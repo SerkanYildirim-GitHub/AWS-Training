@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" width="1200" height="260" role="img" aria-label="AWS Training — Cloud Engineering Hands-on Portfolio">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#182638"/><stop offset="100%" stop-color="#263c52"/></linearGradient>
+ <pattern id="grid" width="35" height="35" patternUnits="userSpaceOnUse"><path d="M35 0H0V35" fill="none" stroke="#7e9cb5" stroke-opacity=".09" stroke-width="1"/></pattern>
+</defs>
+<rect width="1200" height="260" fill="url(#bg)"/><rect width="1200" height="260" fill="url(#grid)"/>
+<rect x="66" y="47" width="6" height="165" rx="3" fill="#ff9900"/>
+<text x="100" y="99" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="52" fill="white">AWS TRAINING</text>
+<text x="102" y="140" font-family="Arial,Helvetica,sans-serif" font-weight="500" font-size="26" fill="#ffb24d">Cloud Engineering Portfolio</text>
+<text x="103" y="178" font-family="Arial,Helvetica,sans-serif" font-weight="400" font-size="18" fill="#d8e3ee">Hands-on infrastructure  •  Security  •  Automation  •  Documentation</text>
+<g fill="none" stroke="#e0eaf4" stroke-opacity=".57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M945 60V107M1020 95V55M945 107L867 155M945 107L1019 155M1019 155L1090 105"/>
+ <rect x="909" y="107" width="73" height="44" rx="8" fill="#344f69"/>
+ <rect x="832" y="155" width="68" height="44" rx="8" fill="#344f69"/>
+ <rect x="987" y="155" width="68" height="44" rx="8" fill="#344f69"/>
+ <rect x="1053" y="62" width="70" height="45" rx="8" fill="#344f69"/>
+ <circle cx="945" cy="60" r="13" fill="#ff9900" stroke="#ff9900"/>
+</g>
+</svg>
