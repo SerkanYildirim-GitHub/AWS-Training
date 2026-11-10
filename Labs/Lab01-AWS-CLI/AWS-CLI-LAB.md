@@ -43,13 +43,12 @@ This is a standalone teaching and revision document. It follows the order in whi
 
 - [08 Exam Review, Corrections and Production Lessons](#08-exam-review-corrections-and-production-lessons)
 
-> [!WARNING]
-> **IMPORTANT**
+> [!IMPORTANT]
+> 
 >
 > The exam notes are explanatory study material derived from the concepts demonstrated in the lab using AWS Documentation.
 
 ## Architecture Highlight
-
 The following shows the **environment used during the lab**, not a claim that every resource is still deployed. The VPC was retained; the temporary EC2 workstation, dedicated role, lab IAM resources, S3 test bucket, and Elastic IP allocations were subsequently removed.
 
 ```mermaid
