@@ -8,11 +8,11 @@ A collection of **hands-on Amazon Web Services labs** documenting infrastructure
 
 This repository serves as a technical portfolio of my practical work. Each completed lab explains 
 
-> ** What I built. **
-> ** How I configured it. ** 
-> ** Why the settings matter. ** 
-> ** How I verified the results. ** and 
-> ** What I would consider for a production environment **. 
+* What I built.
+* How I configured it. 
+* Why the settings matter. 
+* How I verified the results, and 
+* What I would consider for a production environment. 
 
 The documentation is designed to be useful both as engineering evidence and as a reproducible learning reference.
 
