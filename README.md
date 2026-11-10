@@ -10,121 +10,75 @@ This repository serves as a technical portfolio of practical work. Each complete
 
 ![AWS](https://img.shields.io/badge/Platform-AWS-232F3E?style=flat-square&labelColor=FF9900)
 ![Focus](https://img.shields.io/badge/Focus-Cloud%20Engineering-232F3E?style=flat-square)
-![Labs](https://img.shields.io/badge/Completed%20Labs-01-232F3E?style=flat-square)
 
-## Portfolio Objectives
+## AWS Hands-On Labs
 
-- **Build and configure** AWS resources using the Management Console and AWS CLI.
-- **Apply foundational security principles**, including IAM permissions, instance roles, and restricted network access.
-- **Validate configurations** through AWS API responses, service status checks, and CLI output.
-- **Troubleshoot and document** configuration issues and the steps used to resolve them.
-- **Manage resource lifecycles** by distinguishing reusable infrastructure from temporary lab resources.
-- **Develop architectural judgment** around availability, cost, identity, and network design.
+The labs cover core AWS services, infrastructure configuration, security, automation, and architecture. Select a linked lab name to open its hands-on guide.
 
-## Completed Hands-On Labs
+### IAM, EC2 & AWS CLI
 
-| Lab | Focus | Technical work | Documentation |
-| --- | --- | --- | --- |
-| **01 — AWS CLI Lab** | VPC, IAM, EC2, Linux, AWS CLI, S3 | Built a multi-AZ VPC; configured an IAM admin and EC2 role; connected through SSH; executed and verified IAM/S3 commands; cleaned up temporary resources | **[Open Lab 01 →](Lab01-AWS-CLI-LAB/AWS-CLI-LAB.md)** |
+| Lab | Focus | Technical work |
+| --- | --- | --- |
+| [AWS CLI Lab](Labs/Lab01-AWS-CLI/AWS-CLI-LAB.md) | Amazon VPC, IAM, EC2, Linux, AWS CLI, Amazon S3 | Configure a multi-AZ VPC and EC2 CLI workstation, manage IAM and S3 through CLI, verify outputs, and clean up resources. |
+| Identity and Access Management (IAM) | IAM users, groups, permissions, MFA | Create IAM identities, assign permission policies, and examine administrative access and authentication. |
+| EC2 Key Pairs | Amazon EC2, SSH, key pairs | Create an EC2 key pair and use key-based authentication to connect to a Linux instance. |
+| Amazon EC2 | EC2, AMIs, security groups, EBS | Launch and configure virtual servers with appropriate compute, network, security, and storage settings. |
+| Elastic IP Addresses | EC2, Elastic IPs, public IPv4 | Allocate and associate a static public IPv4 address with an EC2 instance. |
+| Windows EC2 and RDP | Windows Server on EC2, RDP, networking | Deploy a Windows EC2 instance and connect to it using Remote Desktop Protocol. |
 
-*Additional labs will be listed here after they are completed and documented.*
+### VPC Networking & Security
 
-## Technical Competencies
+| Lab | Focus | Technical work |
+| --- | --- | --- |
+| Network Access Control Lists | VPC, NACLs, subnet associations | Create and configure subnet-level network ACL rules and explore stateless filtering. |
+| NAT Gateway | NAT gateways, public/private subnets, route tables | Configure routing that allows private-subnet instances to initiate outbound internet connections. |
+| VPC Flow Logs | VPC networking, flow logs, CloudWatch Logs, S3 | Capture and inspect IP traffic metadata for VPC network interfaces. |
 
-**Cloud networking:** VPC creation, CIDR planning, public and private subnets, availability zones, route tables, internet gateways, and network verification.
+### Storage
 
-**Identity and security:** IAM users and groups, managed and inline policies, EC2 instance profiles, temporary credentials, security group ingress, and policy-evaluation concepts.
+| Lab | Focus | Technical work |
+| --- | --- | --- |
+| Amazon S3 Buckets | Amazon S3, buckets, objects, access settings | Create buckets and work with object storage and bucket configuration. |
+| Amazon EBS | EBS volumes, EC2, block storage | Provision and manage block storage attached to EC2 instances. |
+| Amazon EFS | Amazon EFS, shared file systems, EC2 | Configure a shared file system that can be accessed from EC2 workloads. |
 
-**Compute and Linux:** EC2 launch configuration, Amazon Linux 2023, SSH key-based access, Linux package management, and health checks.
+### Automation & Application Integration
 
-**AWS CLI and automation foundations:** AWS CLI installation verification, Region/output defaults, STS identity checks, JSON/text/table responses, and repeatable resource commands.
+| Lab | Focus | Technical work |
+| --- | --- | --- |
+| EC2 User Data Bootstrapping | EC2 user data, Linux, Apache, S3 | Automate instance initialization, install a web server, and explore instance metadata and S3 integration. |
+| AWS CloudFormation | CloudFormation, templates, stacks | Create AWS infrastructure from a CloudFormation template and examine the resulting stack. |
+| Amazon SQS and SNS | SQS queues, SNS topics, subscriptions | Send and receive SQS messages and connect SNS notifications to subscribers. |
+| AWS Lambda for EBS Cleanup | AWS Lambda, EBS, IAM roles | Build an automated workflow to identify and remove unused EBS volumes. |
 
-**Storage and data operations:** S3 bucket management, object uploads, filtered synchronization, local-versus-remote persistence, and object recovery.
+### Databases & Machine Learning
 
-**Operational hygiene:** Verification-driven cleanup of IAM, S3, EC2, security groups, EBS resources, and public IPv4 allocations.
+| Lab | Focus | Technical work |
+| --- | --- | --- |
+| Amazon RDS | RDS, relational databases, VPC | Create and configure a managed relational database in an AWS networking environment. |
+| Amazon DynamoDB | DynamoDB tables, queries, filters | Create a NoSQL table and practice querying and filtering its items. |
+| Amazon SageMaker Canvas | SageMaker Canvas, no-code ML | Explore a no-code machine-learning workflow and interpret prediction limitations. |
 
-### Skills Matrix — Supported by Completed Work
+### Monitoring, Auditing & Encryption
 
-| Engineering area | AWS technologies / tools | Evidence demonstrated | Lab |
-| --- | --- | --- | --- |
-| Networking | Amazon VPC, subnets, route tables, internet gateway | Created a `10.0.0.0/16` VPC with four subnets across two Availability Zones | [Lab 01](Lab01-AWS-CLI-LAB/AWS-CLI-LAB.md#01-building-the-aws-networking-environment) |
-| Identity and access | IAM, roles, policies, instance profiles | Configured admin-group permissions, a dedicated EC2 role, and temporary IAM CLI resources | [Lab 01](Lab01-AWS-CLI-LAB/AWS-CLI-LAB.md#05-creating-iam-groups-users-and-policies-with-cli) |
-| Compute and OS | EC2, Amazon Linux 2023, SSH, PowerShell | Launched a `t3.micro` CLI workstation, restricted SSH, connected, and checked system health | [Lab 01](Lab01-AWS-CLI-LAB/AWS-CLI-LAB.md#03-launching-a-secure-ec2-cli-workstation) |
-| AWS CLI | AWS CLI v2, STS, EC2 APIs | Verified role-based credentials and compared JSON, text, and table output | [Lab 01](Lab01-AWS-CLI-LAB/AWS-CLI-LAB.md#04-connecting-to-linux-and-learning-aws-cli) |
-| Object storage | Amazon S3, `cp`, `sync`, `rm` | Created a temporary bucket, transferred selected objects, and recovered files | [Lab 01](Lab01-AWS-CLI-LAB/AWS-CLI-LAB.md#06-working-with-amazon-s3-from-aws-cli) |
-| Resource lifecycle | IAM, EC2, S3, EBS, Elastic IPs | Removed temporary resources, retained the VPC, and released unneeded Elastic IPs | [Lab 01](Lab01-AWS-CLI-LAB/AWS-CLI-LAB.md#07-cleaning-up-resources-and-verifying-the-result) |
+| Lab | Focus | Technical work |
+| --- | --- | --- |
+| AWS CloudTrail | CloudTrail, auditing, S3 | Create a trail and explore the collection of account activity and API event records. |
+| CloudWatch Custom Metrics | Amazon CloudWatch, EC2, metrics | Configure CloudWatch access and work with custom monitoring metrics. |
+| AWS KMS, CloudTrail & S3 Encryption | AWS KMS, CloudTrail, S3, encryption | Explore key management, encryption, and auditing in an S3 workflow. |
 
-## Architecture Highlight — Lab 01
+### Load Balancing, DNS & Global Routing
 
-The following shows the **environment used during the lab**, not a claim that every resource is still deployed. The VPC was retained; the temporary EC2 workstation, dedicated role, lab IAM resources, S3 test bucket, and Elastic IP allocations were subsequently removed.
+| Lab | Focus | Technical work |
+| --- | --- | --- |
+| Elastic Load Balancing | Elastic Load Balancing, EC2, targets | Distribute incoming application traffic across compute targets and examine load-balancer configuration. |
+| Route 53 Failover Routing | Amazon Route 53, DNS, health checks | Configure active-passive DNS routing to direct traffic when a primary endpoint is unhealthy. |
+| Route 53 Latency-Based Routing | Amazon Route 53, latency routing, Regions | Use latency-based DNS policies to select among application endpoints in different Regions. |
+| Route 53 Geolocation Routing | Amazon Route 53, geolocation DNS | Apply geographic DNS routing policies according to the location of the DNS query. |
+| AWS Global Accelerator | Global Accelerator, EC2, global traffic | Explore global traffic routing through AWS Global Accelerator endpoints. |
 
-```mermaid
-flowchart LR
-    User["Windows PowerShell"] -->|"SSH via restricted security group"| EC2
-    subgraph VPC["AwsSaaNew-vpc · 10.0.0.0/16 · us-east-1"]
-      direction TB
-      subgraph AZ1["Availability Zone A"]
-        PubA["Public subnet"]
-        PrivA["Private subnet"]
-        EC2["LinuxCLI EC2 · Amazon Linux 2023"]
-        PubA --- EC2
-      end
-      subgraph AZ2["Availability Zone B"]
-        PubB["Public subnet"]
-        PrivB["Private subnet"]
-      end
-    end
-    IGW["Internet Gateway"] --- PubA
-    IGW --- PubB
-    EC2 -.->|"Temporary role credentials"| Role["IAM EC2 role"]
-    EC2 -->|"AWS CLI: S3 cp / sync"| S3["Temporary S3 lab bucket"]
-```
+## Capstone Projects
 
-## Engineering Development Roadmap
+Capstone projects bring several AWS services together in end-to-end architectures, with emphasis on secure design, implementation, testing, and operational decisions.
 
-These are **planned learning areas**, not completed implementations. The roadmap will evolve as additional labs are carried out and documented.
-
-| Area | Planned topics |
-| --- | --- |
-| **Networking and security** | Advanced VPC connectivity, NAT, VPC endpoints, route design, security boundaries, and IAM policy evaluation |
-| **Compute and storage** | EC2 operational patterns, load balancing, Auto Scaling, EBS, S3 access controls, and lifecycle strategies |
-| **Databases** | Relational and NoSQL service fundamentals, managed database availability, backup, and recovery |
-| **Monitoring and operations** | Amazon CloudWatch, CloudTrail, logs, alerts, cost visibility, and operational troubleshooting |
-| **Infrastructure as code** | AWS CloudFormation and repeatable, version-controlled infrastructure deployment |
-| **High availability and resilience** | Multi-AZ workloads, scaling, recovery planning, and tradeoffs among availability, performance, and cost |
-
-## Repository Structure
-
-```text
-AWS-Training/
-├── README.md
-├── assets/
-│   └── aws-training-banner.svg
-└── Lab01-AWS-CLI-LAB/
-    ├── AWS-CLI-LAB.md
-    └── images/
-        ├── screenshot-01.png
-        ├── screenshot-02.png
-        ├── ...
-        └── screenshot-63.png
-```
-
-Future completed labs will use the same structure: `LabNN-Descriptive-Name/Lab-Name.md`, with an `images/` folder beside the Markdown file.
-
-## Documentation Approach
-
-Each lab is an independent technical study guide containing its purpose, core AWS concepts, configuration choices, CLI commands, explanation of command behavior, verification steps, screenshots, troubleshooting or corrections, knowledge checks, and production considerations.
-
-- Actual actions are documented in the **first person**; concept explanations use an instructional voice.
-- Screenshots appear **beside the relevant step**, followed by brief, descriptive captions.
-- Code blocks can be copied for practice, but resource names and placeholders must be adapted to the reader's account and Region.
-- Temporary resources are explicitly distinguished from infrastructure deliberately retained for future labs.
-- Public screenshots and examples are **redacted to omit unnecessary account-specific identifiers**. Redaction is for publication hygiene, not proof that resources or access controls are secure.
-
-## AWS Certification Alignment
-
-The labs also reinforce design and implementation concepts relevant to the **AWS Certified Solutions Architect – Associate (SAA-C03)** exam. The repository is primarily an engineering portfolio; it does **not** imply that the certification has been earned.
-
-## Responsible Use
-
-Resources in these tutorials may incur AWS charges. Before reproducing a lab, verify your Region, IAM permissions, resource names, estimated costs, and cleanup scope. Some screenshots reflect a completed and cleaned-up lab, rather than a currently running environment. Consult current AWS documentation when applying the concepts to production.
+The labs also reinforce concepts relevant to the **AWS Certified Solutions Architect – Associate (SAA-C03)** exam.

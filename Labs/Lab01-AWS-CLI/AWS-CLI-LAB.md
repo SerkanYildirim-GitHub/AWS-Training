@@ -44,6 +44,34 @@ This is a standalone teaching and revision document. It follows the order in whi
 >
 > The exam notes are explanatory study material derived from the concepts demonstrated in the lab using AWS Documentation.
 
+## Architecture Highlight
+
+The following shows the **environment used during the lab**, not a claim that every resource is still deployed. The VPC was retained; the temporary EC2 workstation, dedicated role, lab IAM resources, S3 test bucket, and Elastic IP allocations were subsequently removed.
+
+```mermaid
+flowchart LR
+    User["Windows PowerShell"] -->|"SSH via restricted security group"| EC2
+    subgraph VPC["AwsSaaNew-vpc · 10.0.0.0/16 · us-east-1"]
+      direction TB
+      subgraph AZ1["Availability Zone A"]
+        PubA["Public subnet"]
+        PrivA["Private subnet"]
+        EC2["LinuxCLI EC2 · Amazon Linux 2023"]
+        PubA --- EC2
+      end
+      subgraph AZ2["Availability Zone B"]
+        PubB["Public subnet"]
+        PrivB["Private subnet"]
+      end
+    end
+    IGW["Internet Gateway"] --- PubA
+    IGW --- PubB
+    EC2 -.->|"Temporary role credentials"| Role["IAM EC2 role"]
+    EC2 -->|"AWS CLI: S3 cp / sync"| S3["Temporary S3 lab bucket"]
+```
+
+---
+
 ## 01 Building the AWS Networking Environment
 
 ### 1.1 Purpose and Objectives
@@ -653,10 +681,10 @@ The first list included an existing bucket associated with a different AWS workf
 ### 6.3 Creating the Temporary Lab Bucket
 
 ```bash
-aws s3 mb s3://awssaanew-cli-054111711040 --region us-east-1
+aws s3 mb s3://awssaanew-cli-ACCOUNT_ID --region us-east-1
 aws s3 ls
-aws s3 ls s3://awssaanew-cli-054111711040/
-aws s3api head-bucket --bucket awssaanew-cli-054111711040
+aws s3 ls s3://awssaanew-cli-ACCOUNT_ID/
+aws s3api head-bucket --bucket awssaanew-cli-ACCOUNT_ID
 ```
 
 | Component / concept | What we should understand |
@@ -683,7 +711,7 @@ The bucket name was unique for this session. Anyone recreating the lab should se
 ```bash
 touch file1.txt file2.py
 ls -l file1.txt file2.py
-aws s3 cp file1.txt s3://awssaanew-cli-054111711040/
+aws s3 cp file1.txt s3://awssaanew-cli-ACCOUNT_ID/
 ```
 
 touch created two empty local test files. The S3 cp command uploaded file1.txt as an object. An S3 object is stored under a key within a bucket; it is not the same thing as a mounted Linux file system file.
@@ -695,8 +723,8 @@ touch created two empty local test files. The S3 cp command uploaded file1.txt a
 ### 6.5 Synchronizing a Selected File Set
 
 ```bash
-aws s3 sync . s3://awssaanew-cli-054111711040/ --exclude "*" --include "file1.txt" --include "file2.py"
-aws s3 ls s3://awssaanew-cli-054111711040/
+aws s3 sync . s3://awssaanew-cli-ACCOUNT_ID/ --exclude "*" --include "file1.txt" --include "file2.py"
+aws s3 ls s3://awssaanew-cli-ACCOUNT_ID/
 ```
 
 The period (.) represents the current local directory. **sync** compares source and destination and transfers files according to differences and filters. I used **--exclude "\*"** followed by two **--include** rules so only the two lab test files would be eligible for upload. This protected unrelated local files, including **mypolicy.json**, from being transferred accidentally.
@@ -711,9 +739,9 @@ Without **--delete**, S3 sync does not generally remove destination objects simp
 
 ```bash
 rm file1.txt file2.py
-aws s3 ls s3://awssaanew-cli-054111711040/
-aws s3 cp s3://awssaanew-cli-054111711040/file1.txt /home/ec2-user/
-aws s3 sync s3://awssaanew-cli-054111711040/ /home/ec2-user/
+aws s3 ls s3://awssaanew-cli-ACCOUNT_ID/
+aws s3 cp s3://awssaanew-cli-ACCOUNT_ID/file1.txt /home/ec2-user/
+aws s3 sync s3://awssaanew-cli-ACCOUNT_ID/ /home/ec2-user/
 ls -l file1.txt file2.py
 ```
 
@@ -808,8 +836,8 @@ aws iam list-groups --query "Groups[?GroupName=='CLIGroup'].GroupName" --output 
 I removed the two lab objects and then deleted the now-empty bucket. I ran the S3 list again and confirmed that the unrelated pre-existing CloudFormation bucket remained.
 
 ```bash
-aws s3 rm s3://awssaanew-cli-054111711040/ --recursive
-aws s3 rb s3://awssaanew-cli-054111711040/
+aws s3 rm s3://awssaanew-cli-ACCOUNT_ID/ --recursive
+aws s3 rb s3://awssaanew-cli-ACCOUNT_ID/
 aws s3 ls
 ```
 
@@ -881,7 +909,7 @@ Elastic IP/public IPv4 allocations may incur ongoing charges while allocated. Re
 | LinuxCLI-SG | Deleted |
 | AwsSaaNew-CLI-EC2-Role and inline policy | Deleted |
 | Student, CLIGroup, MyPowerUser | Deleted |
-| awssaanew-cli-054111711040 bucket and objects | Deleted |
+| awssaanew-cli-ACCOUNT_ID bucket and objects | Deleted |
 | Two Elastic IP allocations | Released |
 | EBS volumes in us-east-1 | No volumes shown in Console |
 | EBS snapshots | Not audited at my request; none intentionally created |
@@ -964,6 +992,33 @@ We did not just create resources. We confirmed identity, tested outputs, cross-c
 >
 > AwsSaaNew-vpc and awsMaster/Admins remain for future practice. The administrator account is intentionally retained without MFA, an exception that should be corrected. No snapshot or full billing audit was performed.
 
+## Technical Competencies
+
+**Cloud networking:** VPC creation, CIDR planning, public and private subnets, availability zones, route tables, internet gateways, and network verification.
+
+**Identity and security:** IAM users and groups, managed and inline policies, EC2 instance profiles, temporary credentials, security group ingress, and policy-evaluation concepts.
+
+**Compute and Linux:** EC2 launch configuration, Amazon Linux 2023, SSH key-based access, Linux package management, and health checks.
+
+**AWS CLI and automation foundations:** AWS CLI installation verification, Region/output defaults, STS identity checks, JSON/text/table responses, and repeatable resource commands.
+
+**Storage and data operations:** S3 bucket management, object uploads, filtered synchronization, local-versus-remote persistence, and object recovery.
+
+**Operational hygiene:** Verification-driven cleanup of IAM, S3, EC2, security groups, EBS resources, and public IPv4 allocations.
+
+### Skills Matrix
+
+| Engineering area | AWS technologies / tools | Evidence demonstrated |
+| --- | --- | --- |
+| Networking | Amazon VPC, subnets, route tables, internet gateway | Created a `10.0.0.0/16` VPC with four subnets across two Availability Zones |
+| Identity and access | IAM, roles, policies, instance profiles | Configured admin-group permissions, a dedicated EC2 role, and temporary IAM CLI resources |
+| Compute and OS | EC2, Amazon Linux 2023, SSH, PowerShell | Launched a `t3.micro` CLI workstation, restricted SSH, connected, and checked system health |
+| AWS CLI | AWS CLI v2, STS, EC2 APIs | Verified role-based credentials and compared JSON, text, and table output |
+| Object storage | Amazon S3, `cp`, `sync`, `rm` | Created a temporary bucket, transferred selected objects, and recovered files |
+| Resource lifecycle | IAM, EC2, S3, EBS, Elastic IPs | Removed temporary resources, retained the VPC, and released unneeded Elastic IPs |
+
+---
+
 ## Command Reference — Commands I Practiced
 
 This section collects the important working syntax for revision. It is a reference only: the explanations and original screenshots appear in the chapters where I used the commands.
@@ -1004,16 +1059,16 @@ aws iam put-group-policy --group-name CLIGroup --policy-name MyPowerUser --polic
 ### S3 create, copy and synchronize
 
 ```bash
-aws s3 mb s3://awssaanew-cli-054111711040 --region us-east-1
-aws s3 cp file1.txt s3://awssaanew-cli-054111711040/
-aws s3 sync . s3://awssaanew-cli-054111711040/ --exclude "*" --include "file1.txt" --include "file2.py"
+aws s3 mb s3://awssaanew-cli-ACCOUNT_ID --region us-east-1
+aws s3 cp file1.txt s3://awssaanew-cli-ACCOUNT_ID/
+aws s3 sync . s3://awssaanew-cli-ACCOUNT_ID/ --exclude "*" --include "file1.txt" --include "file2.py"
 ```
 
 ### S3 recovery
 
 ```bash
-aws s3 cp s3://awssaanew-cli-054111711040/file1.txt /home/ec2-user/
-aws s3 sync s3://awssaanew-cli-054111711040/ /home/ec2-user/
+aws s3 cp s3://awssaanew-cli-ACCOUNT_ID/file1.txt /home/ec2-user/
+aws s3 sync s3://awssaanew-cli-ACCOUNT_ID/ /home/ec2-user/
 ```
 
 > **SAFE REUSE REMINDER**
