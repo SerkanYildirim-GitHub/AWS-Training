@@ -27,7 +27,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ### IAM, EC2 & AWS CLI
 
-| Lab | Focus | Technical work |
+| Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | [AWS CLI Lab](Labs/Lab01-AWS-CLI/AWS-CLI-LAB.md) | Amazon VPC, IAM, EC2, Linux, AWS CLI, Amazon S3 | Configure a multi-AZ VPC and EC2 CLI workstation, manage IAM and S3 through CLI, verify outputs, and clean up resources. |
 | Identity and Access Management (IAM) | IAM users, groups, permissions, MFA | Create IAM identities, assign permission policies, and examine administrative access and authentication. |
@@ -38,7 +38,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ### VPC Networking & Security
 
-| Lab | Focus | Technical work |
+| Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | Network Access Control Lists | VPC, NACLs, subnet associations | Create and configure subnet-level network ACL rules and explore stateless filtering. |
 | NAT Gateway | NAT gateways, public/private subnets, route tables | Configure routing that allows private-subnet instances to initiate outbound internet connections. |
@@ -46,7 +46,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ### Storage
 
-| Lab | Focus | Technical work |
+| Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | Amazon S3 Buckets | Amazon S3, buckets, objects, access settings | Create buckets and work with object storage and bucket configuration. |
 | Amazon EBS | EBS volumes, EC2, block storage | Provision and manage block storage attached to EC2 instances. |
@@ -54,7 +54,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ### Automation & Application Integration
 
-| Lab | Focus | Technical work |
+| Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | EC2 User Data Bootstrapping | EC2 user data, Linux, Apache, S3 | Automate instance initialization, install a web server, and explore instance metadata and S3 integration. |
 | AWS CloudFormation | CloudFormation, templates, stacks | Create AWS infrastructure from a CloudFormation template and examine the resulting stack. |
@@ -63,7 +63,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ### Databases & Machine Learning
 
-| Lab | Focus | Technical work |
+| Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | Amazon RDS | RDS, relational databases, VPC | Create and configure a managed relational database in an AWS networking environment. |
 | Amazon DynamoDB | DynamoDB tables, queries, filters | Create a NoSQL table and practice querying and filtering its items. |
@@ -71,7 +71,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ### Monitoring, Auditing & Encryption
 
-| Lab | Focus | Technical work |
+| Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | AWS CloudTrail | CloudTrail, auditing, S3 | Create a trail and explore the collection of account activity and API event records. |
 | CloudWatch Custom Metrics | Amazon CloudWatch, EC2, metrics | Configure CloudWatch access and work with custom monitoring metrics. |
@@ -79,7 +79,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ### Load Balancing, DNS & Global Routing
 
-| Lab | Focus | Technical work |
+| Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | Elastic Load Balancing | Elastic Load Balancing, EC2, targets | Distribute incoming application traffic across compute targets and examine load-balancer configuration. |
 | Route 53 Failover Routing | Amazon Route 53, DNS, health checks | Configure active-passive DNS routing to direct traffic when a primary endpoint is unhealthy. |
@@ -89,6 +89,6 @@ To open hands-on guides for each lab click the lab name within the table.
 
 ## Capstone Projects
 
-Capstone projects bring several AWS services together in end-to-end architectures, with emphasis on secure design, implementation, testing, and operational decisions.
+Capstone projects will bring several AWS services together in end-to-end architectures, with emphasis on secure design, implementation, testing, and operational decisions.
 
 The labs also reinforce concepts relevant to the **AWS Certified Solutions Architect – Associate (SAA-C03)** exam.
