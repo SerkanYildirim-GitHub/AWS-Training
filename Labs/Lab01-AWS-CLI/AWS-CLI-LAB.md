@@ -1,29 +1,23 @@
 ![AWS CLI Lab Guide banner](../../assets/aws-cli-lab-banner.svg)
 
-# AWS CLI Lab Guide
-
+# AWS CLI Lab
 **NETWORKING / IAM / EC2 / AWS CLI / AMAZON S3**
 
-A practical, evidence-based learning workbook built from my own AWS Console and terminal exercises.
+This lab covers hands-on AWS infrastructure configuration using the AWS Management Console and AWS Command Line Interface (CLI).
 
-> [!NOTE]
-> **HOW THIS WORKBOOK IS WRITTEN**
->
-> My actual actions are narrated in the first person (I selected, I ran, I verified). Technical explanations use a teaching voice (we should understand, this service does, this setting matters). Each original screenshot appears next to the section it documents.
+I created a VPC, configured IAM permissions, launched an Amazon Linux EC2 instance, and established secure SSH access. I then used AWS CLI commands to manage IAM resources, work with Amazon S3, verify configurations, and clean up temporary resources.
 
-## How to Use This Study Guide
+The exercises demonstrate how AWS networking, identity, compute, and storage services work together in a practical cloud environment.
 
-This is a standalone teaching and revision document. It follows the order in which I built and tested the lab, but it explains the reason behind each important setting rather than simply listing completed actions.
+---
 
-| Component / concept | What we should understand |
-| --- | --- |
-| Purpose and Objectives | The outcome a lab section is designed to demonstrate. |
-| Concepts and configuration | What the AWS service does and why the selected settings matter. |
-| My implementation | The selections and terminal commands I used in the actual session. |
-| Original screenshots | Evidence of what I saw in the Console or terminal; Screenshot 01–63 numbers follow the lab chronology. |
-| Verification | What the response or AWS Console demonstrated, including limitations. |
-| Exam essentials / questions | Architectural rules and practice questions relevant to SAA-C03. |
-| Production considerations | How a real workload would demand stronger security, change control, cost and resilience design. |
+## 01 Building the AWS Networking Environment
+
+### 1.1 Purpose and Objectives
+
+The purpose of this section is to create a Virtual Private Cloud (VPC) to host my temporary EC2 workstation and provide a reusable networking foundation for future labs. The environment includes public and private subnets across two Availability Zones, route tables, and an internet gateway.
+
+By completing this setup, we should understand the relationship between VPCs, CIDR ranges, subnets, Availability Zones, routing, and network access.
 
 ### Chapter map
 
