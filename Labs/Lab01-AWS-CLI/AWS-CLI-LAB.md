@@ -1,4 +1,4 @@
-![AWS CLI Lab Guide banner](assets/aws-cli-lab-banner.svg)
+![AWS CLI Lab Guide banner](Lab01-AWS-CLI/assets/aws-cli-lab-banner.svg)
 
 # AWS CLI Lab Guide
 
