@@ -6,14 +6,24 @@
 
 A collection of **hands-on Amazon Web Services labs** documenting infrastructure configuration, cloud networking, identity and access management, Linux administration, command-line operations, troubleshooting, and responsible cleanup.
 
-This repository serves as a technical portfolio of practical work. Each completed lab explains **what I built, how I configured it, why the settings matter, how I verified the results, and what I would consider for a production environment**. The documentation is designed to be useful both as engineering evidence and as a reproducible learning reference.
+This repository serves as a technical portfolio of my practical work. Each completed lab explains 
+
+> ** What I built. **
+> ** How I configured it. ** 
+> ** Why the settings matter. ** 
+> ** How I verified the results. ** and 
+> ** What I would consider for a production environment **. 
+
+The documentation is designed to be useful both as engineering evidence and as a reproducible learning reference.
 
 ![AWS](https://img.shields.io/badge/Platform-AWS-232F3E?style=flat-square&labelColor=FF9900)
 ![Focus](https://img.shields.io/badge/Focus-Cloud%20Engineering-232F3E?style=flat-square)
 
 ## AWS Hands-On Labs
 
-The labs cover core AWS services, infrastructure configuration, security, automation, and architecture. Select a linked lab name to open its hands-on guide.
+These labs covers the core AWS services, infrastructure configuration, security, automation, and architecture. 
+
+To open hands-on guides for each lab click the lab name within the table.
 
 ### IAM, EC2 & AWS CLI
 
