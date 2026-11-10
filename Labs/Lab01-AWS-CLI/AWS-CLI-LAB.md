@@ -11,36 +11,16 @@ The exercises demonstrate how AWS networking, identity, compute, and storage ser
 
 ---
 
-## 01 Building the AWS Networking Environment
-
-### 1.1 Purpose and Objectives
-
-The purpose of this section is to create a Virtual Private Cloud (VPC) to host my temporary EC2 workstation and provide a reusable networking foundation for future labs. The environment includes public and private subnets across two Availability Zones, route tables, and an internet gateway.
-
-By completing this setup, we should understand the relationship between VPCs, CIDR ranges, subnets, Availability Zones, routing, and network access.
-
-### Chapter map
+## Contents
 
 - [01 Building the AWS Networking Environment](#01-building-the-aws-networking-environment)
-
 - [02 Setting Up an IAM Administrator for the Lab](#02-setting-up-an-iam-administrator-for-the-lab)
-
 - [03 Launching a Secure EC2 CLI Workstation](#03-launching-a-secure-ec2-cli-workstation)
-
 - [04 Connecting to Linux and Learning AWS CLI](#04-connecting-to-linux-and-learning-aws-cli)
-
 - [05 Creating IAM Groups, Users and Policies with CLI](#05-creating-iam-groups-users-and-policies-with-cli)
-
-- [06 Working with Amazon S3 from CLI](#06-working-with-amazon-s3-from-aws-cli)
-
-- [07 Cleaning Up Resources and Verifying Costs](#07-cleaning-up-resources-and-verifying-the-result)
-
+- [06 Working with Amazon S3 from AWS CLI](#06-working-with-amazon-s3-from-aws-cli)
+- [07 Cleaning Up Resources and Verifying the Result](#07-cleaning-up-resources-and-verifying-the-result)
 - [08 Exam Review, Corrections and Production Lessons](#08-exam-review-corrections-and-production-lessons)
-
-> [!IMPORTANT]
-> 
->
-> The exam notes are explanatory study material derived from the concepts demonstrated in the lab using AWS Documentation.
 
 ## Architecture Highlight
 The following shows the **environment used during the lab**, not a claim that every resource is still deployed. The VPC was retained; the temporary EC2 workstation, dedicated role, lab IAM resources, S3 test bucket, and Elastic IP allocations were subsequently removed.
@@ -73,17 +53,17 @@ flowchart LR
 
 ### 1.1 Purpose and Objectives
 
-The purpose of this section is to create a Virtual Private Cloud (VPC) to host my temporary EC2 workstation and provide a reusable networking foundation for future labs. The environment includes public and private subnets across two Availability Zones, route tables, and an internet gateway.
+The purpose of this section is to create an Amazon Virtual Private Cloud (VPC) for my temporary EC2 workstation and establish a networking foundation that I can reuse in future labs. The environment includes public and private subnets across two Availability Zones, route tables, and an internet gateway.
 
-By completing this setup, we should understand the relationship between VPCs, CIDR ranges, subnets, Availability Zones, routing, and network access. A successful resource creation is only the first checkpoint: we also need to verify the resulting architecture.
+This exercise demonstrates how VPCs, CIDR ranges, subnets, Availability Zones, routing, and network access fit together. Creating the resources is the first step; verifying the resulting network configuration is equally important.
 
 ### 1.2 Understanding Amazon VPC
 
-Amazon VPC provides a logically isolated network in an AWS Region. A VPC contains subnets with non-overlapping address ranges. Each subnet exists in one Availability Zone, while the VPC can contain subnets across several zones.
+Amazon VPC provides a logically isolated virtual network within an AWS Region. Subnets divide its IP address space into smaller, non-overlapping ranges. Each subnet belongs to one Availability Zone; the VPC can contain subnets across multiple Availability Zones in the same Region.
 
 | Component / concept | What we should understand |
 | --- | --- |
-| VPC | The Regional network boundary for AWS resources. |
+| VPC | A regional virtual network for AWS resources. |
 | CIDR block | The IP address range allocated to the VPC or a subnet. |
 | Public subnet | A subnet whose associated route table has a route to an internet gateway; public IP and security settings are needed for direct IPv4 internet communication. |
 | Private subnet | A subnet without a direct route to an internet gateway. |
@@ -93,7 +73,7 @@ Amazon VPC provides a logically isolated network in an AWS Region. A VPC contain
 
 ### 1.3 Creating the VPC
 
-I opened the AWS Console, navigated to VPC \> Create VPC, and selected the “VPC and more” workflow. This created the VPC together with the requested subnets and related networking components.
+I opened the AWS Management Console, navigated to **VPC > Create VPC**, and selected the **VPC and more** workflow. This option provisioned the VPC together with the selected subnets, route tables, and other networking components.
 
 | Setting | My lab configuration |
 | --- | --- |
@@ -109,9 +89,9 @@ I opened the AWS Console, navigated to VPC \> Create VPC, and selected the “VP
 | DNS resolution | Enabled |
 | DNS hostnames | Enabled after verification |
 
-The /16 VPC CIDR represents 65,536 IPv4 addresses before subnet allocations. AWS reserves five IPv4 addresses in each subnet. The public and private subnets make the design useful for learning network separation, and two Availability Zones provide a starting point for discussing availability.
+The `10.0.0.0/16` VPC CIDR contains 65,536 IPv4 addresses. The subnet ranges are allocated within that space, and AWS reserves five addresses in each subnet. Public and private subnets let us examine network separation, while two Availability Zones provide the foundation for a multi-AZ architecture. This network layout alone does not make an application highly available.
 
-I deliberately omitted NAT gateways and VPC endpoints. The workstation would run in a public subnet, so this exercise did not require private-subnet outbound access. Leaving out NAT avoided paying for a resource that the lab did not use.
+I did not create NAT gateways or VPC endpoints because the workstation ran in a public subnet and the exercise did not require outbound access from private-subnet resources. Omitting a NAT gateway also avoided unnecessary hourly and data-processing charges.
 
 <table><tr><td align="center"><a href="images/screenshot-01.png"><img src="images/screenshot-01.png" alt="Screenshot 01: VPC wizard showing the name prefix and 10.0.0.0/16 IPv4 CIDR." width="780"></a></td></tr></table>
 
@@ -127,9 +107,9 @@ I deliberately omitted NAT gateways and VPC endpoints. The workstation would run
 
 ### 1.4 Verifying the VPC Configuration
 
-After AWS completed creation, I opened the VPC details and Resource Map. The map allowed me to check the actual topology instead of assuming the wizard had created exactly what I intended. I confirmed four subnets across two zones and an attached internet gateway.
+After the VPC was created, I opened its details and Resource Map to verify the resulting topology. I confirmed four subnets across two Availability Zones, the associated route tables, and an attached internet gateway.
 
-During the DNS review, I found that DNS hostnames were not enabled initially. I returned to **VPC \> Your VPCs \> AwsSaaNew-vpc \> Actions \> Edit VPC settings**, enabled DNS hostnames, and kept DNS resolution enabled.
+During verification, I found that DNS hostnames were initially disabled. I opened **VPC > Your VPCs > `AwsSaaNew-vpc` > Actions > Edit VPC settings**, enabled DNS hostnames, and confirmed that DNS resolution remained enabled. DNS resolves hostnames to IP addresses; routing separately determines how network traffic reaches those addresses.
 
 <table><tr><td align="center"><a href="images/screenshot-04.png"><img src="images/screenshot-04.png" alt="Screenshot 04: Created VPC showing four subnets, its resource map, and enabled DNS settings." width="780"></a></td></tr></table>
 
@@ -143,9 +123,9 @@ During the DNS review, I found that DNS hostnames were not enabled initially. I 
 ### 1.5 Knowledge Check
 
 > [!TIP]
-> 1.  Does creating two Availability Zones automatically make my application highly available?
+> 1.  Does configuring subnets in two Availability Zones automatically make an application highly available?
 >
-> **Answer: No.** The network has the potential to host resources in multiple zones, but application components, load balancing, replication, and failure recovery must also be designed.
+> **Answer: No.** The network can host resources in multiple zones, but the application, data replication, traffic distribution, and failure recovery must also be designed for availability.
 >
 > 2.  Is the public IPv4 address by itself enough for internet access?
 >
@@ -164,11 +144,11 @@ During the DNS review, I found that DNS hostnames were not enabled initially. I 
 
 ### 2.1 Purpose and Objectives
 
-Before creating and managing resources in the AWS Console, I prepared an IAM identity to use for hands-on administration. This section records how I created awsMaster, placed it in Admins, and gave that group AdministratorAccess.
+To administer AWS resources through a dedicated console identity, I created the IAM user `awsMaster`, added it to the `Admins` group, and attached the AWS-managed `AdministratorAccess` policy to that group.
 
 ### 2.2 IAM Users, Groups and Policies
 
-Identity and Access Management (IAM) controls who can authenticate and what actions their identity is allowed to perform. We should distinguish identity creation, group membership, and permissions: they are separate operations.
+AWS Identity and Access Management (IAM) controls identities and authorization for AWS resources. Creating an IAM user, adding the user to a group, and granting permissions are separate operations. Group membership allows applicable group policies to contribute to a user's effective permissions.
 
 | Component / concept | What we should understand |
 | --- | --- |
@@ -177,11 +157,11 @@ Identity and Access Management (IAM) controls who can authenticate and what acti
 | IAM policy | A JSON policy document that describes allowed or denied actions on resources under defined conditions. |
 | AdministratorAccess | An AWS-managed policy providing broad administrative allow permissions; not appropriate for most workload identities. |
 | MFA | A second factor for authentication, strongly recommended and especially important for privileged identities. |
-| IAM role | A principal assumed temporarily; we use one later for EC2 instead of storing permanent AWS keys. |
+| IAM role | An AWS identity that can be assumed to obtain temporary credentials; I later attached one to EC2 instead of storing long-term access keys. |
 
 ### 2.3 Creating awsMaster and the Admins Group
 
-I opened IAM \> Users \> Create user, entered awsMaster, and enabled console sign-in. During permissions setup I created a group named Admins and selected AdministratorAccess. I then selected Admins as the user’s permission group and reviewed the final creation screen.
+I navigated to **IAM > Users > Create user**, entered `awsMaster`, and enabled AWS Management Console access. During permissions setup, I created the `Admins` group, attached the AWS-managed `AdministratorAccess` policy, selected the group for the new user, and reviewed the configuration before creating the user.
 
 | Resource | Configuration / observed result |
 | --- | --- |
@@ -214,17 +194,17 @@ I opened IAM \> Users \> Create user, entered awsMaster, and enabled console sig
 
 ### 2.4 Understanding the Security Exception
 
-I chose not to configure MFA on awsMaster during this exercise, and I later decided to keep the user for future labs. This is an explicit learning-environment exception, not a pattern to reuse in production. A compromised privileged user could create, modify, or delete resources and incur significant cost.
+I did not configure MFA on `awsMaster` during this exercise, and I kept the user for future labs. This was an intentional lab-only security exception, **not** a recommended security practice. A compromised administrator identity could modify or delete resources, expose data, or incur charges.
 
 > [!CAUTION]
 > **SECURITY ACTION FOR THE RETAINED USER**
 >
-> Enable MFA on awsMaster before using the account for anything outside a controlled training context. Use a unique password, do not generate unnecessary permanent access keys, and review the membership of Admins and the effective permissions periodically.
+> Enable MFA on `awsMaster` as soon as possible, including for continued lab use. Keep a unique, strong password, avoid unnecessary long-term access keys, and periodically review `Admins` membership and effective permissions.
 
 > [!IMPORTANT]
 > **SAA-C03 EXAM CONNECTION**
 >
-> Groups do not authenticate or assume roles by themselves; users are added to groups. A policy attached to Admins is relevant to awsMaster because that user belongs to the group. Permissions from multiple applicable policies are evaluated together, and an explicit deny overrides an allow.
+> IAM groups do not sign requests or assume roles; IAM users belong to groups. The policy attached to `Admins` contributes permissions to `awsMaster` through membership. Effective permissions depend on all applicable policies and controls, and an applicable explicit deny overrides an allow.
 
 ### 2.5 Knowledge Check
 
@@ -244,17 +224,17 @@ I chose not to configure MFA on awsMaster during this exercise, and I later deci
 > [!NOTE]
 > **KEY TAKEAWAY**
 >
-> The administration identity and the EC2 workload identity have different purposes. Later, I created a dedicated EC2 role so terminal commands would not depend on awsMaster access keys.
+> The administrative IAM user and the EC2 workload role serve different purposes. I used a dedicated EC2 role so commands running on the instance did not require `awsMaster` access keys.
 
 ## 03 Launching a Secure EC2 CLI Workstation
 
 ### 3.1 Purpose and Objectives
 
-The goal of this part of the lab is to launch a temporary Linux EC2 instance that can run AWS CLI commands. I needed a supported Linux image, public-subnet network connectivity for SSH, a private key for login, and an IAM role for temporary AWS credentials.
+The purpose of this section is to launch a temporary Amazon Linux EC2 workstation for AWS CLI practice. The instance needs an appropriate AMI, public-subnet connectivity for SSH, a key pair for login, and an IAM role for temporary AWS API credentials.
 
 ### 3.2 Choosing the AMI, Instance and Network
 
-I selected Amazon Linux 2023 with an x86_64 architecture and a t3.micro instance type. I named the instance LinuxCLI and placed it in a public subnet of AwsSaaNew-vpc. I used a small 8 Gb root EBS volume and the npoweraws key pair.
+I selected an Amazon Linux 2023 x86_64 AMI and a `t3.micro` instance. I named it `LinuxCLI`, placed it in a public subnet of `AwsSaaNew-vpc`, configured an **8 GiB** root EBS volume, and selected the `npoweraws` key pair.
 
 | Setting | My observed selection |
 | --- | --- |
@@ -271,13 +251,11 @@ I selected Amazon Linux 2023 with an x86_64 architecture and a t3.micro instance
 | Root storage | 8 GiB EBS |
 | Result | Running; 3/3 checks passed |
 
-A **public subnet** makes it possible to build a direct SSH learning environment, but it also places security responsibility on the instance configuration.
+A public subnet with an internet gateway route, a public IPv4 address, and appropriate network rules enabled me to connect directly over SSH.
 
-**Restricting SSH to My IP (/32)** was safer than permitting 0.0.0.0/0.
+I restricted inbound **TCP port 22 to My IP (`/32`)** rather than allowing access from `0.0.0.0/0`. Security groups are stateful, so response traffic for an allowed connection is automatically permitted.
 
-**Security groups are stateful**; response traffic for allowed connections is automatically permitted.
-
-The automatically assigned public IPv4 address used for SSH was not an Elastic IP allocation.
+The automatically assigned public IPv4 address was **not** an Elastic IP allocation.
 
 <table><tr><td align="center"><a href="images/screenshot-10.png"><img src="images/screenshot-10.png" alt="Screenshot 10: Amazon Linux 2023 AMI selected for the EC2 workstation." width="777"></a></td></tr></table>
 
@@ -295,23 +273,29 @@ The automatically assigned public IPv4 address used for SSH was not an Elastic I
 
 I created **AwsSaaNew-CLI-EC2-Role** for this lab. I selected EC2 as the trusted AWS service and created a custom inline policy designed around the operations I expected to perform.
 
-This separates the two questions that IAM roles must answer: “Who is allowed to assume the role?” and “What is the role allowed to do after it is assumed?” The trust policy allows EC2 to assume the role; the permissions policy allows defined API actions. The instance profile makes the role available to the EC2 instance.
+An IAM role has two distinct policy responsibilities: **who may assume it** and **what actions an assumed role may perform**. The trust policy permits the EC2 service to assume the role; the permissions policy defines the allowed AWS API operations. An EC2 instance profile associates the role with the instance.
 
-| Component / concept | What we should understand |
+**Understanding the role components**
+
+| Component | Purpose |
 | --- | --- |
-| Role component | What I configured |
-| Trust policy | Specifies which principal, here the EC2 service, may assume the role. |
-| Permissions policy | Describes actions and resources that role sessions may access. |
-| Inline policy | A policy embedded directly in one IAM identity; removal of that identity removes the attachment. |
-| Instance profile | The IAM container used to associate an IAM role with an EC2 instance. |
-| Temporary role credentials | Credentials supplied to the workload and rotated by AWS, avoiding hard-coded IAM user secret keys. |
-| Role name | AwsSaaNew-CLI-EC2-Role |
-| Trusted entity | AWS service: EC2 |
-| Inline policy | AwsSaaNew-CLI-Lab-Policy |
-| Permission intent | EC2 operations; limited lab IAM operations for CLIGroup / Student; S3 operations for awssaanew-cli- bucket prefix |
-| Instance association | Selected the new instance profile under EC2 Advanced details |
+| Trust policy | Identifies the trusted principal, here the EC2 service. |
+| Permissions policy | Defines which actions and resources the role session may access. |
+| Inline policy | A policy embedded in one IAM identity rather than managed as a reusable standalone policy. |
+| Instance profile | Associates an IAM role with an EC2 instance. |
+| Temporary role credentials | Short-lived credentials made available to the workload and rotated by AWS. |
 
-A role may have permission to perform broad actions if a policy is too permissive. The important principle is to restrict actions and resources to the required training operations. The screenshot sequence documents the custom policy setup, but this guide does not invent the exact JSON text where the capture does not show every character.
+**My IAM role configuration**
+
+| Setting | Configuration |
+| --- | --- |
+| Role name | `AwsSaaNew-CLI-EC2-Role` |
+| Trusted entity | AWS service: EC2 |
+| Inline policy name | `AwsSaaNew-CLI-Lab-Policy` |
+| Permission scope | EC2 operations; limited IAM operations involving `CLIGroup` and `Student`; S3 operations for the `awssaanew-cli-` bucket prefix |
+| Instance association | Selected the role's instance profile under **EC2 > Advanced details** |
+
+Even a temporary role can be overly permissive if its policy grants too much access. For this lab, I limited the policy to the operations being practiced. The screenshots show the policy setup and summary, but do not reproduce a complete copyable JSON policy; recreating the role requires preparing and reviewing the appropriate policy document.
 
 <table><tr><td align="center"><a href="images/screenshot-13.png"><img src="images/screenshot-13.png" alt="Screenshot 13: Existing IAM instance profile displayed before creating a dedicated lab role." width="632"></a></td></tr></table>
 
@@ -347,7 +331,7 @@ A role may have permission to perform broad actions if a policy is too permissiv
 
 ### 3.4 Completing the Launch and Checking Health
 
-With the instance profile attached, I reviewed the launch summary and started LinuxCLI. I waited for the EC2 Console to show Running and 3/3 status checks. These checks established that the instance was ready for the next test: connecting over SSH.
+With the instance profile selected, I reviewed the launch summary and launched `LinuxCLI`. The EC2 Console showed the instance as **Running**, with **3/3 status checks passed**. These checks indicated a healthy instance and underlying environment; SSH connectivity still needed to be verified separately.
 
 <table><tr><td align="center"><a href="images/screenshot-21.png"><img src="images/screenshot-21.png" alt="Screenshot 21: EC2 launch summary showing a t3.micro instance and 8 GiB EBS volume." width="433"></a></td></tr></table>
 
@@ -380,19 +364,19 @@ With the instance profile attached, I reviewed the launch summary and started Li
 > [!NOTE]
 > **KEY TAKEAWAY**
 >
-> The EC2 instance was only a workstation. The larger architectural lesson was to give the workstation a dedicated identity and narrowly scoped permissions rather than copying long-term administrator keys into Linux.
+> The EC2 instance served as a temporary CLI workstation. Attaching a dedicated, narrowly scoped IAM role avoided placing long-term administrator credentials on the Linux system.
 
 ## 04 Connecting to Linux and Learning AWS CLI
 
 ### 4.1 Purpose and Objectives
 
-In this chapter I connect from Windows PowerShell to LinuxCLI, verify the command-line tools and role identity, configure the default AWS Region and output format, and compare JSON, text and table responses. This establishes a repeatable process for checking the AWS CLI environment.
+In this chapter, I connected to `LinuxCLI` from Windows PowerShell, checked the AWS CLI installation and caller identity, configured default Region and output settings, and compared JSON, text, and table responses. These checks establish a repeatable way to verify the CLI environment.
 
 ### 4.2 Establishing an SSH Session
 
-I used PowerShell on Windows, the private key npoweraws.pem, and the ec2-user login for Amazon Linux. You need to replace the IPv4 with your EC2s IP address.
+I connected from Windows PowerShell using the `npoweraws.pem` private key and the default Amazon Linux user, `ec2-user`. The address shown in brackets below is a placeholder; to repeat this step, replace it with the current public IPv4 address of your instance.
 
-```bash
+```powershell
 ssh -i "npoweraws.pem" ec2-user@[EC2-PublicIPaddress]
 ```
 
@@ -401,7 +385,7 @@ ssh -i "npoweraws.pem" ec2-user@[EC2-PublicIPaddress]
 | ssh | Starts an encrypted remote shell connection. |
 | -i "npoweraws.pem" | Specifies the SSH private key file on the local Windows computer. |
 | ec2-user | The default login user for the selected Amazon Linux image. |
-| 100.55.43.111 | The public IPv4 address used in this lab; a temporary address, not a reusable endpoint. |
+| `100.55.43.111` | The public IPv4 address used for SSH during this lab; it was temporary, not a persistent endpoint. |
 
 <table><tr><td align="center"><a href="images/screenshot-23.png"><img src="images/screenshot-23.png" alt="Screenshot 23: Windows PowerShell SSH session successfully connected to the Amazon Linux EC2 instance." width="780"></a></td></tr></table>
 
@@ -409,7 +393,7 @@ ssh -i "npoweraws.pem" ec2-user@[EC2-PublicIPaddress]
 
 ### 4.3 Updating Packages and Checking AWS CLI
 
-After signing in, I tested the Linux package-update commands. Amazon Linux 2023 uses **dnf**. The **yum-compatible** invocation also worked in this session, but for reproducible modern instructions, I prefer dnf. Both reported that no packages needed updating.
+After signing in, I checked package updates and the AWS CLI version. Amazon Linux 2023 uses `dnf` as its package manager; the `yum` compatibility command also worked in my session. Both update checks reported that no packages needed updating. For future Amazon Linux 2023 steps, I use `dnf`.
 
 ```bash
 sudo su
@@ -419,9 +403,9 @@ sudo dnf upgrade -y
 aws --version
 ```
 
-sudo runs commands with elevated operating-system privileges. This is not the same as AWS IAM authorization. The -y flag accepts a package manager’s confirmation prompts; it does not bypass AWS permissions.
+`sudo` executes commands with elevated Linux privileges; it does not grant AWS IAM permissions. The `-y` argument automatically accepts package manager confirmation prompts and does not bypass IAM authorization.
 
-The installed version reported aws-cli/2.38.0 with Python 3.9.25. Version checks are useful because syntax, behavior, and installed packages can change between Amazon Linux releases.
+The version check returned `aws-cli/2.38.0` with Python `3.9.25`. Recording the installed version helps explain differences in behavior or available commands across environments.
 
 <table><tr><td align="center"><a href="images/screenshot-24.png"><img src="images/screenshot-24.png" alt="Screenshot 24: Linux package update commands completed with no pending updates." width="780"></a></td></tr></table>
 
@@ -433,7 +417,7 @@ The installed version reported aws-cli/2.38.0 with Python 3.9.25. Version checks
 
 ### 4.4 Verifying the Instance Role Identity
 
-The most important authentication checkpoint was the STS caller identity query. I ran it before making IAM or S3 changes. The returned ARN identified an assumed role session for AwsSaaNew-CLI-EC2-Role, rather than a long-term IAM user credential.
+Before making IAM or S3 changes, I ran the AWS STS caller identity command. Its returned ARN identified an assumed-role session for `AwsSaaNew-CLI-EC2-Role`, rather than an IAM user. Together with the role attached through the EC2 instance profile, this confirmed the intended workload identity. The STS response identifies the caller; by itself it does not identify every step of the credential-provider chain.
 
 ```bash
 aws sts get-caller-identity
@@ -444,7 +428,7 @@ aws sts get-caller-identity
 | aws | Invokes the AWS CLI executable. |
 | sts | Selects AWS Security Token Service. |
 | get-caller-identity | Returns the identity associated with the credentials currently used by the request. |
-| Assumed-role ARN | Shows the named IAM role supplying temporary credentials to the EC2 session. |
+| Assumed-role ARN | Identifies the role session used to sign the request. |
 
 <table><tr><td align="center"><a href="images/screenshot-26.png"><img src="images/screenshot-26.png" alt="Screenshot 26: aws sts get-caller-identity output identifying the assumed EC2 IAM role." width="780"></a></td></tr></table>
 
@@ -453,11 +437,11 @@ aws sts get-caller-identity
 > [!NOTE]
 > **WHY THIS MATTERS**
 >
-> I did not enter an awsMaster access key and secret key into aws configure on the instance. The attached EC2 role was the credential source. This reduces long-term credential exposure and is the preferred pattern for AWS workloads.
+> I did not store `awsMaster` access keys on the instance. The attached EC2 role provided temporary credentials to the AWS CLI, reducing exposure to long-term secrets.
 
 ### 4.5 Configuring the Default Region and Output
 
-I configured the CLI to use us-east-1 and JSON as its default output. I then read those settings back rather than assuming they were saved.
+I set the AWS CLI default Region to `us-east-1` and output format to `json`. I then retrieved both settings to verify they were saved.
 
 ```bash
 aws configure set region us-east-1
@@ -466,7 +450,7 @@ aws configure set output json
 aws configure get output
 ```
 
-These commands set client-side defaults in the AWS CLI configuration. They do not create an AWS resource, and they do not grant IAM permissions. A later command can override the output format explicitly.
+These commands update local AWS CLI configuration defaults; they do not create AWS resources or grant permissions. An individual command can override the default output format with `--output`.
 
 <table><tr><td align="center"><a href="images/screenshot-27.png"><img src="images/screenshot-27.png" alt="Screenshot 27: AWS CLI Region configured and verified as us-east-1." width="780"></a></td></tr></table>
 
@@ -478,7 +462,7 @@ These commands set client-side defaults in the AWS CLI configuration. They do no
 
 ### 4.6 Exploring AWS Region Data in Three Formats
 
-I used the EC2 describe-regions API to compare how the same information appears in different output formats. JSON is structured and usually useful for automation. Text is compact and script-friendly. Table format is easier to scan in a terminal.
+I used `aws ec2 describe-regions` to view the same API response in three formats. JSON preserves structured fields, text is useful for concise command-line output, and table format is easier to scan interactively.
 
 ```bash
 aws ec2 describe-regions
@@ -493,7 +477,7 @@ aws ec2 describe-regions --output table
 | --output text | Overrides the default format for this invocation only. |
 | --output table | Overrides the format with a terminal-style table for this invocation only. |
 
-A command I encountered in the older learning instructions misspelled describe-regions. I corrected the spelling. The AWS CLI parses command names exactly, so small typos are meaningful.
+The earlier instructions contained a misspelling of `describe-regions`. I corrected it because AWS CLI operation names must be typed accurately.
 
 <table><tr><td align="center"><a href="images/screenshot-29.png"><img src="images/screenshot-29.png" alt="Screenshot 29: Additional JSON results returned by aws ec2 describe-regions." width="573"></a></td></tr></table>
 
@@ -510,7 +494,7 @@ A command I encountered in the older learning instructions misspelled describe-r
 > [!IMPORTANT]
 > **SAA-C03 EXAM CONNECTION**
 >
-> A successful aws sts get-caller-identity response is a strong credential-source checkpoint. Output formatting flags do not alter permissions or the underlying API operation. For workload authentication, use temporary role credentials rather than an IAM user’s long-lived secret key.
+> `aws sts get-caller-identity` identifies the principal signing the request. Combined with the EC2 instance profile configuration, it helps verify the intended role-based authentication. Output-format options do not change IAM permissions or the underlying API request.
 
 ### 4.7 Knowledge Check
 
@@ -519,9 +503,9 @@ A command I encountered in the older learning instructions misspelled describe-r
 >
 > **Answer: No.** It changes a CLI default, not the IAM policy decision.
 >
-> 2.  What proves the instance was using an EC2 role?
+> 2.  Which result identifies the IAM role session used by the AWS CLI?
 >
-> **Answer: The assumed-role ARN returned by STS.** The caller identity establishes which principal signed the request.
+> **Answer: The assumed-role ARN returned by STS.** The instance profile association separately confirms how the role was attached to EC2.
 >
 > 3.  Does --output table permanently replace the configured JSON output?
 >
@@ -530,13 +514,13 @@ A command I encountered in the older learning instructions misspelled describe-r
 > [!NOTE]
 > **KEY TAKEAWAY**
 >
-> Before troubleshooting a failed AWS CLI command, I should identify the current credentials and Region. The identity, Region, and command syntax are separate layers of a successful API request.
+> Before troubleshooting an AWS CLI request, I check the caller identity, Region, and command syntax. Authentication, authorization, endpoint selection, and syntax are different parts of a successful request.
 
 ## 05 Creating IAM Groups, Users and Policies with CLI
 
 ### 5.1 Purpose and Objectives
 
-This chapter records my first hands-on IAM resource creation with AWS CLI. I created an empty group, created a user, added the user to the group, prepared an inline policy in a JSON file, and verified the result in both the terminal and AWS Console.
+In this chapter, I created an IAM group and user through the AWS CLI, added the user to the group, prepared an inline policy in a JSON file, and verified the results in both the terminal and AWS Management Console.
 
 ### 5.2 Creating the CLIGroup IAM Group
 
@@ -544,9 +528,9 @@ This chapter records my first hands-on IAM resource creation with AWS CLI. I cre
 aws iam create-group --group-name CLIGroup
 ```
 
-Here, **iam** identifies the service, **create-group** is the API operation, and **--group-name** supplies the requested group name. The JSON response contained the newly created group metadata.
+In this command, `iam` selects the service, `create-group` specifies the operation, and `--group-name` supplies the name. The JSON response returned metadata for the newly created group.
 
-At this point the group had no members and no permissions policy.
+At this point, the group had no members and no policies attached.
 
 <table><tr><td align="center"><a href="images/screenshot-32.png"><img src="images/screenshot-32.png" alt="Screenshot 32: aws iam create-group command and JSON response confirming CLIGroup creation." width="715"></a></td></tr></table>
 
@@ -558,7 +542,7 @@ At this point the group had no members and no permissions policy.
 aws iam create-user --user-name Student
 ```
 
-The new Student identity appeared in the JSON response and then in the IAM Console. Creating a user through this command does not automatically create a console password or an access key, and it does not automatically grant permissions.
+The `Student` user appeared in the JSON response and in the IAM Console. `create-user` does not create a console password or access keys automatically, and it does not grant permissions by itself.
 
 <table><tr><td align="center"><a href="images/screenshot-33.png"><img src="images/screenshot-33.png" alt="Screenshot 33: aws iam create-user command and JSON response confirming Student creation." width="721"></a></td></tr></table>
 
@@ -585,10 +569,10 @@ aws iam get-group --group-name CLIGroup --query 'Users[].UserName' --output tabl
 | --user-name Student | Identifies the user being added. |
 | --group-name CLIGroup | Identifies the target IAM group. |
 | get-group | Retrieves metadata and membership for the specified group. |
-| --query 'Users\[\].UserName' | JMESPath expression selecting user names from the returned Users array. |
+| `--query 'Users[].UserName'` | A JMESPath expression selecting user names from the returned `Users` array. |
 | --output table | Makes this selected membership result easy to read. |
 
-I checked the Console and saw Student listed under CLIGroup. The verification mattered because the group membership, not merely the existence of the two resources, is what allows an attached group policy to become relevant to Student.
+I checked the IAM Console and confirmed that `Student` appeared as a member of `CLIGroup`. Membership is what makes policies attached to the group relevant to that user; simply creating the two resources would not establish that relationship.
 
 <table><tr><td align="center"><a href="images/screenshot-36.png"><img src="images/screenshot-36.png" alt="Screenshot 36: CLIGroup page listing Student as a group member." width="780"></a></td></tr></table>
 
@@ -600,14 +584,14 @@ I checked the Console and saw Student listed under CLIGroup. The verification ma
 
 ### 5.5 Preparing a JSON Permissions Policy
 
-For policy practice, I opened AWS-managed **PowerUserAccess** in the IAM Console and used its then-current JSON structure as a learning reference. On the EC2 instance, I created a local file using the Nano editor named **mypolicy.json.**
+To practice IAM policy syntax, I examined the AWS-managed `PowerUserAccess` policy in the IAM Console and used its JSON structure as a reference. On the EC2 instance, I created `mypolicy.json` with the `nano` text editor.
 
 ```bash
 nano mypolicy.json
 python3 -m json.tool mypolicy.json > /dev/null && echo "JSON valid"
 ```
 
-The policy structure included Allow statements and a NotAction-based permission pattern. This is not a least-privilege policy suitable for most real workloads; it demonstrates how broad IAM policy language can be expressed and reused. The exact policy version can change, so we should not assume an old screenshot is permanently authoritative.
+The JSON included `Allow` statements and a `NotAction`-based permission pattern. This broad policy is useful for studying IAM syntax but is not a least-privilege design for most workloads. AWS-managed policy versions can change, so a copied example should be reviewed rather than treated as permanently current.
 
 | Component / concept | What we should understand |
 | --- | --- |
@@ -615,8 +599,8 @@ The policy structure included Allow statements and a NotAction-based permission 
 | Action / NotAction | Identifies included or excluded action sets in the statement; context depends on Effect. |
 | Resource | The AWS resources to which the statement applies. |
 | Condition | Optional constraints for when the statement applies. |
-| python3 -m json.tool | Checks that the file contains syntactically valid JSON; it does not prove the IAM permissions are safe or correct. |
-| file://mypolicy.json | Instructs the CLI to read local file contents for a policy-document argument. |
+| `python3 -m json.tool` | Validates JSON syntax, not whether the IAM actions, resources, or permissions are appropriate. |
+| `file://mypolicy.json` | Tells the AWS CLI to read the policy document from a local file. |
 
 <table><tr><td align="center"><a href="images/screenshot-38.png"><img src="images/screenshot-38.png" alt="Screenshot 38: IAM Console displaying the AWS-managed PowerUserAccess policy used as a reference." width="780"></a></td></tr></table>
 
@@ -637,7 +621,7 @@ aws iam put-group-policy --group-name CLIGroup --policy-name MyPowerUser --polic
 aws iam get-group-policy --group-name CLIGroup --policy-name MyPowerUser --query PolicyName --output text
 ```
 
-**Put-group-policy** stores an inline policy on one group. I used the name **MyPowerUser** and then retrieved the policy name for confirmation. The Console showed the policy associated with CLIGroup
+`aws iam put-group-policy` attaches an inline policy directly to a group. I named it `MyPowerUser`, retrieved the policy name using `get-group-policy`, and verified the association with `CLIGroup` in the IAM Console.
 
 <table><tr><td align="center"><a href="images/screenshot-41.png"><img src="images/screenshot-41.png" alt="Screenshot 41: CLI commands attaching MyPowerUser to CLIGroup and checking the inline policy." width="780"></a></td></tr></table>
 
@@ -650,22 +634,23 @@ aws iam get-group-policy --group-name CLIGroup --policy-name MyPowerUser --query
 > [!IMPORTANT]
 > **IAM PERMISSION EVALUATION**
 >
-> Student can potentially gain applicable allows from the policy attached to CLIGroup because Student is a group member. However, access is not unconditional: explicit denies, permissions boundaries, service control policies and other relevant policies or controls may restrict what is possible. A group policy does not grant permissions to users who are not members.
+> Because `Student` belongs to `CLIGroup`, the group's inline policy contributes to the user's possible permissions. Effective access still depends on applicable explicit denies, permissions boundaries, AWS Organizations controls, and other relevant policies. Users who are not group members do not inherit that group's policy.
+
 > [!IMPORTANT]
 > **SAA-C03 EXAM CONNECTION**
 >
-> On SAA-C03, remember: explicit Deny overrides Allow; an IAM group is a permissions-management structure, not a principal that signs requests; managed and inline policies differ in reusability; role sessions are preferable to stored secret keys for AWS workloads.
+> An applicable explicit `Deny` overrides `Allow`. IAM groups organize permissions for users but cannot sign requests. Managed policies are reusable across identities, while inline policies belong to one identity. AWS workloads should generally use IAM roles rather than stored long-term access keys.
 
 ### 5.7 Knowledge Check
 
 > [!TIP]
 > 1.  Does MyPowerUser automatically grant permissions to every IAM user in the account?
 >
-> **Answer: No.** The policy is attached to CLIGroup and affects its relevant members, subject to other applicable controls.
+> **Answer: No.** The policy is attached to `CLIGroup` and contributes permissions only to its members, subject to other applicable controls.
 >
-> 2.  Can an explicit Deny be overridden by an AdministratorAccess?
+> 2.  Can an applicable explicit deny be overridden by the `AdministratorAccess` policy?
 >
-> **Answer: No.** An explicit deny in an applicable policy takes precedence over an allow, with policy evaluation context .
+> **Answer: No.** An explicit deny takes precedence over an allow, including one granted by `AdministratorAccess`.
 >
 > 3.  What does json.tool prove?
 >
@@ -674,13 +659,13 @@ aws iam get-group-policy --group-name CLIGroup --policy-name MyPowerUser --query
 > [!NOTE]
 > **KEY TAKEAWAY**
 >
-> I verified IAM changes through both API responses and the IAM Console. This helped distinguish creation, membership, and authorization instead of treating them as one operation.
+> I verified IAM resource creation, group membership, and policy attachment separately in the AWS CLI and IAM Console. These are distinct operations with different authorization effects.
 
 ## 06 Working with Amazon S3 from AWS CLI
 
 ### 6.1 Purpose and Objectives
 
-In this section, I created a temporary private S3 bucket, copied local files to object storage, synchronized selected files, deleted local copies, recovered files from S3, and confirmed object persistence. I also deliberately left an unrelated pre-existing CloudFormation bucket untouched.
+In this section, I created a temporary S3 bucket, uploaded local test files, synchronized a selected file set, deleted the local copies, and recovered them from S3. I verified that the remote objects persisted and left an unrelated CloudFormation bucket untouched.
 
 ### 6.2 Listing Buckets Before Creating Anything
 
@@ -688,7 +673,7 @@ In this section, I created a temporary private S3 bucket, copied local files to 
 aws s3 ls
 ```
 
-The first list included an existing bucket associated with a different AWS workflow. I treated it as unrelated account infrastructure and preserved it. Listing before creation is a useful habit because it reveals what already exists before we run cleanup commands later.
+The initial `aws s3 ls` output included a bucket associated with another AWS workflow. I kept it untouched. Listing existing resources before creating or deleting anything helps distinguish lab-owned resources from unrelated infrastructure.
 
 <table><tr><td align="center"><a href="images/screenshot-43.png"><img src="images/screenshot-43.png" alt="Screenshot 43: Initial aws s3 ls output showing the pre-existing CloudFormation bucket." width="595"></a></td></tr></table>
 
@@ -696,11 +681,13 @@ The first list included an existing bucket associated with a different AWS workf
 
 ### 6.3 Creating the Temporary Lab Bucket
 
+The original bucket name contained my AWS account ID, which is redacted for publication. The commands here use `awssaanew-cli-your-unique-suffix` as a **replacement example**, not the exact historical bucket name. Before running them, substitute a suffix that makes your bucket name unique and use the same name throughout the lab. General-purpose S3 bucket names must use valid characters (such as lowercase letters, numbers, and hyphens) and be unique within the AWS partition. Buckets are created in a specific Region.
+
 ```bash
-aws s3 mb s3://awssaanew-cli-ACCOUNT_ID --region us-east-1
+aws s3 mb s3://awssaanew-cli-your-unique-suffix --region us-east-1
 aws s3 ls
-aws s3 ls s3://awssaanew-cli-ACCOUNT_ID/
-aws s3api head-bucket --bucket awssaanew-cli-ACCOUNT_ID
+aws s3 ls s3://awssaanew-cli-your-unique-suffix/
+aws s3api head-bucket --bucket awssaanew-cli-your-unique-suffix
 ```
 
 | Component / concept | What we should understand |
@@ -711,8 +698,6 @@ aws s3api head-bucket --bucket awssaanew-cli-ACCOUNT_ID
 | s3api | Lower-level S3 API command group. |
 | head-bucket | Checks whether the bucket can be accessed; a successful result may have no visible body. |
 | --region us-east-1 | Specifies the target Region for the creation command. |
-
-The bucket name was unique for this session. Anyone recreating the lab should select their own globally unique name and consistently use it throughout the examples. A bucket has a Region, but S3 bucket names share a global namespace within the AWS commercial partition.
 
 <table><tr><td align="center"><a href="images/screenshot-44.png"><img src="images/screenshot-44.png" alt="Screenshot 44: aws s3 mb command confirming creation of the temporary S3 lab bucket." width="780"></a></td></tr></table>
 
@@ -727,10 +712,10 @@ The bucket name was unique for this session. Anyone recreating the lab should se
 ```bash
 touch file1.txt file2.py
 ls -l file1.txt file2.py
-aws s3 cp file1.txt s3://awssaanew-cli-ACCOUNT_ID/
+aws s3 cp file1.txt s3://awssaanew-cli-your-unique-suffix/
 ```
 
-touch created two empty local test files. The S3 cp command uploaded file1.txt as an object. An S3 object is stored under a key within a bucket; it is not the same thing as a mounted Linux file system file.
+`touch` created two empty local test files. The `aws s3 cp` command uploaded `file1.txt` as an S3 object. An S3 object is identified by a key in a bucket and is separate from files in the EC2 instance's local filesystem.
 
 <table><tr><td align="center"><a href="images/screenshot-46.png"><img src="images/screenshot-46.png" alt="Screenshot 46: Local file creation and aws s3 cp upload of file1.txt to S3." width="778"></a></td></tr></table>
 
@@ -739,13 +724,13 @@ touch created two empty local test files. The S3 cp command uploaded file1.txt a
 ### 6.5 Synchronizing a Selected File Set
 
 ```bash
-aws s3 sync . s3://awssaanew-cli-ACCOUNT_ID/ --exclude "*" --include "file1.txt" --include "file2.py"
-aws s3 ls s3://awssaanew-cli-ACCOUNT_ID/
+aws s3 sync . s3://awssaanew-cli-your-unique-suffix/ --exclude "*" --include "file1.txt" --include "file2.py"
+aws s3 ls s3://awssaanew-cli-your-unique-suffix/
 ```
 
-The period (.) represents the current local directory. **sync** compares source and destination and transfers files according to differences and filters. I used **--exclude "\*"** followed by two **--include** rules so only the two lab test files would be eligible for upload. This protected unrelated local files, including **mypolicy.json**, from being transferred accidentally.
+The period (`.`) specifies the current directory. `aws s3 sync` compares source and destination and transfers eligible files according to its synchronization rules. I used `--exclude "*"` followed by two `--include` rules to select only the test files. This avoided uploading unrelated local content such as `mypolicy.json`.
 
-Without **--delete**, S3 sync does not generally remove destination objects simply because they are absent from the source. That distinction became one of the final quiz topics.
+Without `--delete`, `aws s3 sync` does not remove destination-only objects simply because they are missing from the source. Adding `--delete` changes that behavior and must be used carefully, especially in automation.
 
 <table><tr><td align="center"><a href="images/screenshot-47.png"><img src="images/screenshot-47.png" alt="Screenshot 47: Filtered aws s3 sync output showing both test objects in the S3 bucket." width="780"></a></td></tr></table>
 
@@ -755,15 +740,15 @@ Without **--delete**, S3 sync does not generally remove destination objects simp
 
 ```bash
 rm file1.txt file2.py
-aws s3 ls s3://awssaanew-cli-ACCOUNT_ID/
-aws s3 cp s3://awssaanew-cli-ACCOUNT_ID/file1.txt /home/ec2-user/
-aws s3 sync s3://awssaanew-cli-ACCOUNT_ID/ /home/ec2-user/
+aws s3 ls s3://awssaanew-cli-your-unique-suffix/
+aws s3 cp s3://awssaanew-cli-your-unique-suffix/file1.txt /home/ec2-user/
+aws s3 sync s3://awssaanew-cli-your-unique-suffix/ /home/ec2-user/
 ls -l file1.txt file2.py
 ```
 
-I deleted the two files locally and then listed the S3 bucket. The objects still existed in S3 because local **rm** does not delete remote objects. Next, I downloaded **file1.txt** directly using **cp**, and I **synchronized** the bucket into the home directory to restore **file2.py**.
+I removed the two local files, then listed the S3 bucket to confirm that both remote objects remained. The Linux `rm` command affects only local files. I restored `file1.txt` using `aws s3 cp` and recovered `file2.py` by synchronizing the bucket into `/home/ec2-user/`.
 
-The final file listing confirmed both local names existed again.
+The final `ls -l` output confirmed that both files were present locally again.
 
 <table><tr><td align="center"><a href="images/screenshot-48.png"><img src="images/screenshot-48.png" alt="Screenshot 48: Local test files removed while both objects remain stored in S3." width="780"></a></td></tr></table>
 
@@ -777,16 +762,16 @@ The final file listing confirmed both local names existed again.
 
 | Command | What it does | Main caution |
 | --- | --- | --- |
-| aws s3 mb | Creates a bucket | Bucket names must be available and Region should be correct. |
-| aws s3 cp | Copies file or object data | Check source/destination direction. |
-| aws s3 sync | Reconciles selected source files with destination | Filters and --delete change what may be transferred or removed. |
-| aws s3 rm | Deletes selected S3 objects | --recursive can remove many objects. |
-| aws s3 rb | Removes a bucket | Empty the bucket first; double-check the target name. |
+| `aws s3 mb` | Creates a bucket | Choose an available, valid bucket name and appropriate Region. |
+| `aws s3 cp` | Copies files or objects | Confirm source and destination direction. |
+| `aws s3 sync` | Synchronizes eligible files or objects | Filters and `--delete` determine which objects are transferred or removed. |
+| `aws s3 rm` | Deletes S3 objects | `--recursive` can delete many objects. |
+| `aws s3 rb` | Removes a bucket | Confirm the target bucket is empty and correctly identified. |
 
 > [!IMPORTANT]
 > **SAA-C03 EXAM CONNECTION**
 >
-> S3 is object storage, not an EC2 filesystem. A bucket is regional, an object has a key, and permissions may apply at bucket and object scope. Pay attention to sync direction, --delete semantics, and filters when interpreting automation questions.
+> Amazon S3 is object storage, not an EC2 filesystem. A bucket is created in a Region, objects have keys, and permissions can be evaluated at bucket and object scope. With `sync`, always check the source/destination direction, filters, and `--delete` behavior.
 
 ### 6.8 Knowledge Check
 
@@ -806,22 +791,22 @@ The final file listing confirmed both local names existed again.
 > [!NOTE]
 > **KEY TAKEAWAY**
 >
-> Amazon S3 preserved the objects after I deleted the local files. Restoring them demonstrated why object storage is distinct from the working directory on EC2.
+> The S3 objects remained available after I removed the local files. Recovering them demonstrated the separation between Amazon S3 object storage and the EC2 instance's filesystem.
 
 ## 07 Cleaning Up Resources and Verifying the Result
 
 ### 7.1 Purpose and Objectives
 
-A **successful** **AWS lab includes responsible teardown**. I removed temporary resources that had been created solely for the CLI exercises and preserved the reusable VPC and administrative IAM setup for future study. The final state was verified through the Console and terminal where screenshots were available.
+Responsible cleanup is part of an AWS lab. I removed resources created only for the CLI exercises and retained the VPC and administrative IAM identity for future study. I verified the main cleanup actions through the AWS Console and CLI, while recording the checks that were not performed.
 
 > [!WARNING]
 > **BEFORE DELETION**
 >
-> Cleanup commands are destructive. A different account, Region, bucket name, or resource ID can change what gets removed. The commands below document actions I performed during this specific session; they are not meant to be pasted into another environment without verification.
+> Cleanup commands can permanently delete resources. Before reusing them, confirm the AWS account, Region, resource names, and IDs. The commands below reflect this specific lab; they must not be run against another environment without checking their targets.
 
 ### 7.2 Removing the IAM Group Policy, User and Group
 
-I deleted the temporary group inline policy before deleting the IAM group. I then removed Student from CLIGroup and deleted Student. My first check showed that CLIGroup still existed, so I performed the remaining group deletion and verified that the filtered CLIGroup lookup returned an empty list. The retained Admins group was not part of this deletion.
+I deleted the inline `MyPowerUser` policy from `CLIGroup`, removed `Student` from the group, and deleted the user. My first verification still showed `CLIGroup`, so I deleted the remaining group and confirmed that its filtered lookup returned an empty list (`[]`). The unrelated `Admins` group was retained.
 
 ```bash
 aws iam delete-group-policy --group-name CLIGroup --policy-name MyPowerUser
@@ -833,7 +818,7 @@ aws iam delete-group --group-name CLIGroup
 aws iam list-groups --query "Groups[?GroupName=='CLIGroup'].GroupName" --output json
 ```
 
-**This sequence is a useful troubleshooting example**: deleting a user does not also delete the group. Verification caught the incomplete teardown and allowed me to correct it.
+This was a practical troubleshooting lesson: deleting an IAM user does not automatically delete its group. The verification step revealed the remaining resource and allowed me to finish cleanup.
 
 <table><tr><td align="center"><a href="images/screenshot-50.png"><img src="images/screenshot-50.png" alt="Screenshot 50: CLI command deleting the MyPowerUser inline group policy." width="780"></a></td></tr></table>
 
@@ -853,11 +838,11 @@ aws iam list-groups --query "Groups[?GroupName=='CLIGroup'].GroupName" --output 
 
 ### 7.3 Deleting S3 Test Objects and the Bucket
 
-I removed the two lab objects and then deleted the now-empty bucket. I ran the S3 list again and confirmed that the unrelated pre-existing CloudFormation bucket remained.
+I removed the two test objects, deleted the empty lab bucket, and listed the account's S3 buckets again. The unrelated CloudFormation bucket was still present.
 
 ```bash
-aws s3 rm s3://awssaanew-cli-ACCOUNT_ID/ --recursive
-aws s3 rb s3://awssaanew-cli-ACCOUNT_ID/
+aws s3 rm s3://awssaanew-cli-your-unique-suffix/ --recursive
+aws s3 rb s3://awssaanew-cli-your-unique-suffix/
 aws s3 ls
 ```
 
@@ -867,9 +852,9 @@ aws s3 ls
 
 ### 7.4 Terminating EC2 and Removing Associated Resources
 
-I selected LinuxCLI in the EC2 Console and terminated it. I intentionally used the Skip OS shutdown option because the instance was disposable and no application data needed a graceful shutdown.
+I terminated `LinuxCLI` from the EC2 Console. Because this was a disposable lab workstation with no application data to preserve, I deliberately selected **Skip OS shutdown**. This is not appropriate for workloads that require graceful shutdown.
 
-The instance later showed Terminated. I deleted LinuxCLI-SG, removed the inline policy from AwsSaaNew-CLI-EC2-Role, and deleted the role. The EC2 Console’s Volumes page showed no remaining volumes in the selected Region.
+The instance later showed **Terminated**. I deleted `LinuxCLI-SG`, removed the inline policy from `AwsSaaNew-CLI-EC2-Role`, and deleted the role. The EBS Volumes page showed no remaining volumes in `us-east-1`.
 
 <table><tr><td align="center"><a href="images/screenshot-55.png"><img src="images/screenshot-55.png" alt="Screenshot 55: EC2 termination confirmation with Skip OS shutdown selected for the disposable instance." width="780"></a></td></tr></table>
 
@@ -901,14 +886,14 @@ The instance later showed Terminated. I deleted LinuxCLI-SG, removed the inline 
 
 ### 7.5 Releasing Two Elastic IP Allocations
 
-The final network cleanup surfaced two Elastic IP addresses. I confirmed that they were no longer needed and completed the Release Elastic IP addresses operation. The green confirmation and empty table established that neither allocation remained in the selected Region.
+During the final network review, I found two Elastic IP allocations that were no longer needed. I released both addresses and verified the success notification and empty Elastic IP list in `us-east-1`.
 
 | Elastic IP | End state |
 | --- | --- |
 | 100.62.10.74 | Released |
 | 98.89.144.11 | Released |
 
-Elastic IP/public IPv4 allocations may incur ongoing charges while allocated. Releasing unused allocations prevents further allocation charges for those addresses, although charges already incurred are not erased. No independent Billing dashboard audit was performed.
+AWS charges for allocated public IPv4 addresses under its standard pricing model, including unused Elastic IPs. Releasing these allocations stopped future hourly charges for the addresses, but did not erase earlier charges. I did not perform an independent AWS Billing audit.
 
 <table><tr><td align="center"><a href="images/screenshot-62.png"><img src="images/screenshot-62.png" alt="Screenshot 62: Both unneeded Elastic IP addresses selected in the release confirmation dialog." width="780"></a></td></tr></table>
 
@@ -929,7 +914,7 @@ Elastic IP/public IPv4 allocations may incur ongoing charges while allocated. Re
 | LinuxCLI-SG | Deleted |
 | AwsSaaNew-CLI-EC2-Role and inline policy | Deleted |
 | Student, CLIGroup, MyPowerUser | Deleted |
-| awssaanew-cli-ACCOUNT_ID bucket and objects | Deleted |
+| awssaanew-cli-your-unique-suffix bucket and objects | Deleted |
 | Two Elastic IP allocations | Released |
 | EBS volumes in us-east-1 | No volumes shown in Console |
 | EBS snapshots | Not audited at my request; none intentionally created |
@@ -946,20 +931,20 @@ Elastic IP/public IPv4 allocations may incur ongoing charges while allocated. Re
 >
 > **Answer: No.** EBS snapshots, public IPv4 allocations, NAT gateways, load balancers and other resources may have separate lifecycle and cost.
 >
-> 3.  Why did I keep the VPC but remove the Elastic IPs?
+> 3.  Why was the VPC retained while the Elastic IP allocations were released?
 >
-> **Answer: The VPC is reusable infrastructure; the addresses were unnecessary allocations.** The basic VPC network objects do not have the same billing behavior as allocated public IPv4 addresses.
+> **Answer:** The VPC and basic networking components can be reused for future labs, while the Elastic IPs were unnecessary allocations that could continue to incur charges.
 
 > [!NOTE]
 > **KEY TAKEAWAY**
 >
-> My deletion checklist ended with a verification step for every major resource category. I also recorded what was intentionally retained and what was not independently audited.
+> I verified the cleanup actions I completed and recorded both the resources intentionally retained and the checks not performed. A terminated EC2 instance alone is not proof that all AWS charges have stopped.
 
 ## 08 Exam Review, Corrections and Production Lessons
 
 ### 8.1 Important Corrections I Made During the Lab
 
-Several practical adjustments improved the accuracy and security of the lab. Rather than reproducing commands without checking them, I compared their intent with the environment actually running on my instance.
+Several adjustments made the lab more accurate and secure. I checked the intended outcome of each step against the AWS services and software actually in use, rather than relying on older instructions without verification.
 
 | Situation | What I did and why |
 | --- | --- |
@@ -981,12 +966,12 @@ Several practical adjustments improved the accuracy and security of the lab. Rat
 | VPC / subnet scope | VPC = Regional; subnet = one AZ; routing defines public/private traffic paths. |
 | IGW vs NAT | IGW supports direct public routing; NAT can support private IPv4 outbound connectivity without exposing the instance to unsolicited direct inbound internet connections. |
 | Security group vs IAM | Security group controls network traffic; IAM controls API actions and resource access. |
-| EC2 role | Instance profiles provide temporary credentials for workloads; avoid embedded long-term access keys. |
+| EC2 role | An instance profile attaches the role to EC2; AWS supplies temporary role credentials to the workload. |
 | IAM explicit deny | A relevant explicit deny takes precedence over an allow. |
 | S3 copy and sync | Object storage persists independently of local Linux files; --delete changes sync cleanup behavior. |
 | Cost hygiene | Terminate disposable compute and verify associated storage, IP allocations and other potentially billable resources. |
 
-### 8.4 Production Considerations and Best Practices
+### 8.3 Production Considerations and Best Practices
 
 - Use separate production and learning accounts or otherwise strong isolation; configure an account budget and billing alerts.
 
@@ -1004,30 +989,30 @@ Several practical adjustments improved the accuracy and security of the lab. Rat
 
 - Use clean naming, tags and a documented teardown checklist to reduce misidentification during cleanup.
 
-### 8.5 Final Reflection
+### 8.4 Final Reflection
 
-This lab connected ideas that initially looked separate. A VPC and public subnet gave the workstation network connectivity; a security group limited SSH; an EC2 IAM role supplied temporary AWS credentials; the CLI executed real IAM and S3 API operations; and cleanup verified which resources had been removed.
+This lab brought together services that serve different purposes. The VPC and public subnet provided a network path for the EC2 workstation; the security group restricted SSH; the EC2 role supplied temporary AWS credentials; and the CLI performed IAM and S3 operations. Cleanup then confirmed which temporary resources were removed.
 
-We did not just create resources. We confirmed identity, tested outputs, cross-checked IAM and S3 state in the Console, caught an incomplete IAM group deletion, and released addresses that were no longer required. The result is a reusable workflow for future AWS labs: configure deliberately, verify every important change, understand its security implications, and clean up with evidence.
+I verified the caller identity, compared output formats, checked IAM and S3 results in the Console, corrected an incomplete IAM group deletion, and released unused Elastic IP allocations. The process reinforced a reusable engineering practice: configure resources deliberately, verify the results, understand the security implications, and clean up carefully.
 
 > [!NOTE]
 > **WHAT REMAINS AFTER THE LAB**
 >
-> AwsSaaNew-vpc and awsMaster/Admins remain for future practice. The administrator account is intentionally retained without MFA, an exception that should be corrected. No snapshot or full billing audit was performed.
+> `AwsSaaNew-vpc`, `awsMaster`, and the `Admins` group remain for future practice. The retained administrator user still lacks MFA and should be secured. EBS snapshots and account-wide billing were not audited.
 
 ## Technical Competencies
 
-**Cloud networking:** VPC creation, CIDR planning, public and private subnets, availability zones, route tables, internet gateways, and network verification.
+**Cloud networking:** VPC creation, CIDR allocation, public and private subnets, Availability Zones, route tables, internet gateways, and network verification.
 
 **Identity and security:** IAM users and groups, managed and inline policies, EC2 instance profiles, temporary credentials, security group ingress, and policy-evaluation concepts.
 
 **Compute and Linux:** EC2 launch configuration, Amazon Linux 2023, SSH key-based access, Linux package management, and health checks.
 
-**AWS CLI and automation foundations:** AWS CLI installation verification, Region/output defaults, STS identity checks, JSON/text/table responses, and repeatable resource commands.
+**AWS CLI and automation foundations:** AWS CLI version checks, Region and output defaults, STS caller identity, JSON/text/table responses, and repeatable resource commands.
 
 **Storage and data operations:** S3 bucket management, object uploads, filtered synchronization, local-versus-remote persistence, and object recovery.
 
-**Operational hygiene:** Verification-driven cleanup of IAM, S3, EC2, security groups, EBS resources, and public IPv4 allocations.
+**Operational hygiene:** Verification-driven cleanup of IAM, S3, EC2, security groups, EBS volumes, and public IPv4 allocations, with unverified areas recorded separately.
 
 ### Skills Matrix
 
@@ -1036,15 +1021,15 @@ We did not just create resources. We confirmed identity, tested outputs, cross-c
 | Networking | Amazon VPC, subnets, route tables, internet gateway | Created a `10.0.0.0/16` VPC with four subnets across two Availability Zones |
 | Identity and access | IAM, roles, policies, instance profiles | Configured admin-group permissions, a dedicated EC2 role, and temporary IAM CLI resources |
 | Compute and OS | EC2, Amazon Linux 2023, SSH, PowerShell | Launched a `t3.micro` CLI workstation, restricted SSH, connected, and checked system health |
-| AWS CLI | AWS CLI v2, STS, EC2 APIs | Verified role-based credentials and compared JSON, text, and table output |
+| AWS CLI | AWS CLI v2, STS, EC2 APIs | Checked the assumed-role caller identity and compared JSON, text, and table output |
 | Object storage | Amazon S3, `cp`, `sync`, `rm` | Created a temporary bucket, transferred selected objects, and recovered files |
-| Resource lifecycle | IAM, EC2, S3, EBS, Elastic IPs | Removed temporary resources, retained the VPC, and released unneeded Elastic IPs |
+| Resource lifecycle | IAM, EC2, S3, EBS, Elastic IPs | Removed temporary resources, retained the VPC, verified the EBS volume list, and released unused Elastic IPs |
 
 ---
 
 ## Command Reference — Commands I Practiced
 
-This section collects the important working syntax for revision. It is a reference only: the explanations and original screenshots appear in the chapters where I used the commands.
+This section consolidates the main commands used in the lab. The relevant explanations, verification results, and screenshots appear in the earlier sections.
 
 ### Linux and role identity
 
@@ -1082,20 +1067,20 @@ aws iam put-group-policy --group-name CLIGroup --policy-name MyPowerUser --polic
 ### S3 create, copy and synchronize
 
 ```bash
-aws s3 mb s3://awssaanew-cli-ACCOUNT_ID --region us-east-1
-aws s3 cp file1.txt s3://awssaanew-cli-ACCOUNT_ID/
-aws s3 sync . s3://awssaanew-cli-ACCOUNT_ID/ --exclude "*" --include "file1.txt" --include "file2.py"
+aws s3 mb s3://awssaanew-cli-your-unique-suffix --region us-east-1
+aws s3 cp file1.txt s3://awssaanew-cli-your-unique-suffix/
+aws s3 sync . s3://awssaanew-cli-your-unique-suffix/ --exclude "*" --include "file1.txt" --include "file2.py"
 ```
 
 ### S3 recovery
 
 ```bash
-aws s3 cp s3://awssaanew-cli-ACCOUNT_ID/file1.txt /home/ec2-user/
-aws s3 sync s3://awssaanew-cli-ACCOUNT_ID/ /home/ec2-user/
+aws s3 cp s3://awssaanew-cli-your-unique-suffix/file1.txt /home/ec2-user/
+aws s3 sync s3://awssaanew-cli-your-unique-suffix/ /home/ec2-user/
 ```
 
 > [!WARNING]
 > **SAFE REUSE REMINDER**
 >
-> These examples contain names from an already completed and cleaned-up lab. For a new account or future exercise, update names, Regions and permissions and verify the desired destination before running any create, overwrite, or delete operation.
+> These commands describe a lab that has already been cleaned up. Before reusing them, select your own valid resource names and bucket suffix, verify the AWS account and Region, and review the permissions and target resources—especially before overwriting or deleting anything.
 
