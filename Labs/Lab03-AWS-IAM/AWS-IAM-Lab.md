@@ -1,4 +1,4 @@
-![AWS Training banner](../../assets/aws-training-banner.svg)
+![AWS IAM Lab Banner](../../assets/aws-iam-lab-banner.svg)
 
 # AWS Identity and Access Management (IAM) Lab
 **IDENTITY & ACCESS MANAGEMENT / IAM USERS / GROUPS / MFA / JSON POLICIES / ROLES / AWS CLI / AWS STS**
