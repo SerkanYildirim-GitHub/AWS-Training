@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="600" viewBox="0 0 1800 600" role="img" aria-labelledby="title desc">
+  <title id="title">AWS IAM Lab — Identity and Access Management</title>
+  <desc id="desc">An AWS-inspired navy and orange banner illustrating an IAM user, Developers group, AdministratorAccess policy, AWS service permissions, MFA, AWS CLI authentication with STS, and an EC2 role trust relationship.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071525"/>
+      <stop offset=".53" stop-color="#0c2239"/>
+      <stop offset="1" stop-color="#13283c"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd16a"/>
+      <stop offset=".45" stop-color="#ffae28"/>
+      <stop offset="1" stop-color="#ff8400"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#103351"/>
+      <stop offset="1" stop-color="#102438"/>
+    </linearGradient>
+    <linearGradient id="mainCard" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#183a57"/>
+      <stop offset="1" stop-color="#10253c"/>
+    </linearGradient>
+    <linearGradient id="titleGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffad22" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#ffad22" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#63b9f0" stroke-opacity=".075" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-25%" y="-30%" width="150%" height="170%">
+      <feDropShadow dx="0" dy="9" stdDeviation="12" flood-color="#000812" flood-opacity=".42"/>
+    </filter>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M1 1 L11 6 L1 11" fill="none" stroke="#ffad2c" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <clipPath id="clip"><rect width="1800" height="600" rx="16"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip)">
+    <rect width="1800" height="600" fill="url(#bg)"/>
+    <rect width="1800" height="600" fill="url(#grid)"/>
+    <circle cx="1580" cy="-90" r="440" fill="#205e93" opacity=".14"/>
+    <circle cx="-95" cy="630" r="510" fill="#ff9900" opacity=".06"/>
+    <rect x="0" y="0" width="1800" height="6" fill="url(#orange)"/>
+    <g fill="none" stroke="#3c8dbe" stroke-width="2" opacity=".23">
+      <path d="M1400 75 h95 l26 -26 h104 l19 -19 h95"/><circle cx="1400" cy="75" r="5" fill="#4ea1cf"/>
+      <path d="M1440 113 h165 l28 -29 h167"/><circle cx="1440" cy="113" r="5" fill="#4ea1cf"/>
+      <path d="M120 564 h90 l23 -23 h180"/><circle cx="120" cy="564" r="4" fill="#4ea1cf"/>
+      <path d="M1680 535 h-105 l-23 23 h-135"/><circle cx="1680" cy="535" r="4" fill="#4ea1cf"/>
+    </g>
+
+    <!-- Header -->
+    <rect x="74" y="37" width="278" height="38" rx="19" fill="#ff9900" fill-opacity=".12" stroke="#ffad30" stroke-opacity=".65"/>
+    <circle cx="97" cy="56" r="6" fill="#ffad25"/>
+    <text x="114" y="62" fill="#fcdba3" font-family="Arial, Helvetica, sans-serif" font-size="17" letter-spacing="2" font-weight="700">AWS TRAINING · LAB 03</text>
+    <rect x="72" y="99" width="1010" height="125" rx="18" fill="url(#titleGlow)"/>
+    <text x="78" y="171" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="75" font-weight="800" letter-spacing="-2">Identity &amp; Access</text>
+    <text x="78" y="229" fill="url(#orange)" font-family="Arial, Helvetica, sans-serif" font-size="59" font-weight="800" letter-spacing="-1.3">Management</text>
+    <text x="1080" y="157" fill="#b8d4e9" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600">AWS IAM</text>
+    <path d="M1080 171 h650" stroke="#6eaacc" opacity=".45"/>
+    <text x="1080" y="204" fill="#e6eff8" font-family="Arial, Helvetica, sans-serif" font-size="20" letter-spacing=".4">USERS  ·  GROUPS  ·  POLICIES  ·  ROLES  ·  MFA</text>
+
+    <!-- horizontal arrow / badge sections -->
+    <path d="M350 349 H460" fill="none" stroke="#ffae2b" stroke-width="3.5" marker-end="url(#arrow)"/>
+    <path d="M772 349 H880" fill="none" stroke="#ffae2b" stroke-width="3.5" marker-end="url(#arrow)"/>
+    <path d="M1200 349 H1302" fill="none" stroke="#ffae2b" stroke-width="3.5" marker-end="url(#arrow)"/>
+    <g fill="#ffc76c" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing=".6">
+      <text x="405" y="329">MEMBERSHIP</text><text x="826" y="329">INHERITS</text><text x="1251" y="329">AUTHORIZES</text>
+    </g>
+
+    <!-- USER card -->
+    <g filter="url(#shadow)">
+      <rect x="75" y="274" width="278" height="160" rx="19" fill="url(#mainCard)" stroke="#4086b1" stroke-width="2"/>
+      <rect x="90" y="290" width="81" height="84" rx="15" fill="#ffa21c" fill-opacity=".13" stroke="#ffad2e" stroke-opacity=".6"/>
+      <circle cx="130" cy="315" r="13" fill="none" stroke="#ffb43a" stroke-width="4"/>
+      <path d="M107 355 v-4 q0-21 23-21 q23 0 23 21 v4" fill="none" stroke="#ffb43a" stroke-width="4" stroke-linecap="round"/>
+      <text x="190" y="321" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">IAM User</text>
+      <text x="190" y="351" fill="#ffca83" font-family="Arial, Helvetica, sans-serif" font-size="17">IAM-Lab-User</text>
+      <path d="M92 391 H336" stroke="#568cae" stroke-opacity=".55"/>
+      <text x="95" y="414" fill="#bbd5e5" font-family="Arial, Helvetica, sans-serif" font-size="16">Temporary lab identity</text>
+    </g>
+
+    <!-- GROUP card -->
+    <g filter="url(#shadow)">
+      <rect x="470" y="274" width="304" height="160" rx="19" fill="url(#mainCard)" stroke="#4086b1" stroke-width="2"/>
+      <rect x="487" y="290" width="80" height="84" rx="15" fill="#3b91cc" fill-opacity=".14" stroke="#67afd5" stroke-opacity=".62"/>
+      <circle cx="526" cy="313" r="10" fill="none" stroke="#9edaf6" stroke-width="3.5"/>
+      <circle cx="508" cy="323" r="7" fill="none" stroke="#9edaf6" stroke-width="3"/>
+      <circle cx="544" cy="323" r="7" fill="none" stroke="#9edaf6" stroke-width="3"/>
+      <path d="M511 355 v-7 q0-12 15-12 q15 0 15 12 v7 M494 355 v-7 q0-12 13-12 M558 355 v-7 q0-12-13-12" fill="none" stroke="#9edaf6" stroke-width="3" stroke-linecap="round"/>
+      <text x="587" y="321" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">IAM Group</text>
+      <text x="587" y="351" fill="#ffd08e" font-family="Arial, Helvetica, sans-serif" font-size="21">Developers</text>
+      <path d="M488 391 H754" stroke="#568cae" stroke-opacity=".55"/>
+      <text x="490" y="414" fill="#bbd5e5" font-family="Arial, Helvetica, sans-serif" font-size="16">Centralized permissions</text>
+    </g>
+
+    <!-- POLICY card -->
+    <g filter="url(#shadow)">
+      <rect x="886" y="274" width="321" height="160" rx="19" fill="url(#mainCard)" stroke="#ffa83e" stroke-width="2"/>
+      <rect x="904" y="290" width="79" height="84" rx="15" fill="#ff9900" fill-opacity=".13" stroke="#ffad2e" stroke-opacity=".66"/>
+      <path d="M951 304 h-23 v55 h39 v-42 l-12-13 h-4 Z M954 305 v15 h14" fill="none" stroke="#ffba49" stroke-width="3" stroke-linejoin="round"/>
+      <text x="917" y="346" fill="#ffc578" font-family="monospace" font-size="13" font-weight="700">{ }</text>
+      <text x="999" y="321" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">IAM Policy</text>
+      <text x="999" y="350" fill="#ffd08e" font-family="Arial, Helvetica, sans-serif" font-size="18">AdministratorAccess</text>
+      <path d="M904 391 H1187" stroke="#568cae" stroke-opacity=".55"/>
+      <text x="906" y="414" fill="#bbd5e5" font-family="Arial, Helvetica, sans-serif" font-size="16">JSON · Actions · Resources</text>
+    </g>
+
+    <!-- service access card -->
+    <g filter="url(#shadow)">
+      <rect x="1313" y="274" width="409" height="160" rx="19" fill="url(#mainCard)" stroke="#4086b1" stroke-width="2"/>
+      <rect x="1331" y="290" width="81" height="84" rx="15" fill="#3b91cc" fill-opacity=".14" stroke="#67afd5" stroke-opacity=".62"/>
+      <path d="M1355 348 q-9 0-9-9 q0-9 10-9 q1-16 17-16 q14 0 18 13 q11 1 11 12 q0 9-11 9 Z" fill="none" stroke="#9edaf6" stroke-width="3.4"/>
+      <path d="M1369 336 l8 7 l13-15" fill="none" stroke="#ffb33b" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="1430" y="321" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">AWS Services</text>
+      <text x="1430" y="351" fill="#ffd08e" font-family="Arial, Helvetica, sans-serif" font-size="18">Authorized API requests</text>
+      <path d="M1332 391 H1704" stroke="#568cae" stroke-opacity=".55"/>
+      <text x="1335" y="414" fill="#bbd5e5" font-family="Arial, Helvetica, sans-serif" font-size="16">Identity-based authorization</text>
+    </g>
+
+    <!-- lower capabilities -->
+    <g font-family="Arial, Helvetica, sans-serif" filter="url(#shadow)">
+      <rect x="75" y="462" width="512" height="91" rx="15" fill="url(#blue)" stroke="#3c7296" stroke-width="1.4"/>
+      <rect x="92" y="482" width="57" height="51" rx="12" fill="#ff9900" fill-opacity=".13" stroke="#ffad2e" stroke-opacity=".55"/>
+      <path d="M112 504 l8-8 l8 8 v13 h-16 Z M124 500 l11 0 v17 h-11" fill="none" stroke="#ffb744" stroke-width="2.5" stroke-linejoin="round"/>
+      <text x="165" y="498" fill="#ffffff" font-size="19" font-weight="700">Console Authentication</text>
+      <text x="165" y="527" fill="#b8d8ec" font-size="17">Password + MFA authenticator</text>
+      <rect x="613" y="462" width="512" height="91" rx="15" fill="url(#blue)" stroke="#3c7296" stroke-width="1.4"/>
+      <rect x="631" y="482" width="57" height="51" rx="12" fill="#ff9900" fill-opacity=".13" stroke="#ffad2e" stroke-opacity=".55"/>
+      <path d="M643 494 l10 10 l-10 10 M661 514 h13" fill="none" stroke="#ffb744" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="705" y="498" fill="#ffffff" font-size="19" font-weight="700">Programmatic Access</text>
+      <text x="705" y="527" fill="#b8d8ec" font-size="17">AWS CLI profile + STS verification</text>
+      <rect x="1150" y="462" width="572" height="91" rx="15" fill="url(#blue)" stroke="#3c7296" stroke-width="1.4"/>
+      <rect x="1168" y="482" width="57" height="51" rx="12" fill="#ff9900" fill-opacity=".13" stroke="#ffad2e" stroke-opacity=".55"/>
+      <circle cx="1195" cy="501" r="8" fill="none" stroke="#ffb744" stroke-width="3"/>
+      <path d="M1195 509 v13 m0-6 h11 m-7 0 v5" stroke="#ffb744" stroke-width="3" stroke-linecap="round"/>
+      <text x="1244" y="498" fill="#ffffff" font-size="19" font-weight="700">IAM Role Trust</text>
+      <text x="1244" y="527" fill="#b8d8ec" font-size="17">Amazon EC2 · sts:AssumeRole</text>
+    </g>
+    <rect x="0" y="587" width="1800" height="13" fill="#ff9900" opacity=".9"/>
+  </g>
+</svg>
