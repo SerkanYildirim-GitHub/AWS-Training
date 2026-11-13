@@ -50,7 +50,6 @@ To open hands-on guides for each lab click the lab name within the table.
 | --- | --- | --- |
 | Amazon S3 Buckets | Amazon S3, buckets, objects, access settings | Create buckets and work with object storage and bucket configuration. |
 | [S3 Static Website Hosting & CloudFront Distribution](Labs/Lab04-S3-Static-Website-and-CloudFront/S3-Static-Website-and-CloudFront-Lab.md) | Amazon S3, CloudFront, EC2, AWS WAF, IAM, AWS CLI | Deploy an Apache website on EC2, publish static content to S3, configure public-read website hosting, deliver the website globally over HTTPS using CloudFront, and monitor requests with AWS WAF. |
-
 | Amazon EBS | EBS volumes, EC2, block storage | Provision and manage block storage attached to EC2 instances. |
 | Amazon EFS | Amazon EFS, shared file systems, EC2 | Configure a shared file system that can be accessed from EC2 workloads. |
 
