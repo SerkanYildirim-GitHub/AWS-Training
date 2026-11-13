@@ -93,3 +93,11 @@ To open hands-on guides for each lab click the lab name within the table.
 Capstone projects will bring several AWS services together in end-to-end architectures, with emphasis on secure design, implementation, testing, and operational decisions.
 
 The labs also reinforce concepts relevant to the **AWS Certified Solutions Architect – Associate (SAA-C03)** exam.
+
+## Disclaimer & Responsible Use
+
+This repository is intended for educational purposes. Users are responsible for their own AWS configurations, security, and costs.
+
+Please credit the original sources when sharing or adapting these materials.
+
+[Read the full Disclaimer, Responsible Use & Attribution](DISCLAIMER.md)
