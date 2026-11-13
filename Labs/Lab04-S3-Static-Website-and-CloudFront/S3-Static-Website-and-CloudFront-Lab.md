@@ -135,7 +135,7 @@ I configured inbound rules for SSH, HTTP, and HTTPS. The HTTP rule allowed reque
 
 | Protocol | Port | Inbound source | Purpose |
 | --- | --- | --- | --- |
-| SSH (TCP) | 22 | `146.70.127.254/32` | My IP access for administration. |
+| SSH (TCP) | 22 | `[IP Address Reducted]/32` | My IP access for administration. |
 | HTTP (TCP) | 80 | `0.0.0.0/0` | Public Apache webpage testing. |
 | HTTPS (TCP) | 443 | `0.0.0.0/0` | Allowed at the security group; no HTTPS web server configured. |
 | SSH (TCP) | 22 | `pl-0e4bcff02b13bef1e` | EC2 Instance Connect managed prefix list. |
