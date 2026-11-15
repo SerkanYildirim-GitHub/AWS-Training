@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="360" viewBox="0 0 1600 360" role="img" aria-labelledby="title desc">
+<title id="title">AWS Training Lab 06 — CloudTrail Auditing</title>
+<desc id="desc">A navy and orange training banner showing AWS activity flowing to CloudTrail and S3 audit logs.</desc>
+<defs>
+  <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#161F2B"/><stop offset="1" stop-color="#232F3E"/></linearGradient>
+  <linearGradient id="orange" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FF9900"/><stop offset="1" stop-color="#F9B44D"/></linearGradient>
+</defs>
+<rect width="1600" height="360" fill="url(#navy)"/>
+<rect x="0" y="0" width="14" height="360" fill="#FF9900"/>
+<path d="M 14 318 L 1600 318" stroke="#4B5A69" stroke-width="1" opacity=".55"/>
+<rect x="60" y="53" width="188" height="34" rx="17" fill="#FF9900"/>
+<text x="154" y="75" font-family="Arial,Helvetica,sans-serif" font-size="16" text-anchor="middle" font-weight="bold" fill="#182330">HANDS-ON LAB 06</text>
+<text x="60" y="152" font-family="Arial,Helvetica,sans-serif" font-size="57" font-weight="bold" fill="#FFFFFF" letter-spacing="1">AWS CLOUDTRAIL</text>
+<text x="63" y="193" font-family="Arial,Helvetica,sans-serif" font-size="22" fill="#DBE3EC">Audit AWS API activity and IAM actions</text>
+<rect x="63" y="220" width="665" height="3" rx="1.5" fill="url(#orange)"/>
+<text x="63" y="262" font-family="Arial,Helvetica,sans-serif" font-size="19" fill="#C8D4E2">MANAGEMENT EVENTS  ·  S3 LOG DELIVERY  ·  EVENT HISTORY</text>
+<text x="63" y="338" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#AEBCCC" letter-spacing="1.7">AWS TRAINING   /   SECURITY &amp; GOVERNANCE</text>
+<!-- Right panel: three simple, well-spaced event path cards -->
+<g transform="translate(838,64)">
+ <rect x="0" y="0" width="204" height="218" rx="16" fill="#2F4052" stroke="#718092" stroke-opacity=".5"/>
+ <rect x="250" y="0" width="204" height="218" rx="16" fill="#344456" stroke="#FF9900" stroke-width="1.5"/>
+ <rect x="500" y="0" width="204" height="218" rx="16" fill="#2F4052" stroke="#718092" stroke-opacity=".5"/>
+ <!-- console window icon -->
+ <rect x="64" y="45" width="78" height="56" rx="7" fill="none" stroke="#FF9900" stroke-width="4"/>
+ <path d="M64 61h78 M79 76l12 8-12 8 M99 92h17" fill="none" stroke="#FF9900" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+ <!-- audit paper icon -->
+ <path d="M320 46h57l17 17v53h-74z" fill="none" stroke="#FF9900" stroke-width="4" stroke-linejoin="round"/>
+ <path d="M377 46v18h17 M333 79h47 M333 92h40 M333 104h26" fill="none" stroke="#FF9900" stroke-width="3" stroke-linecap="round"/>
+ <!-- S3 bucket original icon -->
+ <ellipse cx="600" cy="53" rx="41" ry="13" fill="none" stroke="#FF9900" stroke-width="4"/>
+ <path d="M559 53v54c0 18 82 18 82 0V53" fill="none" stroke="#FF9900" stroke-width="4"/>
+ <path d="M559 82c0 18 82 18 82 0" fill="none" stroke="#FF9900" stroke-width="3"/>
+ <path d="M215 89h23m-7-6 7 6-7 6 M465 89h23m-7-6 7 6-7 6" stroke="#FF9900" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+ <g text-anchor="middle" font-family="Arial,Helvetica,sans-serif">
+  <text x="102" y="151" font-size="22" fill="#FFFFFF" font-weight="bold">AWS ACTION</text>
+  <text x="102" y="179" font-size="15" fill="#C7D3E0">Console / API</text>
+  <text x="352" y="151" font-size="22" fill="#FFFFFF" font-weight="bold">CLOUDTRAIL</text>
+  <text x="352" y="179" font-size="15" fill="#C7D3E0">Audit event</text>
+  <text x="602" y="151" font-size="22" fill="#FFFFFF" font-weight="bold">AMAZON S3</text>
+  <text x="602" y="179" font-size="15" fill="#C7D3E0">JSON log files</text>
+ </g>
+</g>
+</svg>
