@@ -433,7 +433,7 @@ For this short exercise I left log file validation and optional SSE-KMS configur
 
 ## 07 Resource Cleanup Procedure
 
-The following steps describe the **planned teardown** of the two temporary resources from this exercise. They have **not yet been performed** at the time of preparing this guide. Once the cleanup is completed, this section should be updated with the actual results and any cleanup screenshots.
+Follow the steps below to tear down the AWS resources created during this activity.
 
 ### 7.1 Delete the CloudTrail Trail
 
