@@ -66,7 +66,7 @@ To open hands-on guides for each lab click the lab name within the table.
 
 | Lab Title | Focus | Technical work |
 | --- | --- | --- |
-| Amazon RDS | RDS, relational databases, VPC | Create and configure a managed relational database in an AWS networking environment. |
+| [Amazon RDS — MySQL Database Lab](Labs/Lab05-Amazon-RDS-MySQL/RDS-MySQL-Lab.md) | Amazon RDS, MySQL, EC2, VPC, IAM, Security Groups | Deploy a managed MySQL database in private subnets, configure secure EC2-to-RDS connectivity, and verify database access using the MySQL CLI. |
 | Amazon DynamoDB | DynamoDB tables, queries, filters | Create a NoSQL table and practice querying and filtering its items. |
 | Amazon SageMaker Canvas | SageMaker Canvas, no-code ML | Explore a no-code machine-learning workflow and interpret prediction limitations. |
 
