@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="420" viewBox="0 0 1600 420" role="img" aria-label="AWS Training Lab 05 Amazon RDS for MySQL: private database connectivity from Ubuntu EC2">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0D1726"/><stop offset="100%" stop-color="#232F3E"/></linearGradient>
+ <linearGradient id="orange" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#FF9900"/><stop offset="100%" stop-color="#FFB44C"/></linearGradient>
+ <style>text{font-family:Arial,Helvetica,sans-serif;fill:#FAFCFE} .sub{fill:#CED7E1} .small{font-size:21px} .mid{font-size:26px;font-weight:700} .tag{font-size:16px;font-weight:700}</style>
+</defs>
+<rect width="1600" height="420" fill="url(#bg)"/>
+<rect width="1600" height="9" fill="url(#orange)"/>
+<path d="M0 369 C255 318 440 389 704 344 S1260 345 1600 304 L1600 420 L0 420 Z" fill="#16273B"/>
+<path d="M0 398 C302 359 442 414 706 372 S1290 382 1600 352" fill="none" stroke="#FF9900" stroke-opacity="0.42" stroke-width="5"/>
+<text x="66" y="72" font-size="35" font-weight="700">AWS <tspan fill="#FF9900">Training</tspan></text>
+<text x="67" y="104" class="sub small">Solutions Architect Associate · SAA-C03</text>
+<rect x="65" y="141" width="124" height="45" rx="8" fill="#FF9900"/>
+<text x="127" y="170" text-anchor="middle" fill="#142335" class="mid" font-size="20">LAB 05</text>
+<text x="65" y="249" font-weight="800" font-size="56">Amazon RDS for MySQL</text>
+<text x="65" y="298" font-size="34" fill="#FFB44C" font-weight="700">Private Database Connectivity</text>
+<text x="65" y="344" font-size="22" class="sub">VPC networking · Ubuntu EC2 client · Managed MySQL</text>
+<!-- architecture block -->
+<rect x="870" y="92" width="660" height="252" rx="19" fill="#263648" stroke="#50647D" stroke-width="2"/>
+<text x="901" y="126" font-size="20" font-weight="700" class="sub">RDS_VPC · 192.168.0.0/16</text>
+<rect x="903" y="159" width="182" height="137" rx="13" fill="#172735" stroke="#FF9900" stroke-width="3"/>
+<text x="994" y="193" font-size="17" text-anchor="middle" class="sub">PUBLIC SUBNET</text>
+<rect x="958" y="208" width="73" height="49" rx="8" fill="#FF9900"/>
+<path d="M969 220 h51 v26 h-51z M978 249 h33" fill="none" stroke="#182938" stroke-width="3"/>
+<text x="994" y="282" font-size="19" font-weight="700" text-anchor="middle">Ubuntu EC2</text>
+<path d="M1097 225 h94" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+<path d="M1177 211 l18 14 -18 14" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+<text x="1143" y="204" text-anchor="middle" font-size="17" fill="#FFB44C">TCP 3306</text>
+<rect x="1204" y="159" width="287" height="137" rx="13" fill="#172735" stroke="#2F85C4" stroke-width="3"/>
+<text x="1347" y="193" font-size="17" text-anchor="middle" class="sub">PRIVATE SUBNETS · 2 AZs</text>
+<ellipse cx="1347" cy="215" rx="38" ry="11" fill="#2F85C4" stroke="#BCE6FF" stroke-width="3"/>
+<path d="M1309 215 v37 c0 13 76 13 76 0 v-37" fill="#286C9C" stroke="#BCE6FF" stroke-width="3"/>
+<path d="M1309 236 c4 14 72 14 76 0" fill="none" stroke="#BCE6FF" stroke-width="2"/>
+<text x="1347" y="282" font-size="20" font-weight="700" text-anchor="middle">RDS MySQL</text>
+<text x="1198" y="326" text-anchor="middle" font-size="16" class="sub">Restricted database security-group access</text>
+</svg>
