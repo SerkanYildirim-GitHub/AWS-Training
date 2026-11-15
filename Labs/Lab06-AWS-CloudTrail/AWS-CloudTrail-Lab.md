@@ -3,12 +3,67 @@
 # AWS CloudTrail Auditing Lab
 **SECURITY / AWS CLOUDTRAIL / AMAZON S3 / IAM / MANAGEMENT EVENTS / JSON AUDIT LOGS**
 
-In this exercise, I configured a multi-Region AWS CloudTrail trail to deliver management-event audit logs to a dedicated S3 bucket. I verified that the trail was logging and inspected an actual compressed JSON log file, including a recorded read-only AWS API call.
+## Introduction to AWS CloudTrail
 
-I then used CloudTrail Event history to verify write operations made during trail creation. As an additional hands-on test, I signed in as the IAM user `awsMaster`, added a tag to an S3 bucket, and matched the action to the recorded `TagResource` event. Event history also displayed the `ConsoleLogin` and `ChangePassword` operations associated with the same IAM user.
+### What Is AWS CloudTrail?
 
-> [!NOTE]
-> **Resource state when this guide was prepared:** The `SYcloudtrail` trail and the `sy-aws-cloudtrailer` S3 bucket were still present. The cleanup section is a **procedure to perform later**, not a claim that deletion was completed.
+**Amazon Web Services (AWS) CloudTrail** is an auditing and governance service that records activities performed within an AWS account.
+
+It provides visibility into actions performed through the AWS Management Console, AWS CLI, AWS SDKs, and AWS service APIs.
+
+CloudTrail helps answer important security and operational questions:
+
+- **Who** performed an action?
+- **What** action was performed?
+- **When** did the activity occur?
+- **Where** did the request originate?
+- **Which AWS resource** was affected?
+
+CloudTrail records these activities as events containing details such as the API operation, timestamp, IAM identity, AWS Region, source IP address, and request parameters.
+
+### Why Is AWS CloudTrail Important?
+
+CloudTrail is essential for maintaining accountability, investigating security incidents, monitoring administrative actions, and demonstrating compliance with organizational security requirements.
+
+For example, if an IAM policy is modified or an S3 bucket configuration is changed, CloudTrail can help identify the API operation and the identity responsible.
+
+### Common AWS CloudTrail Use Cases
+
+| Use case | Description |
+|---|---|
+| Security auditing | Track IAM user activity, authentication events, and changes to AWS resources. |
+| Incident investigation | Investigate unauthorized changes, unusual API activity, and potential security incidents. |
+| Compliance and governance | Maintain audit records to support internal reviews and regulatory requirements. |
+| Change tracking | Identify who created, modified, or deleted resources and when the changes occurred. |
+| Operational troubleshooting | Investigate failed API requests, permission errors, and configuration changes. |
+| Automated security monitoring | Integrate CloudTrail activity with AWS monitoring and security services to detect and respond to selected events. |
+
+### CloudTrail Event Types
+
+| Event type | Description |
+|---|---|
+| Management events | Record administrative API operations, such as creating resources, changing policies, and retrieving resource information. |
+| Data events | Record supported resource-level operations, such as Amazon S3 object access and AWS Lambda function invocations. |
+| Insights events | Identify unusual patterns in API activity or error rates. |
+| Network activity events | Record supported API activity involving VPC endpoints. |
+
+### CloudTrail Event History vs. Trails
+
+**Event History** provides a searchable record of the previous 90 days of management events within an AWS Region. It is available without creating a trail.
+
+A **CloudTrail trail** provides ongoing delivery of selected event records to an Amazon S3 bucket. This supports longer-term retention, investigation, and integration with other AWS services.
+
+### How CloudTrail Was Used in This Lab
+
+In this exercise, I configured a multi-Region AWS CloudTrail trail to capture Read and Write management events and deliver compressed JSON audit logs to a dedicated Amazon S3 bucket.
+
+I verified that the trail was actively logging, confirmed successful log delivery to Amazon S3, and examined recorded API operations, including the read-only DescribeTrails event and write operations associated with trail creation.
+
+As an additional hands-on exercise, I signed in using the IAM user 'awsMaster' and added a tag to an S3 bucket. I then used CloudTrail Event history to identify the corresponding 'TagResource' event and verify the 'IAM identity' responsible for the configuration change.
+
+Event history also contained 'ConsoleLogin' and 'ChangePassword' events associated with 'awsMaster', demonstrating CloudTrail's visibility into authentication and IAM account-management activity.
+
+This exercise demonstrated how AWS CloudTrail supports user accountability, configuration auditing, operational visibility, and security investigations in an AWS environment.
 
 ---
 
