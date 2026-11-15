@@ -510,8 +510,6 @@ The `CloudTrailAuditTest` tag does not need separate removal if the entire bucke
 
 By the end of the hands-on portion, I had verified both **CloudTrail delivery to Amazon S3** and **Event history auditing of individual AWS activities**. The combination of Read/Write comparisons, JSON inspection, and a deliberately generated IAM user action provided concrete evidence of how CloudTrail helps reconstruct changes within an AWS environment.
 
-The trail and S3 log bucket remain subject to the cleanup procedure in Section 07.
-
 ### AWS Documentation
 
 - [Working with CloudTrail event history](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html)
