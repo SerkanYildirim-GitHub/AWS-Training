@@ -1,4 +1,4 @@
-![AWS Training Lab 05 — Amazon RDS for MySQL](../../assets/lab05-rds-mysql-banner.svg)
+![AWS Training Lab 05 — Amazon RDS for MySQL](../../assets/rds-mysql-banner.svg)
 
 # Amazon RDS for MySQL Lab
 **DATABASES / AMAZON RDS / AMAZON VPC / EC2 / MYSQL / SECURITY GROUPS**
