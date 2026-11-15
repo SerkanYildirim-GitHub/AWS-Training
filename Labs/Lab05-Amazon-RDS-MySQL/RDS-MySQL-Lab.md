@@ -8,7 +8,7 @@ In this lab, I built a dedicated AWS network from scratch, deployed a private Am
 I verified the database's endpoint and availability, installed the MySQL CLI on Ubuntu, corrected an initial hostname/command error, and successfully executed `SHOW DATABASES;` against the RDS instance. The outcome was **five returned databases, including the initial application database**.
 
 > [!NOTE]
-> **Final resource state:** After the database and EC2 connectivity tests, I completed the Lab 05 resource teardown. **Chapter 07** records the planned dependency order, and **Chapter 11** documents the completed console cleanup with sequential screenshots. Existing infrastructure from earlier labs was preserved.
+> **Final resource state:** After the database and EC2 connectivity tests, I completed the Lab 05 resource teardown. **Section 07** records the planned dependency order, and **Section 11** documents the completed console cleanup with sequential screenshots. Existing infrastructure from earlier labs was preserved.
 
 ---
 
@@ -609,7 +609,7 @@ The server reported MySQL version **8.4.11** and returned:
 > [!CAUTION]
 > Deleting a database and choosing **no final snapshot** can permanently destroy data. That may be acceptable for a disposable exercise but is not a production default. Deletion protection must be disabled before deleting an RDS instance. Check the actual AWS Console state when doing cleanup, rather than assuming an earlier selection persisted.
 
-**Teardown outcome:** The Lab 05 RDS database, EC2 client, both dedicated security groups, DB subnet group, custom route tables, Internet Gateway, three subnets, VPC, and remaining manual DB snapshot were removed. I also checked that no Lab 05 EBS root volume, Elastic IP, or retained RDS automated backup remained. See the screenshot-backed walkthrough in Chapter 11.
+**Teardown outcome:** The Lab 05 RDS database, EC2 client, both dedicated security groups, DB subnet group, custom route tables, Internet Gateway, three subnets, VPC, and remaining manual DB snapshot were removed. I also checked that no Lab 05 EBS root volume, Elastic IP, or retained RDS automated backup remained. See the screenshot-backed walkthrough in [Section 11](./RDS-MySQL-Lab.md/#11-resource-teardown--step-by-step)
 
 ---
 
@@ -735,11 +735,11 @@ Never paste database passwords into public documentation or into a shared comman
 
 This exercise confirmed how managed Amazon RDS can remain private while being reachable from a carefully controlled EC2 client inside the same VPC. The important successful verification was not only the database's **Available** status, but the subsequent **authenticated SQL session**: a correct RDS DNS endpoint, allowed traffic on TCP 3306, and valid MySQL credentials were all required.
 
-The initial `ERROR 2005` attempts showed that a database identifier is not a substitute for its endpoint hostname. After correcting the command, the returned database list verified the deployment end to end. After archiving the screenshots, I completed the dependency-aware teardown and checked for residual RDS snapshots, automated backups, EC2 storage and Elastic IPs. The details appear in Chapter 11.
+The initial `ERROR 2005` attempts showed that a database identifier is not a substitute for its endpoint hostname. After correcting the command, the returned database list verified the deployment end to end. After archiving the screenshots, I completed the dependency-aware teardown and checked for residual RDS snapshots, automated backups, EC2 storage and Elastic IPs. The details appear in Section 11.
 
 ---
 
-## 11 Completed Resource Teardown — Step by Step
+## 11 Resource Teardown — Step by Step
 
 After completing the authenticated MySQL connection and running `SHOW DATABASES;`, I removed the disposable Lab 05 resources from **US East (N. Virginia), `us-east-1`**. I performed the deletion in dependency order so that the database and EC2 network interfaces no longer held security groups or subnets in use.
 
@@ -775,6 +775,7 @@ I returned to the database list and verified the AWS success banner stating that
 
 <table><tr><td align="center"><a href="images/screenshot-46.png"><img src="images/screenshot-46.png" alt="AWS confirms the DB instance was deleted; Databases list is empty." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 46:</strong> AWS confirms the DB instance was deleted; Databases list is empty.</sub></p>
+
 ### 11.4 Delete Both Lab Security Groups in Dependency Order
 
 **Console path:** **VPC → Security groups**.
@@ -791,6 +792,7 @@ For each, I selected only the Lab 05 resource and used **Actions → Delete secu
 
 <table><tr><td align="center"><a href="images/screenshot-48.png"><img src="images/screenshot-48.png" alt="RDS-MySQL-SG successfully deleted; deleting RDS-EC2-Client-SG." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 48:</strong> RDS-MySQL-SG successfully deleted; deleting RDS-EC2-Client-SG.</sub></p>
+
 ### 11.5 Remove the RDS DB Subnet Group
 
 **Console path:** **Aurora and RDS → Subnet groups → `rds-private-subnet-group` → Delete**.
@@ -799,6 +801,7 @@ After the DB instance was gone, I selected the dedicated DB subnet group `rds-pr
 
 <table><tr><td align="center"><a href="images/screenshot-49.png"><img src="images/screenshot-49.png" alt="Deletion confirmation for the RDS private DB subnet group." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 49:</strong> Deletion confirmation for the RDS private DB subnet group.</sub></p>
+
 ### 11.6 Disassociate and Delete the Custom Route Tables
 
 **Console path:** **VPC → Route tables**.
@@ -815,6 +818,7 @@ I preserved the VPC's **main route table** during this step. The main table is p
 
 <table><tr><td align="center"><a href="images/screenshot-51.png"><img src="images/screenshot-51.png" alt="Private route table deletion after both explicit subnet associations were removed." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 51:</strong> Private route table deletion after both explicit subnet associations were removed.</sub></p>
+
 ### 11.7 Detach and Delete the Internet Gateway
 
 **Console path:** **VPC → Internet gateways → `RDS_IGW` → Actions**.
@@ -825,6 +829,7 @@ With the dependency removed, I selected **Delete internet gateway**, entered the
 
 <table><tr><td align="center"><a href="images/screenshot-52.png"><img src="images/screenshot-52.png" alt="Internet Gateway detached successfully and selected for permanent deletion; account ID redacted." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 52:</strong> Internet Gateway detached successfully and selected for permanent deletion; account ID redacted.</sub></p>
+
 ### 11.8 Delete the Three Dedicated VPC Subnets
 
 **Console path:** **VPC → Subnets → filter `RDS_VPC` → Actions → Delete subnet**.
@@ -841,6 +846,7 @@ The screenshot shows **Subnets (3/3)** selected and the **Delete subnet** action
 
 <table><tr><td align="center"><a href="images/screenshot-53.png"><img src="images/screenshot-53.png" alt="All three dedicated Lab 05 subnets selected for deletion." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 53:</strong> All three dedicated Lab 05 subnets selected for deletion.</sub></p>
+
 ### 11.9 Delete the Dedicated RDS VPC
 
 **Console path:** **VPC → Your VPCs → `RDS_VPC` → Actions → Delete VPC**.
@@ -851,6 +857,7 @@ The VPC's associated AWS-created default networking resources, such as its main 
 
 <table><tr><td align="center"><a href="images/screenshot-54.png"><img src="images/screenshot-54.png" alt="Deletion dialog for the dedicated RDS_VPC after dependent resources were removed." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 54:</strong> Deletion dialog for the dedicated RDS_VPC after dependent resources were removed.</sub></p>
+
 ### 11.10 Delete the Remaining Manual RDS Snapshot
 
 **Console path:** **Aurora and RDS → Snapshots → Manual**.
@@ -861,6 +868,7 @@ I selected the snapshot and used **Actions → Delete** to remove it. This was a
 
 <table><tr><td align="center"><a href="images/screenshot-55.png"><img src="images/screenshot-55.png" alt="Remaining manual RDS snapshot selected for deletion." width="780"></a></td></tr></table>
 <p><sub><strong>Screenshot 55:</strong> Remaining manual RDS snapshot selected for deletion.</sub></p>
+
 ### 11.11 Perform the Final Storage and Network Audit
 
 I finished by reviewing the resources that can remain after a database or EC2 instance is deleted. I verified the following results in the AWS Console:
