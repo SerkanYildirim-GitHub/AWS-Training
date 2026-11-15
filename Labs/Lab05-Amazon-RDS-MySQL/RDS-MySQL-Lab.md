@@ -609,13 +609,6 @@ The server reported MySQL version **8.4.11** and returned:
 > [!CAUTION]
 > Deleting a database and choosing **no final snapshot** can permanently destroy data. That may be acceptable for a disposable exercise but is not a production default. Deletion protection must be disabled before deleting an RDS instance. Check the actual AWS Console state when doing cleanup, rather than assuming an earlier selection persisted.
 
-### What Must Be Preserved
-
-- The separate pre-existing training VPC `AwsSaaNew-vpc` and its infrastructure.
-- The reusable `npoweraws` EC2 key pair.
-- Pre-existing IAM users, roles and policies, including the role retained from earlier labs.
-- The CloudFront distribution intentionally retained from the preceding lab.
-
 **Teardown outcome:** The Lab 05 RDS database, EC2 client, both dedicated security groups, DB subnet group, custom route tables, Internet Gateway, three subnets, VPC, and remaining manual DB snapshot were removed. I also checked that no Lab 05 EBS root volume, Elastic IP, or retained RDS automated backup remained. See the screenshot-backed walkthrough in Chapter 11.
 
 ---
