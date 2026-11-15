@@ -1,4 +1,4 @@
-![Lab 06 — AWS CloudTrail Auditing](../../assets/lab06-cloudtrail-banner.svg)
+![Lab 06 — AWS CloudTrail Auditing](../../assets/cloudtrail-banner.svg)
 
 # AWS CloudTrail Auditing Lab
 **SECURITY / AWS CLOUDTRAIL / AMAZON S3 / IAM / MANAGEMENT EVENTS / JSON AUDIT LOGS**
