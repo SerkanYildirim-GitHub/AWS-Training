@@ -7,9 +7,6 @@ In this lab, I built a dedicated AWS network from scratch, deployed a private Am
 
 I verified the database's endpoint and availability, installed the MySQL CLI on Ubuntu, corrected an initial hostname/command error, and successfully executed `SHOW DATABASES;` against the RDS instance. The outcome was **five returned databases, including the initial application database**.
 
-> [!NOTE]
-> **Final resource state:** After the database and EC2 connectivity tests, I completed the Lab 05 resource teardown. **Section 07** records the planned dependency order, and **Section 11** documents the completed console cleanup with sequential screenshots. Existing infrastructure from earlier labs was preserved.
-
 ---
 
 ## Contents
