@@ -74,7 +74,6 @@ To open hands-on guides for each lab click the lab name within the table.
 
 | Lab Title | Focus | Technical work |
 | --- | --- | --- |
-
 | [AWS CloudTrail — Auditing & Event Monitoring](Labs/Lab06-AWS-CloudTrail/AWS-CloudTrail-Lab.md) | AWS CloudTrail, S3, IAM, auditing | Configure a multi-Region trail, verify S3 log delivery, analyze Read/Write API events, and audit IAM user sign-in, password changes, and S3 tagging activity. |
 | CloudWatch Custom Metrics | Amazon CloudWatch, EC2, metrics | Configure CloudWatch access and work with custom monitoring metrics. |
 | AWS KMS, CloudTrail & S3 Encryption | AWS KMS, CloudTrail, S3, encryption | Explore key management, encryption, and auditing in an S3 workflow. |
