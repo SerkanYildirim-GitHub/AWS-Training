@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1230 250" role="img" aria-labelledby="title desc">
+<title id="title">Three Regional CloudFormation Website Deployments Verified</title><desc id="desc">Orange Virginia, turquoise Paris, pink Singapore result cards</desc>
+<rect width="1230" height="250" fill="#FFFFFF"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<rect x="12" y="12" width="390" height="226" rx="18" fill="#FFF0E3" stroke="#F7DCC9"/>
+<rect x="420" y="12" width="390" height="226" rx="18" fill="#E0F7F4" stroke="#B5E3DD"/>
+<rect x="828" y="12" width="390" height="226" rx="18" fill="#FCE7F0" stroke="#F2C9DC"/>
+<g text-anchor="middle"><text x="207" y="60" font-size="22" font-weight="700" fill="#653B25">N. Virginia</text><text x="615" y="60" font-size="22" font-weight="700" fill="#225B57">Paris</text><text x="1023" y="60" font-size="22" font-weight="700" fill="#793651">Singapore</text>
+<text x="207" y="100" font-size="18" fill="#653B25">us-east-1</text><text x="615" y="100" font-size="18" fill="#225B57">eu-west-3</text><text x="1023" y="100" font-size="18" fill="#793651">ap-southeast-1</text>
+<text x="207" y="151" font-size="26" fill="#26734D" font-weight="700">✓ HTTP 200</text><text x="615" y="151" font-size="26" fill="#26734D" font-weight="700">✓ HTTP 200</text><text x="1023" y="151" font-size="26" fill="#26734D" font-weight="700">✓ HTTP 200</text>
+<text x="207" y="191" font-size="16" fill="#653B25">Website + /health verified</text><text x="615" y="191" font-size="16" fill="#225B57">Website + /health verified</text><text x="1023" y="191" font-size="16" fill="#793651">Website + /health verified</text></g>
+</g></svg>

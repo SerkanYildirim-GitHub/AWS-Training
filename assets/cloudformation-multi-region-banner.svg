@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 248" role="img" aria-labelledby="title desc">
+<title id="title">AWS CloudFormation Multi-Region Web Infrastructure</title>
+<desc id="desc">Dark navy portfolio banner with three regional deployment panels.</desc>
+<rect width="1280" height="248" rx="18" fill="#232F3E"/>
+<rect x="0" y="0" width="16" height="248" fill="#FF9900"/>
+<text x="56" y="53" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#FF9900">AWS TRAINING BY SRKN</text>
+<text x="56" y="106" font-family="Arial, Helvetica, sans-serif" font-size="37" font-weight="700" fill="#FFFFFF">CloudFormation</text>
+<text x="56" y="151" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#D5E0EA">Automated Multi-Region Web Infrastructure</text>
+<text x="56" y="204" font-family="Arial, Helvetica, sans-serif" font-size="17" fill="#BAC9D5">One YAML template  ·  Three AWS Regions  ·  Automated lifecycle</text>
+<rect x="916" y="37" width="91" height="94" rx="13" fill="#FFF0E3"/><rect x="1022" y="37" width="91" height="94" rx="13" fill="#E0F7F4"/><rect x="1128" y="37" width="91" height="94" rx="13" fill="#FCE7F0"/>
+<g font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700" text-anchor="middle"><text x="961" y="81" fill="#653B25">US</text><text x="1068" y="81" fill="#225B57">EU</text><text x="1174" y="81" fill="#793651">AP</text></g>
+<g font-family="Arial, Helvetica, sans-serif" font-size="12" text-anchor="middle" fill="#E6EBF0"><text x="961" y="160">us-east-1</text><text x="1068" y="160">eu-west-3</text><text x="1174" y="160">ap-southeast-1</text></g>
+<path d="M890 182h340" stroke="#547084" stroke-width="2" stroke-dasharray="6 7"/>
+</svg>

@@ -1,0 +1,175 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  AWS Training by Srkn - reusable regional CloudFormation web server.
+  Launches one Amazon Linux 2023 EC2 instance, an HTTP security group,
+  Apache, and a pastel regional website with a /health endpoint.
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Existing regional default VPC ID.
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Existing public subnet ID in the selected Region and VPC.
+  AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: Latest Amazon Linux 2023 x86-64 AMI for this Region.
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.micro, t3.small]
+    Description: EC2 instance size.
+
+Mappings:
+  RegionDesign:
+    us-east-1:
+      ServerName: Route53-Web-US
+      RegionTitle: US East - N. Virginia
+      Background: '#FFF0E3'
+      Foreground: '#653B25'
+      BadgeBackground: '#FFE0CA'
+    eu-west-3:
+      ServerName: Route53-Web-EU
+      RegionTitle: Europe - Paris
+      Background: '#E0F7F4'
+      Foreground: '#225B57'
+      BadgeBackground: '#C9EEEA'
+    ap-southeast-1:
+      ServerName: Route53-Web-AP
+      RegionTitle: Asia Pacific - Singapore
+      Background: '#FCE7F0'
+      Foreground: '#793651'
+      BadgeBackground: '#F8D4E3'
+
+Resources:
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub
+        - '${ServerName}-SG'
+        - ServerName: !FindInMap [RegionDesign, !Ref 'AWS::Region', ServerName]
+      GroupDescription: HTTP access for the CloudFormation regional web server
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: Public HTTP for website and health endpoint
+      Tags:
+        - Key: Name
+          Value: !Sub
+            - '${ServerName}-SG'
+            - ServerName: !FindInMap [RegionDesign, !Ref 'AWS::Region', ServerName]
+        - Key: Project
+          Value: CloudFormation-Multi-Region-Web
+
+  WebInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - !GetAtt WebSecurityGroup.GroupId
+      MetadataOptions:
+        HttpTokens: required
+        HttpEndpoint: enabled
+      Tags:
+        - Key: Name
+          Value: !FindInMap [RegionDesign, !Ref 'AWS::Region', ServerName]
+        - Key: Project
+          Value: CloudFormation-Multi-Region-Web
+      UserData:
+        Fn::Base64:
+          Fn::Sub:
+            - |
+              #!/bin/bash
+              set -euxo pipefail
+              dnf install -y httpd
+              mkdir -p /var/www/html
+              cat > /var/www/html/index.html <<'WEBPAGE'
+              <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>AWS CloudFormation | ${RegionTitle}</title>
+                <style>
+                  * { box-sizing: border-box; }
+                  body {
+                    margin: 0;
+                    min-height: 100vh;
+                    padding: 24px;
+                    background: ${Background};
+                    color: ${Foreground};
+                    font-family: Arial, sans-serif;
+                  }
+                  .card {
+                    width: 100%;
+                    max-width: 500px;
+                    padding: 32px;
+                    background: white;
+                    border-radius: 20px;
+                    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+                    text-align: left;
+                  }
+                  .badge {
+                    display: inline-block;
+                    padding: 9px 16px;
+                    border-radius: 24px;
+                    background: ${BadgeBackground};
+                    font-size: 13px;
+                    font-weight: bold;
+                  }
+                  .deployment {
+                    margin-top: 16px;
+                    font-size: 13px;
+                    font-weight: bold;
+                    letter-spacing: 0.04em;
+                  }
+                  h1 { font-size: 28px; margin: 22px 0 8px; }
+                  h2 { font-size: 20px; margin: 0 0 24px; }
+                  p { font-size: 16px; line-height: 1.6; }
+                  .status { color: #26734D; font-weight: bold; }
+                </style>
+              </head>
+              <body>
+                <main class="card">
+                  <div class="badge">AWS TRAINING BY SRKN</div>
+                  <div class="deployment">CLOUDFORMATION DEPLOYMENT</div>
+                  <h1>${RegionTitle}</h1>
+                  <h2>Regional Web Server</h2>
+                  <p><strong>Region:</strong> ${AWS::Region}</p>
+                  <p><strong>Instance:</strong> ${ServerName}</p>
+                  <p class="status">&#9679; Server Healthy</p>
+                  <p>Multi-Region DNS Routing Demonstration</p>
+                </main>
+              </body>
+              </html>
+              WEBPAGE
+              printf 'healthy\n' > /var/www/html/health
+              systemctl enable --now httpd
+            - RegionTitle: !FindInMap [RegionDesign, !Ref 'AWS::Region', RegionTitle]
+              Background: !FindInMap [RegionDesign, !Ref 'AWS::Region', Background]
+              Foreground: !FindInMap [RegionDesign, !Ref 'AWS::Region', Foreground]
+              BadgeBackground: !FindInMap [RegionDesign, !Ref 'AWS::Region', BadgeBackground]
+              ServerName: !FindInMap [RegionDesign, !Ref 'AWS::Region', ServerName]
+
+Outputs:
+  Region:
+    Description: AWS Region for this stack.
+    Value: !Ref 'AWS::Region'
+  InstanceId:
+    Description: EC2 instance ID.
+    Value: !Ref WebInstance
+  SecurityGroupId:
+    Description: Security group created by the stack.
+    Value: !GetAtt WebSecurityGroup.GroupId
+  WebsiteURL:
+    Description: Open this address in a browser (HTTP, not HTTPS).
+    Value: !Sub 'http://${WebInstance.PublicIp}/'
+  HealthURL:
+    Description: Health endpoint returning healthy.
+    Value: !Sub 'http://${WebInstance.PublicIp}/health'

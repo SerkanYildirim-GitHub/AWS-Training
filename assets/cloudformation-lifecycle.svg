@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 240" role="img" aria-labelledby="t d">
+<title id="t">CloudFormation lifecycle demonstrated</title><desc id="d">Define, Deploy, Verify, Update, Drift Detection, Delete</desc>
+<rect width="1240" height="240" fill="#FFFFFF"/>
+<g font-family="Arial, Helvetica, sans-serif" text-anchor="middle" font-size="17" font-weight="700">
+<rect x="8" y="68" width="182" height="96" rx="14" fill="#232F3E"/><text x="99" y="124" fill="#FFFFFF">DEFINE</text>
+<rect x="218" y="68" width="182" height="96" rx="14" fill="#E0F7F4"/><text x="309" y="124" fill="#225B57">DEPLOY</text>
+<rect x="428" y="68" width="182" height="96" rx="14" fill="#FFF0E3"/><text x="519" y="124" fill="#653B25">VERIFY</text>
+<rect x="638" y="68" width="182" height="96" rx="14" fill="#FCE7F0"/><text x="729" y="124" fill="#793651">UPDATE</text>
+<rect x="848" y="68" width="182" height="96" rx="14" fill="#E5EAF0"/><text x="939" y="124" fill="#2D3A46">DRIFT CHECK</text>
+<rect x="1058" y="68" width="174" height="96" rx="14" fill="#232F3E"/><text x="1145" y="124" fill="#FFFFFF">DELETE</text></g>
+<g fill="#FF9900"><path d="M194 112l17 0-7-7v14l7-7z"/><path d="M404 112l17 0-7-7v14l7-7z"/><path d="M614 112l17 0-7-7v14l7-7z"/><path d="M824 112l17 0-7-7v14l7-7z"/><path d="M1034 112l17 0-7-7v14l7-7z"/></g>
+</svg>

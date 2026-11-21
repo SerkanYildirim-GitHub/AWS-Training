@@ -1,0 +1,25 @@
+screenshot-01.png | 2026-11-21 20:58:27 | Default VPC and default subnet inventory across the three selected AWS Regions.
+screenshot-02.png | 2026-11-21 21:02:24 | AWS CloudShell Actions menu displaying the file-upload command.
+screenshot-03.png | 2026-11-21 21:03:00 | Successful upload of the CloudFormation YAML template to CloudShell.
+screenshot-04.png | 2026-11-21 21:03:39 | CloudFormation validate-template output recognizing the initial template parameters.
+screenshot-05.png | 2026-11-21 21:07:39 | N. Virginia website running with the light-orange background and CloudFormation branding.
+screenshot-06.png | 2026-11-21 21:09:26 | Paris website running with the light-turquoise regional design.
+screenshot-07.png | 2026-11-21 21:11:04 | Singapore website running with the light-pink regional design.
+screenshot-08.png | 2026-11-21 21:11:54 | CloudShell verifying CREATE_COMPLETE for the three regional CloudFormation stacks.
+screenshot-09.png | 2026-11-21 21:12:54 | All three Apache /health endpoints returning healthy and HTTP 200.
+screenshot-10.png | 2026-11-21 21:14:02 | CloudFormation outputs for the three Regions, including website and health URLs.
+screenshot-11.png | 2026-11-21 21:15:55 | CloudFormation console showing CFN-Regional-Web in CREATE_COMPLETE state.
+screenshot-12.png | 2026-11-21 21:17:16 | CloudFormation Events tab showing the resource-creation sequence.
+screenshot-13.png | 2026-11-21 21:18:25 | Resources tab showing the managed EC2 instance and security group.
+screenshot-14.png | 2026-11-21 21:19:16 | Stack parameters showing AMI, t3.micro instance type, subnet ID and VPC ID.
+screenshot-15.png | 2026-11-21 21:21:03 | Creation and successful validation of cloudformation-regional-web-v2.yaml.
+screenshot-16.png | 2026-11-21 21:22:32 | CloudFormation create-change-set request accepted for CFN-Add-Environment-Tag.
+screenshot-17.png | 2026-11-21 21:23:33 | Change set preview: WebInstance Modify with Replacement False.
+screenshot-18.png | 2026-11-21 21:24:31 | Stack still at CREATE_COMPLETE before the change set was executed.
+screenshot-19.png | 2026-11-21 21:25:51 | Successful change set execution and UPDATE_COMPLETE state.
+screenshot-20.png | 2026-11-21 21:27:04 | EC2 instance retained its ID and public IP and acquired Environment=Training.
+screenshot-21.png | 2026-11-21 21:28:03 | CloudFormation drift-detection request returning its detection ID.
+screenshot-22.png | 2026-11-21 21:29:23 | Completed drift detection reporting IN_SYNC and zero drifted resources.
+screenshot-23.png | 2026-11-21 21:32:33 | Automated deletion script confirming DELETE_COMPLETE in all three Regions.
+screenshot-24.png | 2026-11-21 21:33:24 | CloudFormation Events tab verifying deletion of stack, EC2 and security group.
+screenshot-25.png | 2026-11-21 21:36:23 | Both the original and Version 2 YAML files remaining in CloudShell after deletion.
