@@ -12,6 +12,199 @@ The published examples use the documentation-only domain **`awspractice.example.
 
 ---
 
+## Understanding Amazon Route 53 and DNS Fundamentals
+
+### What Is Amazon Route 53?
+
+**Amazon Route 53** is a highly available and scalable Domain Name System (DNS) web service provided by Amazon Web Services (AWS).
+
+It allows organizations to manage DNS records, direct users to application endpoints, monitor endpoint health, and implement advanced routing policies across different AWS Regions.
+
+Route 53 can route DNS queries to resources such as Amazon EC2 instances, Elastic Load Balancers, Amazon S3 websites, and other publicly accessible application endpoints.
+
+Unlike a traditional DNS configuration that simply maps a domain name to an IP address, Route 53 supports intelligent DNS routing based on:
+
+- **Endpoint health:** Whether an application is available.
+- **Network latency:** Which AWS Region is expected to provide favorable network performance.
+- **Geographic location:** Where a DNS query originates.
+- **Traffic distribution:** How DNS responses should be distributed across multiple endpoints.
+
+These capabilities make Route 53 an important service for building highly available, globally distributed applications.
+
+### How DNS Works
+
+The **Domain Name System (DNS)** translates human-readable domain names into information that computers use to locate services, including IP addresses.
+
+For example, when a user visits a website, a DNS resolver looks up the domain name and obtains the appropriate destination address.
+
+A simplified DNS resolution process is:
+
+1. A user enters a domain name in a browser.
+2. The browser or operating system requests DNS information from a recursive resolver.
+3. The resolver discovers the authoritative DNS servers responsible for the domain.
+4. The authoritative DNS service returns the appropriate DNS record.
+5. The browser connects to the destination web server using the returned address.
+
+DNS resolution and application traffic are separate operations. **Route 53 provides DNS answers; it does not act as an HTTP reverse proxy for our EC2 websites.**
+
+### Core DNS Terminology
+
+| Concept | Definition | Purpose |
+|---|---|---|
+| DNS | Domain Name System | Resolves domain names to addresses and other DNS information. |
+| Hosted Zone | Container for DNS records in Route 53 | Defines how Route 53 answers queries for a domain or subdomain. |
+| Public Hosted Zone | DNS zone accessible through public DNS | Manages internet-facing domain records. |
+| A Record | Maps a DNS name to an IPv4 address | Directs clients to our EC2 web servers. |
+| NS Record | Identifies authoritative name servers | Delegates DNS authority for a domain or subdomain. |
+| SOA Record | Start of Authority record | Contains administrative information about a DNS zone. |
+| TTL | Time to Live | Indicates how long DNS resolvers may cache a response. |
+| Authoritative DNS Server | Server responsible for answering queries for a DNS zone | Provides DNS responses based on configured records and policies. |
+| Recursive DNS Resolver | Service that obtains DNS answers on behalf of clients | Retrieves and caches DNS information. |
+| Health Check | Automated endpoint availability monitoring | Helps Route 53 avoid unhealthy endpoints when supported by the routing policy. |
+| DNS Delegation | Assignment of DNS authority to another set of name servers | Allows a subdomain to be managed independently from its parent domain. |
+
+### Amazon Route 53 Routing Policies
+
+Amazon Route 53 provides several routing policies for different application requirements.
+
+| Routing Policy | Description | Real-World Use Case |
+|---|---|---|
+| Simple | Returns DNS records without specialized traffic-selection rules. | A basic website hosted on a single endpoint. |
+| Weighted | Distributes DNS responses according to configured weights. | Gradual application migrations and traffic splitting. |
+| Failover | Selects a primary or secondary endpoint according to health-check status. | Disaster recovery and active-passive architectures. |
+| Latency-Based | Selects an AWS Region using Route 53 network latency information. | Global applications serving users from multiple Regions. |
+| Geolocation | Selects records according to geographic rules, including continent, country, or US state. | Regional content, localization, and geographic traffic control. |
+| Geoproximity | Routes according to resource locations and optional geographic bias. | Adjusting the geographic distribution of application traffic. |
+| Multivalue Answer | Returns multiple healthy records using DNS-based selection. | Basic DNS-level distribution across healthy endpoints. |
+
+**Important:** DNS routing is not the same as application-level load balancing. Route 53 changes DNS answers, while services such as Application Load Balancers distribute HTTP requests among application targets.
+
+### Routing Policies Implemented in This Project
+
+I implemented three Route 53 routing policies using separate DNS names within a shared public hosted zone.
+
+#### 1. Failover Routing — High Availability
+
+Failover routing supports an **active-passive architecture**, in which a preferred primary endpoint serves the application and a secondary endpoint is available if the primary fails.
+
+In this implementation:
+
+- **Primary:** N. Virginia (`us-east-1`)
+- **Secondary:** Paris (`eu-west-3`)
+- **Monitoring:** Route 53 HTTP health checks
+- **DNS record:** `failover.awspractice.example.com`
+
+I simulated an application failure by stopping Apache on the primary EC2 instance.
+
+Route 53 detected the unhealthy endpoint and returned the Paris secondary IP address. After restoring Apache, I verified that DNS responses returned to the N. Virginia primary endpoint.
+
+**Real-world use case:** Maintaining access to an application when its primary regional deployment becomes unavailable.
+
+#### 2. Latency-Based Routing — Global Performance
+
+Latency-based routing selects among regional application endpoints using Route 53's measurements of network latency between DNS query origins and AWS Regions.
+
+In this implementation, I configured endpoints in:
+
+- N. Virginia (`us-east-1`)
+- Paris (`eu-west-3`)
+- Singapore (`ap-southeast-1`)
+
+**DNS record:** `latency.awspractice.example.com`
+
+I tested regional DNS selections using Route 53's Test record tool and verified the Singapore endpoint using a VPN connection, DNS lookup, and web browser.
+
+**Real-world use case:** Improving the expected network performance of globally distributed applications.
+
+**Key distinction:** Latency-based routing does not necessarily choose the geographically closest server. It uses Route 53's regional latency information.
+
+#### 3. Geolocation Routing — Geographic Traffic Control
+
+Geolocation routing selects DNS records according to the geographic location associated with a DNS query.
+
+In this implementation, I configured:
+
+- **Virginia, United States:** N. Virginia endpoint
+- **France:** Paris endpoint
+- **Singapore:** Singapore endpoint
+- **Default:** N. Virginia endpoint
+
+**DNS record:** `geo.awspractice.example.com`
+
+I verified country-specific behavior and demonstrated the importance of a default record.
+
+Before configuring the default record, an unmatched geographic query returned no IP address. After adding the default record, the same query returned the configured N. Virginia destination.
+
+I also verified website selection through VPN connections from France, Australia, and Singapore.
+
+**Real-world use case:** Geographic content delivery, localization, country-specific application endpoints, and regional routing requirements.
+
+### AWS and Supporting Technologies
+
+The project combined multiple services and technologies to build and test a functioning multi-Region DNS architecture.
+
+| Technology | Role in the Project |
+|---|---|
+| Amazon Route 53 | Hosted DNS records, applied routing policies, and monitored endpoint health. |
+| Amazon EC2 | Hosted three independent regional web servers. |
+| Amazon Linux 2023 | Provided the operating system for the EC2 instances. |
+| Apache HTTP Server | Served regional websites and HTTP health-check endpoints. |
+| Amazon VPC | Provided isolated networking within each AWS Region. |
+| Security Groups | Controlled inbound SSH and HTTP access to EC2 instances. |
+| Cloudflare DNS | Managed the parent DNS zone and delegated the training subdomain to Route 53. |
+| AWS CloudShell | Provided a command-line environment for DNS and HTTP testing. |
+| `dig` and `nslookup` | Verified DNS resolution and selected IP addresses. |
+| `curl` | Tested HTTP connectivity and health-check responses. |
+| VPN | Supported real-browser tests from different geographic locations. |
+
+### DNS Delegation Between Cloudflare and Route 53
+
+The project used **subdomain delegation** to allow Cloudflare and Amazon Route 53 to manage different portions of the DNS namespace.
+
+Cloudflare remained authoritative for the parent domain, while Route 53 became authoritative for the dedicated training subdomain.
+
+I created a Route 53 public hosted zone, obtained its four authoritative name servers, and configured matching NS delegation records in Cloudflare.
+
+This allowed all three routing exercises to operate within one Route 53 hosted zone without migrating the parent domain to AWS.
+
+**Real-world use case:** Organizations can delegate application-specific subdomains to different teams, cloud platforms, or DNS providers while maintaining centralized management of their parent domain.
+
+### Route 53 Health Checks and DNS Caching
+
+Route 53 health checks periodically monitor endpoints using protocols such as HTTP, HTTPS, or TCP.
+
+For HTTP health checks, Route 53 evaluates the endpoint's HTTP response to determine availability.
+
+In this project, each regional Apache server exposed a dedicated endpoint:
+
+`/health`
+
+A successful request returned:
+
+```text
+healthy
+```
+
+The three health checks monitored the regional web servers independently and were reused across the supported routing policies.
+
+**DNS TTL and caching are important considerations:** Even after Route 53 changes an authoritative DNS answer, recursive resolvers and clients may continue using cached answers until those caches expire.
+
+As a result, DNS failover is not an instantaneous replacement for existing connections, and it does not automatically repair an unavailable application.
+
+### AWS Solutions Architect Associate — Key Takeaways
+
+- Route 53 is a global DNS service that supports different routing strategies.
+- EC2 instances, VPCs, subnets, security groups, and EC2 key pairs are Region-scoped resources.
+- Failover routing supports active-passive disaster recovery through endpoint health monitoring.
+- Latency-based routing uses regional latency information, not simply geographic distance.
+- Geolocation routing uses explicitly configured geographic rules.
+- A default geolocation record handles locations without a specific matching rule.
+- Health checks can be reused across multiple DNS records when the routing configuration supports them.
+- DNS caching influences how quickly clients observe routing changes.
+- Public DNS delegation allows different DNS providers to manage a parent domain and its subdomains independently.
+- Route 53 provides DNS-based endpoint selection; application load balancing and application recovery require additional mechanisms.
+
+---
 ## Contents
 
 - [Architecture Highlight](#architecture-highlight)
