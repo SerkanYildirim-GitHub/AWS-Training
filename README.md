@@ -81,13 +81,16 @@ To open hands-on guides for each lab click the lab name within the table.
 ### Load Balancing, DNS & Global Routing
 
 
+
 | Lab Title | Focus | Technical work |
 |---|---|---|
 | Elastic Load Balancing | Elastic Load Balancing, EC2, targets | Distribute incoming application traffic across compute targets and examine load-balancer configuration. |
-| [Route 53 Failover Routing](Labs/Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md#05-active-passive-failover-routing) | Amazon Route 53, DNS, health checks | Configure active-passive DNS routing to direct traffic when a primary endpoint is unhealthy. |
-| [Route 53 Latency-Based Routing](Labs/Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md#06-latency-based-routing) | Amazon Route 53, latency routing, Regions | Use latency-based DNS policies to select among application endpoints in different Regions. |
-| [Route 53 Geolocation Routing](Labs/Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md#07-geolocation-and-default-routing) | Amazon Route 53, geolocation DNS | Apply geographic DNS routing policies according to the location of the DNS query. |
+| [Amazon Route 53 — Complete Multi-Region DNS Project](Labs/Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md) | **Route 53, Cloudflare, EC2, Apache, DNS, health checks** | **Complete hands-on project covering DNS delegation, multi-Region infrastructure, failover, latency-based routing, geolocation, and verified browser/VPN tests.** |
+| [Route 53 Failover Routing](Labs/Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md#05-active-passive-failover-routing) | Amazon Route 53, DNS, health checks | Configure active-passive DNS routing and verify automatic failover and recovery. |
+| [Route 53 Latency-Based Routing](Labs/Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md#06-latency-based-routing) | Amazon Route 53, latency routing, Regions | Use latency-based DNS policies to select among application endpoints in different AWS Regions. |
+| [Route 53 Geolocation Routing](Labs/Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md#07-geolocation-and-default-routing) | Amazon Route 53, geolocation DNS | Apply country- and state-based geographic rules, configure a default record, and verify regional website selection. |
 | AWS Global Accelerator | Global Accelerator, EC2, global traffic | Explore global traffic routing through AWS Global Accelerator endpoints. |
+
 
 
 
