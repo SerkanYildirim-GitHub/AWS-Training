@@ -58,7 +58,8 @@ To open hands-on guides for each lab click the lab name within the table.
 | Lab Title | Focus | Technical work |
 | --- | --- | --- |
 | [EC2 User Data Bootstrapping](Labs/Lab02-EC2-Bootstrapping/EC2-Bootstrapping-Lab.md) | EC2 user data, Linux, Apache, S3 | Automate instance initialization, install a web server, and explore instance metadata and S3 integration. |
-| AWS CloudFormation | CloudFormation, templates, stacks | Create AWS infrastructure from a CloudFormation template and examine the resulting stack. |
+| [CloudFormation Automated Multi-Region Web Infrastructure](Labs/Lab09-CloudFormation-Multi-Region-Web/CloudFormation-Multi-Region-Web-Lab.md)
+AWS CloudFormation | CloudFormation, templates, stacks | Create AWS infrastructure from a CloudFormation template and examine the resulting stack. |
 | Amazon SQS and SNS | SQS queues, SNS topics, subscriptions | Send and receive SQS messages and connect SNS notifications to subscribers. |
 | AWS Lambda for EBS Cleanup | AWS Lambda, EBS, IAM roles | Build an automated workflow to identify and remove unused EBS volumes. |
 
