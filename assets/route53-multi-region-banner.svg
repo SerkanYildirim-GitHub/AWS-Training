@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" role="img" aria-label="AWS Training by SRKN: Amazon Route 53 Multi-Region DNS Routing">
+<rect width="1200" height="240" fill="#232F3E"/>
+<rect x="0" y="0" width="1200" height="7" fill="#FF9900"/>
+<circle cx="1068" cy="110" r="92" fill="none" stroke="#45566a" stroke-width="2"/>
+<circle cx="1068" cy="110" r="58" fill="none" stroke="#45566a" stroke-width="2"/>
+<path d="M978 110h180M1068 18v184" stroke="#45566a" stroke-width="2"/>
+<circle cx="1030" cy="90" r="12" fill="#FFF0E3"/><circle cx="1105" cy="73" r="12" fill="#E0F7F4"/><circle cx="1107" cy="155" r="12" fill="#FCE7F0"/>
+<path d="M1030 90L1105 73L1107 155L1030 90" fill="none" stroke="#FF9900" stroke-width="3" stroke-dasharray="6 6"/>
+<text x="54" y="61" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" fill="#FF9900">AWS TRAINING BY SRKN</text>
+<text x="54" y="120" font-family="Arial,Helvetica,sans-serif" font-size="44" font-weight="700" fill="white">Amazon Route 53</text>
+<text x="54" y="165" font-family="Arial,Helvetica,sans-serif" font-size="29" fill="#E4E9F0">Multi-Region DNS Routing</text>
+<text x="54" y="208" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="#B9C8D5">FAILOVER    /    LATENCY-BASED    /    GEOLOCATION</text>
+</svg>
