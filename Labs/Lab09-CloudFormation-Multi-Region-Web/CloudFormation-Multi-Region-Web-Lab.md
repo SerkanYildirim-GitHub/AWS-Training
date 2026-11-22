@@ -2,13 +2,14 @@
 
 # AWS CloudFormation — Automated Multi-Region Web Infrastructure
 
-**AWS CLOUDFORMATION / INFRASTRUCTURE AS CODE / AWS CLI / EC2 / USER DATA / AMAZON LINUX 2023 / APACHE / MULTI-REGION DEPLOYMENT**
+**AWS CLOUDFORMATION / INFRASTRUCTURE AS CODE / AWS CLI / EC2 / Web Server / APACHE / MULTI-REGION DEPLOYMENT**
 
 ## From Manual Deployment to Infrastructure as Code
 
 ### The Challenge That Inspired This Project
 
-During my previous **Amazon Route 53 Multi-Region DNS Routing** project, I built a working infrastructure across three AWS Regions: **N. Virginia, Paris, and Singapore**.
+
+During my previous **[Amazon Route 53 Multi-Region DNS Routing](../Lab08-Route53-Multi-Region-DNS/Route53-Multi-Region-DNS-Lab.md)** project, I built a working infrastructure across three AWS Regions: **N. Virginia, Paris, and Singapore**.
 
 Each Region required its own EC2 instance, security group, network configuration, Apache installation, and regional website. I repeated the provisioning process, configured the applications, verified their connectivity, and tested their HTTP health endpoints.
 
