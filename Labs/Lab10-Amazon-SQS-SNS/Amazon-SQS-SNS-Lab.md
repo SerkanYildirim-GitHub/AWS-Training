@@ -66,9 +66,9 @@ I treated the **AWS Management Console as the order publisher** and used the SQS
 The exercise had two stages:
 
 | Stage | Message route | Question I tested |
-| --- | --- | --- |
-| **1 — SQS alone** | Publisher → `SY-OrderQueue` → Consumer | Can SQS retain an order until it is retrieved and explicitly deleted? |
-| **2 — SNS + SQS** | Publisher → `SY-OrderTopic` → Subscription → `SY-OrderQueue` → Consumer | Can SNS deliver a published order event to an independently managed queue? |
+| ---- | --- | --- |
+| **1-SQS alone** | Publisher → `SY-OrderQueue` → Consumer | Can SQS retain an order until it is retrieved and explicitly deleted? |
+| **2-SNS + SQS** | Publisher → `SY-OrderTopic` → Subscription → `SY-OrderQueue` → Consumer | Can SNS deliver a published order event to an independently managed queue? |
 
 The difference between the stages was deliberate. In the first, the publisher knew the queue's destination. In the second, the publisher addressed an **SNS topic**, while the **subscription** determined where its notifications went.
 
