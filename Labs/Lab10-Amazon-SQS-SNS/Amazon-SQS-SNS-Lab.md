@@ -1,4 +1,4 @@
-<p align="center"><img src="../../assets/amazon-sqs-sns-banner.png" alt="Amazon SQS and SNS — Event-Driven Messaging Lab banner" width="940"></p>
+<p align="center"><img src="../../assets/amazon-sqs-sns-banner.svg" alt="Amazon SQS and SNS — Event-Driven Messaging Lab banner" width="940"></p>
 
 # Amazon SQS & SNS — Event-Driven Messaging Lab
 
