@@ -1,0 +1,226 @@
+[
+  {
+    "screenshot": 1,
+    "original_filename": "Screenshot 2026-11-22 234904.png",
+    "filename": "screenshot-01.png",
+    "caption": "IAM JSON policy permitting regional EBS volume discovery through ec2:DescribeVolumes.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 2,
+    "original_filename": "Screenshot 2026-11-22 235059.png",
+    "filename": "screenshot-02.png",
+    "caption": "Review and creation of the SY-Lambda-EBS-ReadOnly-Policy inline policy.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 3,
+    "original_filename": "Screenshot 2026-11-22 235150.png",
+    "filename": "screenshot-03.png",
+    "caption": "Lambda execution role with CloudWatch logging and EBS read-only permissions.",
+    "redacted_account_id": true
+  },
+  {
+    "screenshot": 4,
+    "original_filename": "Screenshot 2026-11-22 235632.png",
+    "filename": "screenshot-04.png",
+    "caption": "EC2 instances selected for shutdown during the coordinated training environment cleanup.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 5,
+    "original_filename": "Screenshot 2026-11-23 001229.png",
+    "filename": "screenshot-05.png",
+    "caption": "Lambda function creation with Author from scratch, Python 3.15, and SY-EBS-Cleanup-Lambda.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 6,
+    "original_filename": "Screenshot 2026-11-23 001413.png",
+    "filename": "screenshot-06.png",
+    "caption": "Existing SY-Lambda-EBS-Cleanup-Role selected as the execution role.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 7,
+    "original_filename": "Screenshot 2026-11-23 001514.png",
+    "filename": "screenshot-07.png",
+    "caption": "Successful creation of the Lambda function and its default Python code editor.",
+    "redacted_account_id": true
+  },
+  {
+    "screenshot": 8,
+    "original_filename": "Screenshot 2026-11-23 001742.png",
+    "filename": "screenshot-08.png",
+    "caption": "Initial Boto3 discovery code filtering available volumes by project and cleanup-eligibility tags.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 9,
+    "original_filename": "Screenshot 2026-11-23 001829.png",
+    "filename": "screenshot-09.png",
+    "caption": "Confirmation that the updated Lambda function code was deployed.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 10,
+    "original_filename": "Screenshot 2026-11-23 002057.png",
+    "filename": "screenshot-10.png",
+    "caption": "Creation of a synchronous Lambda console test event for the discovery preview.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 11,
+    "original_filename": "Screenshot 2026-11-23 002521.png",
+    "filename": "screenshot-11.png",
+    "caption": "Successful preview response identifying one eligible 1 GiB volume, with no deletion performed.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 12,
+    "original_filename": "Screenshot 2026-11-23 002637.png",
+    "filename": "screenshot-12.png",
+    "caption": "Lambda monitoring tab showing invocation and duration metrics.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 13,
+    "original_filename": "Screenshot 2026-11-23 002710.png",
+    "filename": "screenshot-13.png",
+    "caption": "CloudWatch log group and log streams created for the Lambda function.",
+    "redacted_account_id": true
+  },
+  {
+    "screenshot": 14,
+    "original_filename": "Screenshot 2026-11-23 002817.png",
+    "filename": "screenshot-14.png",
+    "caption": "CloudWatch log entries reporting PREVIEW_ONLY and DeletionPerformed=false.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 15,
+    "original_filename": "Screenshot 2026-11-23 003029.png",
+    "filename": "screenshot-15.png",
+    "caption": "IAM JSON policy restricting DeleteVolume to the exact training volume and its required tags.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 16,
+    "original_filename": "Screenshot 2026-11-23 003105.png",
+    "filename": "screenshot-16.png",
+    "caption": "Review of the SY-Lambda-EBS-Delete-Policy inline policy.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 17,
+    "original_filename": "Screenshot 2026-11-23 003145.png",
+    "filename": "screenshot-17.png",
+    "caption": "Execution role showing the managed logging policy and both custom inline EBS policies.",
+    "redacted_account_id": true
+  },
+  {
+    "screenshot": 18,
+    "original_filename": "Screenshot 2026-11-23 003342.png",
+    "filename": "screenshot-18.png",
+    "caption": "Unattached 1 GiB gp3 training volume in the Available state.",
+    "redacted_account_id": true
+  },
+  {
+    "screenshot": 19,
+    "original_filename": "Screenshot 2026-11-23 003528.png",
+    "filename": "screenshot-19.png",
+    "caption": "Training EBS volume tags showing Project=SY-AWS-Labs and CleanupEligible=true.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 20,
+    "original_filename": "Screenshot 2026-11-23 003813.png",
+    "filename": "screenshot-20.png",
+    "caption": "Lambda code with exact target-volume ID and a default-disabled deletion switch.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 21,
+    "original_filename": "Screenshot 2026-11-23 004046.png",
+    "filename": "screenshot-21.png",
+    "caption": "Successful guarded preview: eligible volume found while deletion remains disabled.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 22,
+    "original_filename": "Screenshot 2026-11-23 004336.png",
+    "filename": "screenshot-22.png",
+    "caption": "Lambda code configured for the individually approved deletion test.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 23,
+    "original_filename": "Screenshot 2026-11-23 004448.png",
+    "filename": "screenshot-23.png",
+    "caption": "Manual test event containing action=DELETE and the exact confirmed EBS volume ID.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 24,
+    "original_filename": "Screenshot 2026-11-23 005047.png",
+    "filename": "screenshot-24.png",
+    "caption": "CloudWatch execution record showing Mode=DELETE and DeletionPerformed=true.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 25,
+    "original_filename": "Screenshot 2026-11-23 005122.png",
+    "filename": "screenshot-25.png",
+    "caption": "EBS inventory following the automated deletion, with the test volume absent.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 26,
+    "original_filename": "Screenshot 2026-11-23 005451.png",
+    "filename": "screenshot-26.png",
+    "caption": "Elastic IP address released as part of the wider resource teardown.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 27,
+    "original_filename": "Screenshot 2026-11-23 005610.png",
+    "filename": "screenshot-27.png",
+    "caption": "Training Linux and Windows EC2 instances shown in the Terminated state.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 28,
+    "original_filename": "Screenshot 2026-11-23 005700.png",
+    "filename": "screenshot-28.png",
+    "caption": "Two remaining training data volumes awaiting final manual cleanup.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 29,
+    "original_filename": "Screenshot 2026-11-23 005830.png",
+    "filename": "screenshot-29.png",
+    "caption": "Successful deletion of the separate EBS snapshot and empty snapshot inventory.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 30,
+    "original_filename": "Screenshot 2026-11-23 010004.png",
+    "filename": "screenshot-30.png",
+    "caption": "Lambda function successfully deleted, with no functions listed.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 31,
+    "original_filename": "Screenshot 2026-11-23 010106.png",
+    "filename": "screenshot-31.png",
+    "caption": "IAM confirmation dialog for removing the temporary Lambda execution role.",
+    "redacted_account_id": false
+  },
+  {
+    "screenshot": 32,
+    "original_filename": "Screenshot 2026-11-23 010655.png",
+    "filename": "screenshot-32.png",
+    "caption": "Successful deletion of the Linux SSH and Windows RDP training security groups.",
+    "redacted_account_id": false
+  }
+]

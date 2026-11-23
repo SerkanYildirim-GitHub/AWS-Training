@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 204" role="img" aria-label="AWS Lambda EBS Cleanup lab banner">
+<defs><linearGradient id="banner" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111E30"/><stop offset="1" stop-color="#232F3E"/></linearGradient></defs>
+<rect width="1200" height="204" rx="12" fill="url(#banner)"/><rect x="0" y="0" width="7" height="204" rx="3" fill="#FF9900"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="39" y="39" font-size="18" font-weight="700" letter-spacing="2" fill="#FF9900">AWS TRAINING BY SRKN</text>
+<text x="40" y="99" font-size="41" font-weight="700" fill="#F8FAFC">AWS Lambda | EBS Cleanup</text>
+<text x="41" y="136" font-size="18" fill="#C9D5E2">Boto3  /  Least-privilege IAM  /  Safety gates  /  CloudWatch</text>
+<text x="41" y="175" font-size="12" letter-spacing="1.6" fill="#9CAFC3">HANDS-ON AWS CLOUD ENGINEERING</text></g>
+<path d="M733 38 L733 167" stroke="#3A4B63"/>
+<g font-family="Arial,Helvetica,sans-serif" fill="#DCE6F0" font-size="13" font-weight="600"><rect x="763" y="82" width="120" height="62" rx="9" fill="#172B43" stroke="#41566F"/><circle cx="783" cy="101" r="5" fill="#FF9900"/><text x="824" y="120" text-anchor="middle">DISCOVER</text>
+<rect x="897" y="82" width="120" height="62" rx="9" fill="#172B43" stroke="#41566F"/><circle cx="917" cy="101" r="5" fill="#FF9900"/><text x="958" y="120" text-anchor="middle">AUTHORIZE</text>
+<rect x="1031" y="82" width="120" height="62" rx="9" fill="#172B43" stroke="#41566F"/><circle cx="1051" cy="101" r="5" fill="#FF9900"/><text x="1092" y="120" text-anchor="middle">VERIFY</text></g>
+<path d="M0 194 Q340 183 600 194 T1200 194" stroke="#FF9900" stroke-width="1.4" opacity=".65" fill="none"/>
+</svg>
