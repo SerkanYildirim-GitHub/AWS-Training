@@ -214,11 +214,12 @@ flowchart LR
 
 The following visuals provide two complementary views: the **general messaging concept**, followed by the **actual sequence of steps** completed in this lab.
 
-<p align="center"><img src="../../assets/sns-sqs-how-it-works.png" alt="Visual guide explaining SQS queues, SNS topics, subscriptions, publishing and polling" width="820"></p>
-
+<p align="center"><img src="../../assets/sns-sqs-how-it-works.svg" alt="Visual guide explaining SQS queues, SNS topics, subscriptions, publishing and polling" width="820"></p>
 <p><sub><strong>Architecture visual:</strong> How a publisher, SNS topic, SQS queue, and consumer fit together in an event-driven system.</sub></p>
 
-<p align="center"><img src="../../assets/sqs-sns-verified-workflow.png" alt="Seven-stage SQS and SNS lab workflow from provisioning to cleanup" width="940"></p>
+---
+
+<p align="center"><img src="../../assets/sqs-sns-verified-workflow.svg" alt="Seven-stage SQS and SNS lab workflow from provisioning to cleanup" width="940"></p>
 
 <p><sub><strong>Workflow visual:</strong> My verified sequence, from creating the queue through publishing, receiving, and cleaning up.</sub></p>
 
