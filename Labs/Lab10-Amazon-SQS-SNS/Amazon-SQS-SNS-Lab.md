@@ -17,8 +17,10 @@ Temporary worker downtime can interrupt the flow.	SQS can retain queued work unt
 The publisher must know about every recipient.	SNS lets the publisher address one topic rather than manage individual subscribers.
 Adding another recipient requires changes to the publishing application.	A new subscription can receive the same published event without changing the original publisher.
 
-[!NOTE]
-**The simplest mental model**: **SNS** announces that something happened; **SQS** holds the work until a consumer is ready. The examples in this report use an order event, but the same architectural pattern applies to many business workflows.
+> [!NOTE]
+ 
+> **The simplest mental model**: **SNS** announces that something happened; **SQS** holds the work until a consumer is ready. 
+> The examples in this report use an order event, but the same architectural pattern applies to many business workflows.
 
 ### WHAT I ACTUALLY TESTED
 
@@ -29,9 +31,10 @@ I simulated both the order publisher and the consumer in the AWS Management Cons
 I built and tested a messaging workflow for a simulated e-commerce application using **Amazon Simple Queue Service (SQS)** and **Amazon Simple Notification Service (SNS)**. First, I created an SQS Standard queue, sent a customer-order message directly to it, retrieved its contents, and deleted it. I then created a Standard SNS topic, subscribed the queue, and published a new order notification through SNS. The received SQS message contained the original order information inside an SNS notification envelope, confirming the end-to-end integration.
 
 The exercise demonstrated why messaging services are useful even when applications are simple: a publisher can send an event without managing each consumer's availability, while a queue retains a delivered message until a consumer retrieves and processes it. 
+
 **After verifying the workflow, I removed the subscription, SNS topic, and SQS queue.** 
 
-| Lab facts | Verified configuration |
+| **Lab facts** | **Verified configuration** |
 | --- | --- |
 | AWS Region | US East (N. Virginia), `us-east-1` |
 | SQS queue | `SY-OrderQueue` — Standard |
@@ -67,7 +70,7 @@ The exercise demonstrated why messaging services are useful even when applicatio
 
 I simulated an online store that generates new-order events. At first, I sent a JSON order directly to SQS to understand the queue's message lifecycle. Next, I changed the message path: the order publisher submitted a notification to SNS, and an SQS subscription received that notification without a separate application server.
 
-The objective was to practice the difference between **queue-based decoupling** and **topic-based publish-subscribe messaging**, then demonstrate how the two services work together. No EC2 instance, Lambda function, real checkout service, or automated worker was created for this activity. The AWS Console represented the publisher and consumer during testing.
+The objective was to practice the difference between **queue-based decoupling** and **topic-based publish-subscribe messaging**, then demonstrate how the two services work together. The AWS Console represented the publisher and consumer during testing.
 
 ### 1.2 Objectives
 
