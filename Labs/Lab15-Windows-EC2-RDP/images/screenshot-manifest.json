@@ -1,0 +1,92 @@
+[
+  {
+    "screenshot": 1,
+    "timestamp": "20261123-070239",
+    "filename": "screenshot-01.png",
+    "caption": "EC2 launch wizard selecting Windows Server 2025 Base and naming the instance SY-Windows-EC2."
+  },
+  {
+    "screenshot": 2,
+    "timestamp": "20261123-070319",
+    "filename": "screenshot-02.png",
+    "caption": "Windows EC2 t3.small instance type and the existing RSA key-pair selection."
+  },
+  {
+    "screenshot": 3,
+    "timestamp": "20261123-070605",
+    "filename": "screenshot-03.png",
+    "caption": "Windows EC2 network configuration showing the default VPC, public IPv4, and restricted RDP rule."
+  },
+  {
+    "screenshot": 4,
+    "timestamp": "20261123-070708",
+    "filename": "screenshot-04.png",
+    "caption": "Windows EC2 root storage configuration showing 30 GiB gp3 and 3,000 IOPS."
+  },
+  {
+    "screenshot": 5,
+    "timestamp": "20261123-071148",
+    "filename": "screenshot-05.png",
+    "caption": "Windows and Linux EC2 instances both running with all displayed status checks passed."
+  },
+  {
+    "screenshot": 6,
+    "timestamp": "20261123-071304",
+    "filename": "screenshot-06.png",
+    "caption": "Security groups list identifying SY-Windows-RDP-SG by name and tag."
+  },
+  {
+    "screenshot": 7,
+    "timestamp": "20261123-071431",
+    "filename": "screenshot-07.png",
+    "caption": "Selected SY-Windows-EC2 and opened its Connect workflow."
+  },
+  {
+    "screenshot": 8,
+    "timestamp": "20261123-071513",
+    "filename": "screenshot-08.png",
+    "caption": "Windows RDP connection tab showing Administrator and the Get Windows password action."
+  },
+  {
+    "screenshot": 9,
+    "timestamp": "20261123-071632",
+    "filename": "screenshot-09.png",
+    "caption": "Windows password retrieval workflow selecting the assigned RSA key and private-key file."
+  },
+  {
+    "screenshot": 10,
+    "timestamp": "20261123-071744",
+    "filename": "screenshot-10.png",
+    "caption": "Decrypted Windows connection details with the Administrator username and password concealed."
+  },
+  {
+    "screenshot": 11,
+    "timestamp": "20261123-072311",
+    "filename": "screenshot-11.png",
+    "caption": "Local Windows Remote Desktop client configured for the EC2 public IPv4 and Administrator username."
+  },
+  {
+    "screenshot": 12,
+    "timestamp": "20261123-072449",
+    "filename": "screenshot-12.png",
+    "caption": "Remote Desktop certificate warning encountered during the initial Windows EC2 connection."
+  },
+  {
+    "screenshot": 13,
+    "timestamp": "20261123-072703",
+    "filename": "screenshot-13.png",
+    "caption": "Successful graphical RDP login to Windows Server with EC2 instance details visible on the desktop."
+  },
+  {
+    "screenshot": 14,
+    "timestamp": "20261123-072822",
+    "filename": "screenshot-14.png",
+    "caption": "Windows Server 2025 Datacenter version 24H2 confirmed using winver."
+  },
+  {
+    "screenshot": 15,
+    "timestamp": "20261123-073006",
+    "filename": "screenshot-15.png",
+    "caption": "PowerShell verification of the 30 GiB healthy NVMe disk and NTFS Windows C: volume."
+  }
+]

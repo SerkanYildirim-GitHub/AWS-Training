@@ -1,0 +1,68 @@
+[
+  {
+    "screenshot": 1,
+    "timestamp": "20261123-044658",
+    "filename": "screenshot-01.png",
+    "caption": "EC2 launch wizard showing the SY-Linux-EC2 name and Amazon Linux 2023 x86 AMI."
+  },
+  {
+    "screenshot": 2,
+    "timestamp": "20261123-044755",
+    "filename": "screenshot-02.png",
+    "caption": "Selected t3.micro instance type and SY-AWS-Labs-Key during EC2 launch."
+  },
+  {
+    "screenshot": 3,
+    "timestamp": "20261123-045214",
+    "filename": "screenshot-03.png",
+    "caption": "Default VPC and subnet selection, automatic public IPv4, and restricted SSH security-group rule."
+  },
+  {
+    "screenshot": 4,
+    "timestamp": "20261123-045431",
+    "filename": "screenshot-04.png",
+    "caption": "EC2 launch storage configuration showing the 8 GiB gp3 EBS root volume."
+  },
+  {
+    "screenshot": 5,
+    "timestamp": "20261123-045529",
+    "filename": "screenshot-05.png",
+    "caption": "EC2 launch summary showing one t3.micro instance and one 8 GiB root volume before launch."
+  },
+  {
+    "screenshot": 6,
+    "timestamp": "20261123-050958",
+    "filename": "screenshot-06.png",
+    "caption": "Running SY-Linux-EC2 with t3.micro, three passing status checks, and public IPv4 assigned."
+  },
+  {
+    "screenshot": 7,
+    "timestamp": "20261123-053449",
+    "filename": "screenshot-07.png",
+    "caption": "SY-Linux-SG details showing its Name tag and VPC association."
+  },
+  {
+    "screenshot": 8,
+    "timestamp": "20261123-053555",
+    "filename": "screenshot-08.png",
+    "caption": "EC2 security groups list identifying SY-Linux-SG by its display name and security-group name."
+  },
+  {
+    "screenshot": 9,
+    "timestamp": "20261123-053900",
+    "filename": "screenshot-09.png",
+    "caption": "Successful SSH session from Windows to Amazon Linux 2023 using the RSA key pair."
+  },
+  {
+    "screenshot": 10,
+    "timestamp": "20261123-054027",
+    "filename": "screenshot-10.png",
+    "caption": "Linux terminal displaying the authenticated user, OS and hardware details, and root block device."
+  },
+  {
+    "screenshot": 11,
+    "timestamp": "20261123-054221",
+    "filename": "screenshot-11.png",
+    "caption": "EC2 Storage tab showing the attached 8 GiB EBS root volume and AWS device mapping."
+  }
+]

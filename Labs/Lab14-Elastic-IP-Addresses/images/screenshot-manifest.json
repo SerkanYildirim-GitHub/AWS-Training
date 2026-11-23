@@ -1,0 +1,62 @@
+[
+  {
+    "screenshot": 1,
+    "timestamp": "20261123-064451",
+    "filename": "screenshot-01.png",
+    "caption": "Elastic IP allocation form with the AWS IPv4 pool, us-east-1 border group, and project tags."
+  },
+  {
+    "screenshot": 2,
+    "timestamp": "20261123-064607",
+    "filename": "screenshot-02.png",
+    "caption": "Elastic IP allocation success showing the assigned static address and allocation ID."
+  },
+  {
+    "screenshot": 3,
+    "timestamp": "20261123-064736",
+    "filename": "screenshot-03.png",
+    "caption": "Elastic IP Actions menu with the Associate Elastic IP address operation selected."
+  },
+  {
+    "screenshot": 4,
+    "timestamp": "20261123-064849",
+    "filename": "screenshot-04.png",
+    "caption": "Elastic IP association form identifying the Linux instance and its private IPv4 address."
+  },
+  {
+    "screenshot": 5,
+    "timestamp": "20261123-064931",
+    "filename": "screenshot-05.png",
+    "caption": "Successful Elastic IP association with SY-Linux-EC2 and the existing private IPv4 address."
+  },
+  {
+    "screenshot": 6,
+    "timestamp": "20261123-065115",
+    "filename": "screenshot-06.png",
+    "caption": "Successful SSH login through the Elastic IP and verification of the original Linux EC2 host."
+  },
+  {
+    "screenshot": 7,
+    "timestamp": "20261123-065431",
+    "filename": "screenshot-07.png",
+    "caption": "Elastic IP Actions menu showing Disassociate rather than Release."
+  },
+  {
+    "screenshot": 8,
+    "timestamp": "20261123-065627",
+    "filename": "screenshot-08.png",
+    "caption": "Elastic IP still allocated to the account with no associated EC2 instance after disassociation."
+  },
+  {
+    "screenshot": 9,
+    "timestamp": "20261123-065737",
+    "filename": "screenshot-09.png",
+    "caption": "Reassociation form targeting SY-Linux-EC2 and private IPv4 172.31.35.166."
+  },
+  {
+    "screenshot": 10,
+    "timestamp": "20261123-065803",
+    "filename": "screenshot-10.png",
+    "caption": "Elastic IP successfully reassociated with the same EC2 instance."
+  }
+]

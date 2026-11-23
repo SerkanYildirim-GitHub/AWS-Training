@@ -1,0 +1,224 @@
+[
+  {
+    "screenshot": 1,
+    "timestamp": "20261123-054221",
+    "filename": "screenshot-01.png",
+    "caption": "EC2 Storage tab identifying the existing 8 GiB EBS-backed root volume."
+  },
+  {
+    "screenshot": 2,
+    "timestamp": "20261123-054629",
+    "filename": "screenshot-02.png",
+    "caption": "EBS volume creation form showing gp3, 2 GiB, 3,000 IOPS, and the matching Availability Zone."
+  },
+  {
+    "screenshot": 3,
+    "timestamp": "20261123-055026",
+    "filename": "screenshot-03.png",
+    "caption": "Final data-volume tags identifying the project and the protected working disk."
+  },
+  {
+    "screenshot": 4,
+    "timestamp": "20261123-055158",
+    "filename": "screenshot-04.png",
+    "caption": "AWS confirmation and Volumes list showing SY-EBS-Data-01 as a new available 2 GiB disk."
+  },
+  {
+    "screenshot": 5,
+    "timestamp": "20261123-055311",
+    "filename": "screenshot-05.png",
+    "caption": "EBS volume Actions menu showing the Attach volume operation for SY-EBS-Data-01."
+  },
+  {
+    "screenshot": 6,
+    "timestamp": "20261123-055450",
+    "filename": "screenshot-06.png",
+    "caption": "Attachment form selecting the Linux instance and the requested /dev/sdf device mapping."
+  },
+  {
+    "screenshot": 7,
+    "timestamp": "20261123-055543",
+    "filename": "screenshot-07.png",
+    "caption": "Successful EBS attachment confirmation with the new volume in the In-use state."
+  },
+  {
+    "screenshot": 8,
+    "timestamp": "20261123-055707",
+    "filename": "screenshot-08.png",
+    "caption": "Linux lsblk output showing the 8 GiB operating-system disk and the new unformatted 2 GiB disk."
+  },
+  {
+    "screenshot": 9,
+    "timestamp": "20261123-055912",
+    "filename": "screenshot-09.png",
+    "caption": "NVMe model and serial numbers confirming that /dev/nvme1n1 matched the 2 GiB EBS data volume."
+  },
+  {
+    "screenshot": 10,
+    "timestamp": "20261123-060101",
+    "filename": "screenshot-10.png",
+    "caption": "XFS filesystem creation output and lsblk verification on the 2 GiB EBS data disk."
+  },
+  {
+    "screenshot": 11,
+    "timestamp": "20261123-060221",
+    "filename": "screenshot-11.png",
+    "caption": "Mounted XFS EBS volume verified by df -hT, with /data backed by the 2 GiB device."
+  },
+  {
+    "screenshot": 12,
+    "timestamp": "20261123-060730",
+    "filename": "screenshot-12.png",
+    "caption": "Created, read, and listed ebs-test.txt on the mounted EBS volume."
+  },
+  {
+    "screenshot": 13,
+    "timestamp": "20261123-061008",
+    "filename": "screenshot-13.png",
+    "caption": "Saved a UUID-based /etc/fstab entry and verified all mount definitions without errors."
+  },
+  {
+    "screenshot": 14,
+    "timestamp": "20261123-061238",
+    "filename": "screenshot-14.png",
+    "caption": "Linux instance reboot followed by a successful SSH reconnection from Windows."
+  },
+  {
+    "screenshot": 15,
+    "timestamp": "20261123-061345",
+    "filename": "screenshot-15.png",
+    "caption": "Post-reboot verification showing the automatically mounted EBS volume and unchanged test file."
+  },
+  {
+    "screenshot": 16,
+    "timestamp": "20261123-061539",
+    "filename": "screenshot-16.png",
+    "caption": "Original data volume safely unmounted; XFS filesystem intact and /data no longer mounted."
+  },
+  {
+    "screenshot": 17,
+    "timestamp": "20261123-061731",
+    "filename": "screenshot-17.png",
+    "caption": "Selected the original EBS data volume and chose normal detachment from EC2."
+  },
+  {
+    "screenshot": 18,
+    "timestamp": "20261123-061833",
+    "filename": "screenshot-18.png",
+    "caption": "AWS success notification and Available state after detaching the data volume."
+  },
+  {
+    "screenshot": 19,
+    "timestamp": "20261123-062022",
+    "filename": "screenshot-19.png",
+    "caption": "Reattachment configuration selecting the same volume and Linux EC2 instance."
+  },
+  {
+    "screenshot": 20,
+    "timestamp": "20261123-062108",
+    "filename": "screenshot-20.png",
+    "caption": "AWS confirmation that SY-EBS-Data-01 was reattached and marked In-use."
+  },
+  {
+    "screenshot": 21,
+    "timestamp": "20261123-062223",
+    "filename": "screenshot-21.png",
+    "caption": "Linux serial number and filesystem identification after reattaching the original EBS volume."
+  },
+  {
+    "screenshot": 22,
+    "timestamp": "20261123-062348",
+    "filename": "screenshot-22.png",
+    "caption": "Original file and timestamp successfully recovered after detaching, reattaching, and remounting EBS."
+  },
+  {
+    "screenshot": 23,
+    "timestamp": "20261123-062623",
+    "filename": "screenshot-23.png",
+    "caption": "EBS volume Actions menu showing Create snapshot for the tested data volume."
+  },
+  {
+    "screenshot": 24,
+    "timestamp": "20261123-062751",
+    "filename": "screenshot-24.png",
+    "caption": "Snapshot creation form showing the source volume, description, and identifying tags."
+  },
+  {
+    "screenshot": 25,
+    "timestamp": "20261123-062807",
+    "filename": "screenshot-25.png",
+    "caption": "AWS confirmation of a new EBS snapshot from SY-EBS-Data-01."
+  },
+  {
+    "screenshot": 26,
+    "timestamp": "20261123-062908",
+    "filename": "screenshot-26.png",
+    "caption": "Snapshot inventory confirming the backup completed with 100% progress."
+  },
+  {
+    "screenshot": 27,
+    "timestamp": "20261123-063110",
+    "filename": "screenshot-27.png",
+    "caption": "Selected the completed EBS snapshot and opened the Create volume from snapshot operation."
+  },
+  {
+    "screenshot": 28,
+    "timestamp": "20261123-063304",
+    "filename": "screenshot-28.png",
+    "caption": "Restored EBS volume settings showing snapshot source, gp3, size, and performance."
+  },
+  {
+    "screenshot": 29,
+    "timestamp": "20261123-063325",
+    "filename": "screenshot-29.png",
+    "caption": "Restored-volume Name, Project, and CleanupEligible tags."
+  },
+  {
+    "screenshot": 30,
+    "timestamp": "20261123-063410",
+    "filename": "screenshot-30.png",
+    "caption": "AWS confirmation that a new EBS volume was created from the snapshot."
+  },
+  {
+    "screenshot": 31,
+    "timestamp": "20261123-063456",
+    "filename": "screenshot-31.png",
+    "caption": "New restored EBS volume shown as Available while the original data disk remained In-use."
+  },
+  {
+    "screenshot": 32,
+    "timestamp": "20261123-063623",
+    "filename": "screenshot-32.png",
+    "caption": "Attachment form selecting the restored EBS volume and the /dev/sdg device mapping."
+  },
+  {
+    "screenshot": 33,
+    "timestamp": "20261123-063658",
+    "filename": "screenshot-33.png",
+    "caption": "Successful attachment of the restored EBS volume; all three EBS disks shown In-use."
+  },
+  {
+    "screenshot": 34,
+    "timestamp": "20261123-063800",
+    "filename": "screenshot-34.png",
+    "caption": "Linux identified the restored 2 GiB NVMe disk and duplicate XFS filesystem UUID."
+  },
+  {
+    "screenshot": 35,
+    "timestamp": "20261123-063922",
+    "filename": "screenshot-35.png",
+    "caption": "Restored XFS volume mounted at /restore using read-only duplicate-UUID-safe options, with test file recovered."
+  },
+  {
+    "screenshot": 36,
+    "timestamp": "20261123-064056",
+    "filename": "screenshot-36.png",
+    "caption": "Matching SHA-256 hashes for the original and restored EBS test files."
+  },
+  {
+    "screenshot": 37,
+    "timestamp": "20261123-064141",
+    "filename": "screenshot-37.png",
+    "caption": "Restored EBS volume unmounted; original data volume remained mounted at /data."
+  }
+]

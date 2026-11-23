@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 204" role="img" aria-label="Amazon EC2 — Linux Instance lab banner">
+<defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111E30"/><stop offset="1" stop-color="#232F3E"/></linearGradient></defs>
+<rect width="1200" height="204" rx="12" fill="url(#b)"/><rect x="0" y="0" width="7" height="204" rx="3" fill="#FF9900"/>
+<g font-family="Arial,Helvetica,sans-serif" fill="#F8FAFC">
+<text x="39" y="39" font-size="18" font-weight="700" letter-spacing="2" fill="#FF9900">AWS TRAINING BY SRKN</text>
+<text x="40" y="100" font-size="42" font-weight="700">Amazon EC2 — Linux Instance</text>
+<text x="41" y="136" font-size="18" fill="#C9D5E2">Amazon Linux 2023  /  Security groups  /  SSH  /  EBS root storage</text>
+<text x="41" y="175" font-size="12" letter-spacing="1.6" fill="#9CAFC3">HANDS-ON AWS CLOUD ENGINEERING</text>
+</g><path d="M715 38 L715 167" stroke="#3A4B63"/><g font-family="Arial,Helvetica,sans-serif" fill="#DCE6F0" font-size="14" font-weight="600" class="node"><rect x="765" y="82" width="118" height="62" rx="9" fill="#172B43" stroke="#41566F"/><circle cx="783" cy="102" r="5" fill="#FF9900"/><text x="824" y="121" text-anchor="middle" class="node">LINUX</text><rect x="898" y="82" width="118" height="62" rx="9" fill="#172B43" stroke="#41566F"/><circle cx="916" cy="102" r="5" fill="#FF9900"/><text x="957" y="121" text-anchor="middle" class="node">VPC</text><rect x="1031" y="82" width="118" height="62" rx="9" fill="#172B43" stroke="#41566F"/><circle cx="1049" cy="102" r="5" fill="#FF9900"/><text x="1090" y="121" text-anchor="middle" class="node">SG</text></g>
+<path d="M0 194 Q340 183 600 194 T1200 194" stroke="#FF9900" stroke-width="1.4" opacity=".65" fill="none"/>
+</svg>

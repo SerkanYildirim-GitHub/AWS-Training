@@ -1,0 +1,50 @@
+[
+  {
+    "screenshot": 1,
+    "timestamp": "20261123-043957",
+    "filename": "screenshot-01.png",
+    "caption": "EC2 key-pair creation form with the RSA algorithm and OpenSSH-compatible PEM format selected."
+  },
+  {
+    "screenshot": 2,
+    "timestamp": "20261123-044123",
+    "filename": "screenshot-02.png",
+    "caption": "AWS confirmation showing the newly created SY-AWS-Labs-Key RSA key pair."
+  },
+  {
+    "screenshot": 3,
+    "timestamp": "20261123-044755",
+    "filename": "screenshot-03.png",
+    "caption": "EC2 launch configuration showing t3.micro and SY-AWS-Labs-Key selected for instance login."
+  },
+  {
+    "screenshot": 4,
+    "timestamp": "20261123-053900",
+    "filename": "screenshot-04.png",
+    "caption": "Windows OpenSSH session authenticated to Amazon Linux 2023 using SY-AWS-Labs-Key.pem."
+  },
+  {
+    "screenshot": 5,
+    "timestamp": "20261123-054027",
+    "filename": "screenshot-05.png",
+    "caption": "Successful Linux authentication and system verification with whoami, hostnamectl, and lsblk."
+  },
+  {
+    "screenshot": 6,
+    "timestamp": "20261123-071513",
+    "filename": "screenshot-06.png",
+    "caption": "Windows instance RDP connection page showing the Administrator account and Get Windows password workflow."
+  },
+  {
+    "screenshot": 7,
+    "timestamp": "20261123-071632",
+    "filename": "screenshot-07.png",
+    "caption": "Windows password retrieval page showing the matching EC2 key pair and private-key file upload."
+  },
+  {
+    "screenshot": 8,
+    "timestamp": "20261123-071744",
+    "filename": "screenshot-08.png",
+    "caption": "Windows EC2 Administrator connection details following successful RSA-key password decryption; secret concealed."
+  }
+]
