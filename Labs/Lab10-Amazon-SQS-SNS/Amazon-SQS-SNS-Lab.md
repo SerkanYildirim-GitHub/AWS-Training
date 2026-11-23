@@ -1,11 +1,35 @@
 <p align="center"><img src="../../assets/amazon-sqs-sns-banner.png" alt="Amazon SQS and SNS — Event-Driven Messaging Lab banner" width="940"></p>
+
 # Amazon SQS & SNS — Event-Driven Messaging Lab
 
 **AMAZON SQS / AMAZON SNS / PUBLISH-SUBSCRIBE / MESSAGE QUEUES / ACCESS POLICIES / EVENT-DRIVEN ARCHITECTURE**
 
+## **The Problem Messaging Solves**
+Imagine an online store receiving a customer order. A simple application might try to perform every task immediately: store the order, charge the customer, reserve inventory, generate a receipt, and notify the shipping system. If any downstream service is slow or temporarily unavailable, the original request may become slow or fail.
+
+I wanted to understand how AWS separates those responsibilities without requiring every component to be online at the same time. That is the value of **asynchronous messaging and loose coupling**:
+
+Without a messaging layer	With Amazon SQS and SNS 
+
+An order producer calls a worker directly and may have to wait for it.	The producer can hand off work as a message and continue.
+Temporary worker downtime can interrupt the flow.	SQS can retain queued work until a consumer becomes available, subject to retention and delivery settings.
+
+The publisher must know about every recipient.	SNS lets the publisher address one topic rather than manage individual subscribers.
+Adding another recipient requires changes to the publishing application.	A new subscription can receive the same published event without changing the original publisher.
+
+[!NOTE]
+**The simplest mental model**: **SNS** announces that something happened; **SQS** holds the work until a consumer is ready. The examples in this report use an order event, but the same architectural pattern applies to many business workflows.
+
+### WHAT I ACTUALLY TESTED
+
+I simulated both the order publisher and the consumer in the AWS Management Console. No production application, email subscriber, Lambda function, or worker fleet was deployed. The later sections include the screenshots proving one SNS topic delivered a notification to one subscribed SQS queue.
+
+----
+
 I built and tested a messaging workflow for a simulated e-commerce application using **Amazon Simple Queue Service (SQS)** and **Amazon Simple Notification Service (SNS)**. First, I created an SQS Standard queue, sent a customer-order message directly to it, retrieved its contents, and deleted it. I then created a Standard SNS topic, subscribed the queue, and published a new order notification through SNS. The received SQS message contained the original order information inside an SNS notification envelope, confirming the end-to-end integration.
 
-The exercise demonstrated why messaging services are useful even when applications are simple: a publisher can send an event without managing each consumer's availability, while a queue retains a delivered message until a consumer retrieves and processes it. After verifying the workflow, I removed the subscription, SNS topic, and SQS queue. **The architecture illustrated below is the tested environment, not infrastructure that remains deployed.**
+The exercise demonstrated why messaging services are useful even when applications are simple: a publisher can send an event without managing each consumer's availability, while a queue retains a delivered message until a consumer retrieves and processes it. 
+**After verifying the workflow, I removed the subscription, SNS topic, and SQS queue.** 
 
 | Lab facts | Verified configuration |
 | --- | --- |
