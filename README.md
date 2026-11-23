@@ -31,10 +31,10 @@ To open hands-on guides for each lab click the lab name within the table.
 | --- | --- | --- |
 | [AWS CLI Lab](Labs/Lab01-AWS-CLI/AWS-CLI-LAB.md) | Amazon VPC, IAM, EC2, Linux, AWS CLI, Amazon S3 | Configure a multi-AZ VPC and EC2 CLI workstation, manage IAM and S3 through CLI, verify outputs, and clean up resources. |
 | [Identity and Access Management (IAM)](Labs/Lab03-AWS-IAM/AWS-IAM-Lab.md) | IAM users, groups, permissions, MFA | Create IAM identities, assign permission policies, and examine administrative access and authentication. |
-| EC2 Key Pairs | Amazon EC2, SSH, key pairs | Create an EC2 key pair and use key-based authentication to connect to a Linux instance. |
-| Amazon EC2 | EC2, AMIs, security groups, EBS | Launch and configure virtual servers with appropriate compute, network, security, and storage settings. |
-| Elastic IP Addresses | EC2, Elastic IPs, public IPv4 | Allocate and associate a static public IPv4 address with an EC2 instance. |
-| Windows EC2 and RDP | Windows Server on EC2, RDP, networking | Deploy a Windows EC2 instance and connect to it using Remote Desktop Protocol. |
+| [EC2 Key Pairs](Labs/Lab11-EC2-Key-Pairs/EC2-Key-Pairs-Lab.md) | Amazon EC2, RSA key pairs, SSH authentication | Create an RSA key pair, securely manage the private key, and verify passwordless SSH access to a Linux EC2 instance.|
+| [Amazon EC2](Labs/Lab12-Amazon-EC2/Amazon-EC2-Lab.md) | EC2, Amazon Linux 2023, AMIs, security groups | Launch and configure an Amazon Linux instance, establish SSH connectivity, and verify instance and storage configuration. |
+| [Elastic IP Addresses](Labs/Lab14-Elastic-IP-Addresses/Elastic-IP-Addresses-Lab.md) | EC2, Elastic IPs, public IPv4 networking | Allocate, associate, disassociate, and reassociate a static public IPv4 address while validating SSH connectivity. |
+| [Windows EC2 and RDP](Labs/Lab15-Windows-EC2-RDP/Windows-EC2-RDP-Lab.md) | Windows Server 2025, EC2, RDP, security groups | Deploy Windows Server on EC2, retrieve administrator credentials, establish an RDP session, and verify the operating system and disk configuration. ||
 
 ### VPC Networking & Security
 
