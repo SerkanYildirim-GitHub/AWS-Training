@@ -18,9 +18,9 @@ The publisher must know about every recipient.	SNS lets the publisher address on
 Adding another recipient requires changes to the publishing application.	A new subscription can receive the same published event without changing the original publisher.
 
 > [!NOTE]
- 
-> **The simplest mental model**: **SNS** announces that something happened; **SQS** holds the work until a consumer is ready. 
-> The examples in this report use an order event, but the same architectural pattern applies to many business workflows.
+> **The simplest mental model**: 
+> 
+>**SNS** announces that something happened; **SQS** holds the work until a consumer is ready. The examples in this report use an order event, but the same architectural pattern applies to many business workflows.
 
 ### WHAT I ACTUALLY TESTED
 
