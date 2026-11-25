@@ -25,6 +25,7 @@ The exercise demonstrates how serverless automation, fine-grained permissions, r
 - [11 Cleaning Up Training Resources](#11-cleaning-up-training-resources)
 - [12 SAA-C03 Review and Production Design](#12-saa-c03-review-and-production-design)
 - [13 Results and Conclusion](#13-results-and-conclusion)
+- [AWS Cost Estimate — Monthly Usage Scenario](#aws-cost-estimate--monthly-usage-scenario)
 - [Technical Competencies](#technical-competencies)
 - [Reference Implementation](#reference-implementation)
 - [AWS Documentation](#aws-documentation)
@@ -571,6 +572,30 @@ A production design might discover candidate volumes at scale and invoke an appr
 This lab demonstrated a complete **discovery → preview → authorization → deletion → verification** lifecycle using AWS Lambda, Python, Boto3, IAM, Amazon EBS, and CloudWatch Logs.
 
 The most important engineering principle was **controlled scope**: the function identified only a specially tagged, unattached training volume; its execution role allowed deletion only for that volume; and the code required two deliberate confirmations before calling the destructive API. The resulting CloudWatch record and EBS inventory check established that the intended resource was deleted while the remaining EBS volumes were left unchanged by the automation.
+
+## AWS Cost Estimate — Monthly Usage Scenario
+
+**Lambda does not incur an EC2-style 730-hour server charge.** The function in this lab was **manually invoked**, not scheduled to execute continuously. Billing depends on the number of requests, allocated memory, execution duration, and any connected services. The following is a *hypothetical example*, not the activity count recorded during our small series of lab tests.
+
+**Scenario:** 10,000 invocations in a month, each billed for 1 second at the configured **256 MB (0.25 GiB)**, plus 0.10 GB of CloudWatch Logs ingestion. Rates are for `us-east-1` as of November 23, 2026, before applying the AWS Free Tier.
+
+| Component | Calculation | Estimated monthly cost before allowances |
+|---|---|---:|
+| Lambda compute | 10,000 × 1 s × 0.25 GiB × $0.0000166667/GB-s | $0.0417 |
+| Lambda requests | 10,000 × $0.20 / 1,000,000 | $0.0020 |
+| CloudWatch Logs ingestion | 0.10 GB × $0.50/GB | $0.0500 |
+| IAM role / inline and managed policies | No separate IAM service charge | $0.00 |
+| **Example recurring workload total** | **Compute + requests + log ingestion** | **About $0.09/month** |
+
+The Lambda Free Tier includes a monthly allowance for requests and compute; eligible usage in this example can therefore produce **$0 in Lambda request/compute fees**, subject to account-wide usage and credit eligibility. CloudWatch Logs also has relevant free allowances, but log storage/retention and queries are not quantified in this table.
+
+**The EBS cost being prevented:** A 1 GiB unattached `gp3` volume held for a full month would cost **1 × $0.08 = $0.08/month**, even if unused. Our function deleted the specifically authorized `SY-EBS-Cleanup-Test-01` volume, so it was **not** retained for the hypothetical full month. The EBS storage cost is separate from the Lambda execution example, and a single-volume cleanup does not imply an overall savings once automation and logging usage increase. At larger scale, the avoided volume-months can be material.
+
+**Cost controls:** Only run permitted deletion events when authorized, restrict logging volume, configure log retention, and review [AWS Cost Explorer](https://aws.amazon.com/aws-cost-management/aws-cost-explorer/) for actual charges. Following validation, the function, its log groups, and the temporary training volume were deleted.
+
+**Pricing references:** [AWS Lambda pricing](https://aws.amazon.com/lambda/pricing/) · [Amazon CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) · [EBS gp3 pricing](https://aws.amazon.com/ebs/general-purpose/).
+
+---
 
 ## Technical Competencies
 

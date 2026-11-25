@@ -18,6 +18,7 @@ I deployed an Amazon Linux 2023 instance in the existing default VPC in N. Virgi
 - [06 EBS Root Storage and Instance Lifecycle](#06-ebs-root-storage-and-instance-lifecycle)
 - [07 SAA-C03 Review and Production Considerations](#07-saa-c03-review-and-production-considerations)
 - [08 Conclusion and Cleanup](#08-conclusion-and-cleanup)
+- [AWS Cost Estimate — Monthly (730 Hours)](#aws-cost-estimate--monthly-730-hours)
 - [Technical Competencies](#technical-competencies)
 - [Command Reference](#command-reference)
 - [AWS Documentation](#aws-documentation)
@@ -219,6 +220,27 @@ For a production workload I would evaluate private-subnet placement, Systems Man
 I configured and deployed a working Amazon Linux EC2 instance, verified its health in the AWS Console, authenticated over SSH, inspected the Linux OS and storage, and traced its root disk back to the associated EBS resource. The exercise demonstrated the relationship between EC2 compute, VPC networking, security groups, key-based access, and persistent storage.
 
 Following completion of the related exercises, I terminated the lab instance and removed its dedicated security group and temporary key pair in the final cleanup. Existing account networking and unrelated AWS resources were retained.
+
+## AWS Cost Estimate — Monthly (730 Hours)
+
+The principal costs of this Linux EC2 deployment are **instance hours, provisioned EBS storage, and a public IPv4 address**. The default VPC and the security group have no separate hourly fee in this setup.
+
+> **Estimate basis:** November 23, 2026; AWS US East (N. Virginia, `us-east-1`); USD; On-Demand list prices; **730 hours per average month** (AWS Pricing Calculator convention). An exact 30-day period is 720 hours. These figures describe a hypothetical deployment left provisioned for a month, **not actual charges from the completed lab**. Free Tier benefits, promotional credits, taxes, data transfer, CPU-credit overages, and other unlisted services are excluded unless specified.
+
+| Lab resource | Calculation | Estimated monthly cost |
+|---|---|---:|
+| `SY-Linux-EC2` — Linux `t3.micro` | 730 h × $0.0104/h | $7.59 |
+| 8 GiB `gp3` root EBS | 8 × $0.08/GiB-month | $0.64 |
+| One public IPv4 address | 730 h × $0.005/h | $3.65 |
+| **Estimated total** | **$7.592 + $0.64 + $3.65** | **$11.88/month** |
+
+For example, an eight-hour lab session with the instance and public IPv4 present for eight hours, and the root disk present for the same period, would cost approximately **$0.13** at these rates (`8 × $0.0104 + 8 × $0.005 + $0.64 × 8/730`). This is a modeled example, not a measured bill. EBS storage can remain billable after an instance is stopped; public IPv4 assignments and EBS capacity must be considered separately from compute state.
+
+**Scope:** The additional two 2 GiB EBS volumes and snapshot are priced in the dedicated EBS lab; the Elastic IP replaced the Linux instance's original public address during the network lab and is not counted as a second simultaneous public IP here. Outbound internet data and excess T3 Unlimited CPU credits are excluded.
+
+**Pricing references:** [AWS EC2 T3](https://aws.amazon.com/ec2/instance-types/t3/) · [EBS gp3](https://aws.amazon.com/ebs/general-purpose/) · [Public IPv4](https://aws.amazon.com/vpc/pricing/) · [AWS calculator assumptions](https://aws.amazon.com/calculator/calculator-assumptions/).
+
+---
 
 ## Technical Competencies
 

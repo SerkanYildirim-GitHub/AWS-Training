@@ -18,6 +18,7 @@ I allocated an Elastic IP, associated it with an Amazon Linux EC2 instance that 
 - [06 Disassociating and Reassociating](#06-disassociating-and-reassociating)
 - [07 SAA-C03 Review and Production Considerations](#07-saa-c03-review-and-production-considerations)
 - [08 Cleanup and Conclusion](#08-cleanup-and-conclusion)
+- [AWS Cost Estimate — Monthly (730 Hours)](#aws-cost-estimate--monthly-730-hours)
 - [Technical Competencies](#technical-competencies)
 - [Command Reference](#command-reference)
 - [AWS Documentation](#aws-documentation)
@@ -194,6 +195,26 @@ I would evaluate AWS load balancers or DNS-based routing for services that need 
 After all six related labs were complete, I disassociated and **released** `SY-Linux-ElasticIP` (`3.216.10.108`), then proceeded with the temporary EC2 and EBS resource cleanup. Existing, unrelated account resources remained untouched.
 
 This lab demonstrated the complete Elastic IP lifecycle and the network distinction between stable public addressing and the EC2 instance's private VPC identity. I allocated and attached a static address, authenticated to the same Linux instance through it, temporarily removed and restored the association, and finally released the allocation. The exercise made clear why **address allocation, address association, and IP-based access controls** must be understood separately.
+
+## AWS Cost Estimate — Monthly (730 Hours)
+
+An **Elastic IP is a public IPv4 address**. AWS charges the same $0.005 per address-hour whether the public IPv4 address is associated with a resource or held idle.
+
+> **Estimate basis:** November 23, 2026; AWS US East (N. Virginia, `us-east-1`); USD; On-Demand list prices; **730 hours per average month** (AWS Pricing Calculator convention). An exact 30-day period is 720 hours. These figures describe a hypothetical deployment left provisioned for a month, **not actual charges from the completed lab**. Free Tier benefits, promotional credits, taxes, data transfer, CPU-credit overages, and other unlisted services are excluded unless specified.
+
+| Elastic IP scenario | Calculation | Estimated monthly cost |
+|---|---|---:|
+| One Elastic IP allocated for a full month | 730 h × $0.005/h | **$3.65** |
+| One Elastic IP held for 24 hours | 24 h × $0.005/h | $0.12 |
+| One Elastic IP allocated and released after eight hours | 8 h × $0.005/h | $0.04 |
+
+**Avoid double-counting:** While `3.216.10.108` was associated with `SY-Linux-EC2`, it took the place of the Linux instance's original public IPv4 address. The Linux EC2 monthly baseline already includes **one** billed public IPv4 ($3.65/month). Replacing that address with one associated Elastic IP does not mean two simultaneous public-IP charges. An *additional* allocated public IP would add another $3.65/month if retained for the full month.
+
+The Linux instance, root EBS volume, and its compute hours are shared with the Amazon EC2 lab. Disassociating an Elastic IP does **not** stop its address-hour charges; the lab finished by releasing the allocation.
+
+**Pricing references:** [AWS VPC public IPv4 pricing](https://aws.amazon.com/vpc/pricing/) · [EC2 instance pricing](https://aws.amazon.com/ec2/instance-types/t3/) · [AWS calculator assumptions](https://aws.amazon.com/calculator/calculator-assumptions/).
+
+---
 
 ## Technical Competencies
 

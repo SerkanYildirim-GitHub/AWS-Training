@@ -19,6 +19,7 @@ I deployed **Windows Server 2025 Datacenter** on a `t3.small` EC2 instance, conf
 - [07 Verifying Windows Server and EBS Storage](#07-verifying-windows-server-and-ebs-storage)
 - [08 SAA-C03 Review and Production Considerations](#08-saa-c03-review-and-production-considerations)
 - [09 Cleanup and Conclusion](#09-cleanup-and-conclusion)
+- [AWS Cost Estimate — Monthly (730 Hours)](#aws-cost-estimate--monthly-730-hours)
 - [Technical Competencies](#technical-competencies)
 - [Command Reference](#command-reference)
 - [AWS Documentation](#aws-documentation)
@@ -259,6 +260,27 @@ After completing the Windows OS, RDP, and EBS checks, I stopped `SY-Windows-EC2`
 ### Conclusion
 
 This exercise covered the operational path from **Windows AMI selection to verified remote administration**. I provisioned a Windows Server instance, configured network and storage settings, retrieved its initial Administrator password using an RSA key, established an RDP session, verified the installed Windows Server version, and inspected its NTFS root volume. The key architectural lesson is that Windows on EC2 uses the same AWS compute, storage, and networking controls as Linux while requiring distinct guest-OS authentication and administration procedures.
+
+## AWS Cost Estimate — Monthly (730 Hours)
+
+For this Windows Server 2025 instance, the EC2 On-Demand price includes the **Windows Server license**. The **30 GiB gp3 EBS root disk** and **public IPv4 address** are separate billable components. RDP itself and the security-group rule do not carry an additional AWS access fee.
+
+> **Estimate basis:** November 23, 2026; AWS US East (N. Virginia, `us-east-1`); USD; On-Demand list prices; **730 hours per average month** (AWS Pricing Calculator convention). An exact 30-day period is 720 hours. These figures describe a hypothetical deployment left provisioned for a month, **not actual charges from the completed lab**. Free Tier benefits, promotional credits, taxes, data transfer, CPU-credit overages, and other unlisted services are excluded unless specified.
+
+| Lab resource | Calculation | Estimated monthly cost |
+|---|---|---:|
+| Windows Server `t3.small` (license included) | 730 h × $0.0392/h | $28.62 |
+| 30 GiB gp3 root volume | 30 × $0.08/GiB-month | $2.40 |
+| One public IPv4 address | 730 h × $0.005/h | $3.65 |
+| **Estimated total** | **$28.616 + $2.40 + $3.65** | **$34.67/month** |
+
+If this environment were held for only eight hours, the modeled charge would be about **$0.38** (`8 × $0.0392 + 8 × $0.005 + $2.40 × 8/730`) before other usage and applicable allowances. The exact effective disk charge depends on how long storage remains provisioned. RDP client software and the EC2 key pair do not introduce a separate AWS service fee.
+
+**Cost controls:** Terminating the Windows instance stopped its compute charges. The root EBS volume was configured for deletion on termination, so the corresponding provisioned storage also ended. Leaving a stopped instance's EBS volume, a snapshot, or an idle public IPv4 allocated would continue to create charges.
+
+**Pricing references:** [Windows t3.small regional rate](https://instances.usage.ai/aws/ec2/t3.small/) · [AWS Windows workload estimating guide](https://docs.aws.amazon.com/pricing-calculator/latest/userguide/windows-workload-estimates.html) · [EBS gp3](https://aws.amazon.com/ebs/general-purpose/) · [VPC public IPv4 pricing](https://aws.amazon.com/vpc/pricing/) · [AWS calculator assumptions](https://aws.amazon.com/calculator/calculator-assumptions/).
+
+---
 
 ## Technical Competencies
 

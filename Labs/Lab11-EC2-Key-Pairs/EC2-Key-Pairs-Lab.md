@@ -16,6 +16,7 @@ I created an RSA key pair in `us-east-1`, assigned it to an Amazon Linux 2023 EC
 - [04 Using the Key Pair for Windows Password Retrieval](#04-using-the-key-pair-for-windows-password-retrieval)
 - [05 Security Practices and SAA-C03 Review](#05-security-practices-and-saa-c03-review)
 - [06 Results and Cleanup](#06-results-and-cleanup)
+- [AWS Cost Estimate — Monthly (730 Hours)](#aws-cost-estimate--monthly-730-hours)
 - [Technical Competencies](#technical-competencies)
 - [Command Reference](#command-reference)
 - [AWS Documentation](#aws-documentation)
@@ -184,6 +185,24 @@ After the associated EC2, EBS, Elastic IP, and RDP activities were complete, I d
 ### Conclusion
 
 This activity connected the mechanics of asymmetric key pairs with real EC2 administration. I created and assigned a key pair, used the locally held private key to authenticate to Amazon Linux, and used RSA password decryption to support a Windows RDP connection. The practical distinction among **identity, network access, and operating-system login** is the most important architectural lesson from this lab.
+
+## AWS Cost Estimate — Monthly (730 Hours)
+
+**Key-pair creation, registration, and SSH public-key authentication have no separate AWS service fee.** Costs arise from the compute, storage, and network resources accessed with a key pair. The same `SY-AWS-Labs-Key` was used with the Linux and Windows examples, so these are *supporting environment costs*, not additional charges for key-pair use.
+
+> **Estimate basis:** November 23, 2026; AWS US East (N. Virginia, `us-east-1`); USD; On-Demand list prices; **730 hours per average month** (AWS Pricing Calculator convention). An exact 30-day period is 720 hours. These figures describe a hypothetical deployment left provisioned for a month, **not actual charges from the completed lab**. Free Tier benefits, promotional credits, taxes, data transfer, CPU-credit overages, and other unlisted services are excluded unless specified.
+
+| Item | Calculation | Estimated monthly cost |
+|---|---|---:|
+| EC2 RSA key pair | No separate charge | **$0.00** |
+| Shared Linux SSH test environment | `t3.micro` $0.0104 × 730 h + 8 GiB gp3 × $0.08 + one public IPv4 $0.005 × 730 h | $11.88 |
+| Windows RDP credential-retrieval environment | Windows `t3.small` $0.0392 × 730 h + 30 GiB gp3 × $0.08 + one public IPv4 $0.005 × 730 h | $34.67 |
+
+**Cost interpretation:** The Linux and Windows rows represent the existing EC2 lab environments. Do **not** add them again as a separate key-pair bill or count them twice in a combined portfolio budget. The Windows rate includes the Windows Server license. Once the instances, EBS volumes, and public IPv4 allocations were cleaned up, the key-pair lab left no ongoing key-pair charge.
+
+**Pricing references:** [AWS EC2 T3](https://aws.amazon.com/ec2/instance-types/t3/) · [EBS gp3](https://aws.amazon.com/ebs/general-purpose/) · [Public IPv4](https://aws.amazon.com/vpc/pricing/) · [AWS calculator assumptions](https://aws.amazon.com/calculator/calculator-assumptions/) · [Windows rate reference](https://instances.usage.ai/aws/ec2/t3.small/) · [AWS Windows estimating guide](https://docs.aws.amazon.com/pricing-calculator/latest/userguide/windows-workload-estimates.html).
+
+---
 
 ## Technical Competencies
 

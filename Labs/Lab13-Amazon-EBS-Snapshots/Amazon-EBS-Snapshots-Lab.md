@@ -21,6 +21,7 @@ I worked through the complete storage lifecycle using an Amazon Linux 2023 EC2 i
 - [09 Verifying Data Integrity and Completing Recovery](#09-verifying-data-integrity-and-completing-recovery)
 - [10 SAA-C03 Review and Production Design](#10-saa-c03-review-and-production-design)
 - [11 Results, Conclusion, and Cleanup](#11-results-conclusion-and-cleanup)
+- [AWS Cost Estimate — Monthly (730 Hours)](#aws-cost-estimate--monthly-730-hours)
 - [Technical Competencies](#technical-competencies)
 - [Command Reference](#command-reference)
 - [AWS Documentation](#aws-documentation)
@@ -541,6 +542,29 @@ After the complete six-lab series, I terminated the temporary EC2 instances and 
 ### Conclusion
 
 This lab demonstrated that EBS is more than extra disk capacity. I provisioned storage separately from compute, prepared an XFS filesystem, established persistent access across reboots, and proved that the same data survived disconnection and reattachment. I then moved from **storage availability** to **recoverability**: creating a snapshot, restoring a second disk, overcoming duplicate filesystem identity, and validating the recovered data byte-for-byte using SHA-256. Together, these tests established the storage lifecycle and recovery principles that underpin reliable EC2 architectures.
+
+## AWS Cost Estimate — Monthly (730 Hours)
+
+EBS `gp3` volume storage is billed for the **provisioned capacity**, whether the volume is mounted, detached, or idle. Standard snapshots are billed for **incremental stored blocks**, not the full provisioned size of the source volume. This lab added two independent 2 GiB data volumes to the Linux environment.
+
+> **Estimate basis:** November 23, 2026; AWS US East (N. Virginia, `us-east-1`); USD; On-Demand list prices; **730 hours per average month** (AWS Pricing Calculator convention). An exact 30-day period is 720 hours. These figures describe a hypothetical deployment left provisioned for a month, **not actual charges from the completed lab**. Free Tier benefits, promotional credits, taxes, data transfer, CPU-credit overages, and other unlisted services are excluded unless specified.
+
+| Lab resource | Calculation | Estimated monthly cost |
+|---|---|---:|
+| `SY-EBS-Data-01` (2 GiB gp3) | 2 × $0.08/GiB-month | $0.16 |
+| `SY-EBS-Restore-01` (2 GiB gp3) | 2 × $0.08/GiB-month | $0.16 |
+| One standard EBS snapshot | Illustrative **68.5 MiB** billed data × $0.05/GiB-month | About $0.0033 |
+| **Incremental storage total** | **$0.16 + $0.16 + ~$0.0033** | **About $0.32/month** |
+
+The snapshot estimate assumes the observed ~68.5 MiB figure corresponds to charged snapshot blocks; the precise billed amount depends on incremental data retained and should be confirmed in AWS billing. Its 2 GiB source volume size should **not** automatically be treated as 2 GiB of snapshot storage.
+
+**Complete teaching environment:** If the shared Linux `t3.micro` instance, 8 GiB root EBS volume, and its single public IPv4 address also remained active for the same 730 hours, add the **$11.88/month** Linux environment estimate for an approximately **$12.21/month** total. That shared baseline belongs to the EC2 lab and must be counted only once in a combined budget.
+
+**Operational takeaway:** Deleting the EC2 instance does not automatically delete these separately created data volumes or their snapshot. We verified the volume and snapshot cleanup, eliminating their continuing storage charges.
+
+**Pricing references:** [Amazon EBS pricing](https://aws.amazon.com/ebs/pricing/) · [EBS gp3](https://aws.amazon.com/ebs/general-purpose/) · [AWS EC2 T3](https://aws.amazon.com/ec2/instance-types/t3/) · [EBS gp3](https://aws.amazon.com/ebs/general-purpose/) · [Public IPv4](https://aws.amazon.com/vpc/pricing/) · [AWS calculator assumptions](https://aws.amazon.com/calculator/calculator-assumptions/).
+
+---
 
 ## Technical Competencies
 
