@@ -31,7 +31,7 @@ I implemented a private general purpose S3 bucket in US East (N. Virginia), veri
 
 ## 01 Purpose and Learning Objectives
 
-Amazon S3 is a managed object storage service for retaining and retrieving data through APIs and HTTPS. A bucket is a regional container; an object consists of data, a key and associated attributes. S3 scales without provisioning file servers or block devices. S3 Standard is designed for 99.999999999% durability and stores data redundantly across at least three Availability Zones; durability is not the same as availability.
+S3 Standard is designed for 99.999999999% annual object durability and stores data redundantly across at least three Availability Zones. Durability describes the likelihood of retaining data; availability describes whether data can be accessed when needed. These are different design requirements: versioning, replication and retention policies address recovery needs beyond the durability of the storage class.
 
 ### 1.1 What Amazon S3 provides
 
@@ -51,7 +51,7 @@ An architecture typically combines four decisions: where to store data (Region a
 
 ### 1.3 Implementation objectives
 
-I created a private bucket, uploaded and inspected objects, compared unsigned and signed access, renamed an object, enabled versioning, recovered a logically deleted object, configured lifecycle retention, and applied tags and metadata. I retained the bucket for a subsequent encryption and auditing implementation.
+The implementation focused on three architectural requirements: restrict access without preventing authorized retrieval, preserve recoverable versions during object updates and deletion, and manage the cost of retaining historical data. Object classification and application metadata completed the storage configuration.
 
 ## 02 Core Concepts and Architecture
 
@@ -61,7 +61,7 @@ I created a private bucket, uploaded and inspected objects, compared unsigned an
 | Amazon EBS | Block storage | EC2 disks and databases |
 | Amazon EFS | Shared NFS file storage | Linux workloads requiring shared filesystem access |
 
-S3 general purpose buckets use a flat key namespace; folder-like prefixes organize objects but are not traditional directories. Keys are case-sensitive. IAM identity policies and bucket policies can authorize access, while Block Public Access restricts public grants. Encryption at rest, integrity checks and authorization address different risks.
+General purpose buckets use a flat key namespace. For example, `reports/2026/summary.json` is one case-sensitive key, not a file stored in two physical directories. IAM and bucket policies can grant access to a specific object or a set of keys sharing a prefix. This makes prefixes useful for organizing datasets and defining authorization scope.
 
 ### 2.1 Implemented architecture
 
@@ -80,23 +80,23 @@ S3 general purpose buckets use a flat key namespace; folder-like prefixes organi
 | Final versioning | Enabled |
 | Object Lock | Disabled |
 
-No EC2 instance or VPC was required for this console-based storage implementation. The browser used AWS Console authorization to upload and retrieve objects, while the S3 endpoint handled the data requests. The bucket was the only newly provisioned storage resource; IAM policies were used as the authorization model, not newly created as part of this exercise.
+The AWS Console provided the management interface for this implementation; S3 handled object storage independently of compute. Applications can access the same service using an SDK or the AWS CLI with appropriate IAM permissions. No EC2 instance, VPC or new IAM policy was required for this activity.
 
-The diagram depicts the final inventory after the metadata copy and recovery tests. The initial bucket was unversioned and empty; these controls and objects were added progressively.
+The architecture shows the final object inventory and protection settings, including the retained historical versions.
 
 ## 03 Creating the Secure S3 Bucket
 
-The purpose was to establish a private regional storage container before introducing object data. I started with managed encryption, disabled ACLs, blocked public access and deferred versioning until the recovery exercise.
+I established the bucket with managed encryption and policy-based access before introducing data. Versioning was deferred to demonstrate the difference between unversioned and versioned operations.
 
 ### 3.1 Selecting the bucket type and Region
 
-I started in the general purpose bucket inventory and chose **Create bucket**. A general purpose bucket supports the storage classes and versioning operations required for this implementation, unlike a specialized directory bucket.
+In **Amazon S3 → General purpose buckets → Create bucket**, I used the general purpose bucket type. It supports the versioning and storage-class choices needed here; directory buckets are optimized for different access and performance requirements.
 
 <table><tr><td align="center"><a href="images/screenshot-01.png"><img src="images/screenshot-01.png" alt="Screenshot 01: General purpose buckets dashboard and Create bucket action." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 01:</strong> General purpose buckets dashboard and Create bucket action.</sub></p>
 
-In the creation form, I selected `us-east-1`, **General purpose**, and **Global namespace**. The global namespace requires a unique bucket name within the AWS partition; it does not make data globally public. The final lowercase name was `sy-awstraining-s3`.
+I selected `us-east-1`, **General purpose**, and **Global namespace**, and created the bucket with the final lowercase name `sy-awstraining-s3`. A globally unique name within an AWS partition is a naming constraint, not a public-access permission. The selected Region determines the bucket’s data location and is an important consideration for latency, residency and pricing.
 
 <table><tr><td align="center"><a href="images/screenshot-02.png"><img src="images/screenshot-02.png" alt="Screenshot 02: Creation wizard with N. Virginia, general purpose type, global namespace and initial bucket name." width="780"></a></td></tr></table>
 
@@ -104,7 +104,7 @@ In the creation form, I selected `us-east-1`, **General purpose**, and **Global 
 
 ### 3.2 Configuring ownership and public access
 
-I chose **ACLs disabled (Bucket owner enforced)** so that bucket ownership is consistent and access is managed through policies rather than per-object ACL grants. I left **Block all public access** selected to prevent public grants through ACLs and policies. These settings address authorization and ownership, not encryption.
+I chose **ACLs disabled (Bucket owner enforced)** and kept **Block all public access** selected. Bucket owner enforced removes ACLs from authorization and gives the bucket owner ownership of objects. Block Public Access complements policy-based authorization by blocking or restricting public grants through ACLs and public policies. It does not grant private access or replace IAM permissions.
 
 <table><tr><td align="center"><a href="images/screenshot-03.png"><img src="images/screenshot-03.png" alt="Screenshot 03: Bucket owner enforced and all four public access blocks selected." width="780"></a></td></tr></table>
 
@@ -112,7 +112,7 @@ I chose **ACLs disabled (Bucket owner enforced)** so that bucket ownership is co
 
 ### 3.3 Choosing the initial protection settings
 
-I deliberately started with versioning disabled so that the initial objects could later demonstrate the difference between unversioned and versioned writes. I left bucket tags empty and chose SSE-S3 for encryption at rest. The Bucket Key selection was enabled in the form, but has no SSE-S3 cost benefit.
+For the initial storage baseline, I used the following protection settings. SSE-S3 uses Amazon S3 managed keys, so encryption did not require a KMS key policy or customer-managed key. Bucket Keys are relevant to SSE-KMS, not SSE-S3.
 
 | Initial setting | Selected value | Reason |
 |---|---|---|
@@ -127,14 +127,14 @@ I deliberately started with versioning disabled so that the initial objects coul
 
 ### 3.4 Verifying the bucket
 
-The success banner identified the final bucket name and the Objects tab showed zero objects. This confirmed that bucket creation had completed before any test data was uploaded.
+After creating the bucket, I confirmed that it was empty before introducing the sample objects.
 
 <table><tr><td align="center"><a href="images/screenshot-05.png"><img src="images/screenshot-05.png" alt="Screenshot 05: Successful creation of the empty sy-awstraining-s3 bucket." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 05:</strong> Successful creation of the empty sy-awstraining-s3 bucket.</sub></p>
 
 > [!IMPORTANT]
-> **SAA-C03 exam connection:** A globally named general purpose bucket has a unique name within its AWS partition. The bucket itself resides in a selected Region. Disabling ACLs does not disable authorized policy-based access.
+> **SAA-C03 exam connection:** Disabling ACLs does not disable authorized policy-based access. A private bucket can still be accessed by permitted IAM identities.
 
 ## 04 Uploading Objects and Selecting Storage Classes
 
@@ -152,7 +152,7 @@ Bucket: sy-awstraining-s3
 Purpose: Object storage, security, and lifecycle management.
 ```
 
-For a repeat implementation, the JSON can contain descriptive fields such as `project`, `activity`, `service`, `environment`, and `status`. The actual upload size is recorded below; an exact final JSON payload is not necessary to reproduce the storage behavior.
+The JSON document represented structured project attributes such as `project`, `service`, `environment`, and `status`. S3 stores both formats as object data; applications interpret their contents.
 
 <table><tr><td align="center"><a href="images/screenshot-06.png"><img src="images/screenshot-06.png" alt="Screenshot 06: Local TXT and JSON files prepared for upload." width="780"></a></td></tr></table>
 
@@ -160,7 +160,7 @@ For a repeat implementation, the JSON can contain descriptive fields such as `pr
 
 ### 4.2 Staging the upload
 
-From **Objects → Upload → Add files**, I selected both files without a destination prefix. Their names would become the object keys at the bucket root. The upload form identified the MIME types and reported 283 bytes in total; this was the pre-upload inventory, not yet a successful write.
+From **Objects → Upload → Add files**, I selected both files without a destination prefix. The filenames therefore became the complete object keys. Uploading to a different prefix would give an object a different key even if the local filename were unchanged.
 
 <table><tr><td align="center"><a href="images/screenshot-07.png"><img src="images/screenshot-07.png" alt="Screenshot 07: Two files staged for upload to the bucket." width="780"></a></td></tr></table>
 
@@ -171,6 +171,8 @@ From **Objects → Upload → Add files**, I selected both files without a desti
 | `Sy-S3-info.json` | application/json | 146 B |
 | `Sy-S3-info.txt` | text/plain | 137 B |
 | Total | | 283 B |
+
+### 4.3 Choosing a storage class
 
 | Storage class | AZs | Minimum duration | Minimum billable object size | Access pattern |
 |---|---:|---|---|---|
@@ -185,9 +187,7 @@ From **Objects → Upload → Add files**, I selected both files without a desti
 
 Retrieval charges apply to IA and archive classes as applicable. S3 Express One Zone is a separate single-AZ, low-latency class for directory buckets and was not part of this general purpose upload selection.
 
-### 4.3 Choosing a storage class
-
-Under **Properties → Storage class**, I selected **Standard**. The workload consisted of tiny documents that would be read and overwritten during the exercise. A class with a 128 KB minimum billable size would charge for much more than either actual payload, and infrequent-access classes may also impose retrieval or early-deletion costs. The comparison above provides the criteria for choosing a class in a larger workload.
+Under **Properties → Storage class**, I selected **Standard** for the two small, frequently accessed documents. Standard-IA would bill each of these sub-128 KB objects at its minimum billable size and introduce retrieval charges. Glacier classes would add archival access or retention considerations that did not suit repeated reads and updates.
 
 <table><tr><td align="center"><a href="images/screenshot-08.png"><img src="images/screenshot-08.png" alt="Screenshot 08: Storage class comparison with Standard selected." width="780"></a></td></tr></table>
 
@@ -195,14 +195,11 @@ Under **Properties → Storage class**, I selected **Standard**. The workload co
 
 ### 4.4 Verifying the upload
 
-I submitted the upload and inspected the status page before closing it. The successful count was two, the failure count was zero, and the reported payload matched the staged 283 bytes. This establishes the initial data baseline for later versioning tests.
+I submitted the upload and confirmed that both requests succeeded. The combined 283-byte payload established the initial storage baseline for the versioning exercise.
 
 <table><tr><td align="center"><a href="images/screenshot-09.png"><img src="images/screenshot-09.png" alt="Screenshot 09: Both uploads succeeded, totaling 283 bytes." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 09:</strong> Both uploads succeeded, totaling 283 bytes.</sub></p>
-
-> [!NOTE]
-> Lower storage rates do not necessarily mean lower total cost. Minimum billable size, retrieval, transitions and retention charges matter, especially for small objects.
 
 ## 05 Inspecting Object Properties and Security
 
@@ -224,7 +221,7 @@ After uploading, I inspected the TXT object to establish its actual storage prop
 
 ### 5.1 Understanding object identifiers
 
-I opened the TXT object by its key. The overview identifies the object using an S3 URI for AWS tools, an ARN for policy resource scoping and an HTTPS URL for requests. None of these identifiers grants permission by itself. The original size and ETag provide useful points of comparison for later writes.
+I opened the TXT object by its key. Its S3 URI identifies the location for AWS tools, the ARN identifies the resource in policies, and the HTTPS URL addresses the object over the network. These identifiers have different roles but none independently authorizes access.
 
 <table><tr><td align="center"><a href="images/screenshot-10.png"><img src="images/screenshot-10.png" alt="Screenshot 10: TXT object overview with key, URI, ARN, ETag and URL." width="780"></a></td></tr></table>
 
@@ -232,7 +229,9 @@ I opened the TXT object by its key. The overview identifies the object using an 
 
 ### 5.2 Checking encryption and data integrity
 
-The storage class and encryption sections confirmed Standard and SSE-S3 on the actual object, rather than merely on the bucket defaults. The CRC64NVME full-object checksum is a separate integrity attribute; encryption protects confidentiality at rest, and authorization controls who can retrieve the data. The checksum shown is not an independently performed download-integrity test.
+An ETag may be an MD5 digest for particular uploads but is not universally an MD5 checksum. For multipart or other encryption configurations, use the documented checksum mechanism rather than treating the ETag as a universal integrity proof.
+
+I inspected the stored object to verify that the bucket’s SSE-S3 default had been applied. Encryption protects confidentiality at rest; the CRC64NVME checksum represents data integrity. These mechanisms do not establish who is allowed to retrieve an object. The checksum was inspected, not independently recomputed after downloading.
 
 <table><tr><td align="center"><a href="images/screenshot-11.png"><img src="images/screenshot-11.png" alt="Screenshot 11: Standard storage, SSE-S3, CRC64NVME and no tags." width="780"></a></td></tr></table>
 
@@ -240,13 +239,11 @@ The storage class and encryption sections confirmed Standard and SSE-S3 on the a
 
 ### 5.3 Inspecting metadata
 
-The metadata section showed a system-defined `Content-Type` of `text/plain` and no annotations. Content-Type tells a consuming application how to interpret the bytes; it does not change the bytes themselves. This is the baseline for the custom metadata operation later.
+The initial object used the system-defined `Content-Type: text/plain`. This HTTP metadata tells consuming applications how to interpret the bytes without changing the stored document.
 
 <table><tr><td align="center"><a href="images/screenshot-12.png"><img src="images/screenshot-12.png" alt="Screenshot 12: System-defined Content-Type and no annotations." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 12:</strong> System-defined Content-Type and no annotations.</sub></p>
-
-An ETag may be an MD5 digest for particular uploads but is not universally an MD5 checksum. For multipart or other encryption configurations, use the documented checksum mechanism rather than treating the ETag as a universal integrity proof.
 
 ## 06 Verifying Private and Signed Access
 
@@ -254,7 +251,7 @@ The access tests compared an unsigned request, an authorized signed request and 
 
 ### 6.1 Testing an unsigned request
 
-I copied the Object URL into a browser and received an XML `AccessDenied` response. An ordinary URL without a valid authorization signature is not equivalent to an authenticated S3 API request. This test confirmed denial for the specific unsigned request without requiring any change to public access settings.
+I copied the Object URL into a browser without a signature and received `AccessDenied`. Without valid authorization, an unsigned request cannot retrieve a private object merely by knowing its URL.
 
 <table><tr><td align="center"><a href="images/screenshot-13.png"><img src="images/screenshot-13.png" alt="Screenshot 13: Unsigned object URL returned AccessDenied." width="780"></a></td></tr></table>
 
@@ -262,7 +259,7 @@ I copied the Object URL into a browser and received an XML `AccessDenied` respon
 
 ### 6.2 Retrieving the private object
 
-I returned to the authenticated Console and chose **Open**. The Console issued a signed URL, and the browser displayed the expected text. This demonstrated that permitted access still works even when anonymous retrieval is blocked.
+I returned to the authenticated Console and chose **Open**. The Console issued a signed request and the document was displayed. This is useful for private application assets: authorization can be provided for retrieval without changing the bucket’s public-access settings.
 
 <table><tr><td align="center"><a href="images/screenshot-14.png"><img src="images/screenshot-14.png" alt="Screenshot 14: Successful signed retrieval of the TXT object." width="780"></a></td></tr></table>
 
@@ -270,7 +267,7 @@ I returned to the authenticated Console and chose **Open**. The Console issued a
 
 ### 6.3 Checking signed-request expiration
 
-A later signed request returned `Request has expired`, with a 300-second expiry parameter. This distinguishes an expired authorization from the initial unsigned denial. The result verifies the observed expiry behavior, not a separate, independently captured URL-sharing configuration.
+A later request using a signed URL was rejected after the 300-second validity period. Expiration limits the time during which a recipient can initiate an authorized request; it does not retract a copy already retrieved.
 
 <table><tr><td align="center"><a href="images/screenshot-15.png"><img src="images/screenshot-15.png" alt="Screenshot 15: Expired signed request rejected after its 300-second validity." width="780"></a></td></tr></table>
 
@@ -285,11 +282,11 @@ Presigned URLs provide temporary access to a specific operation using the signer
 
 ## 07 Renaming an Object
 
-The rename exercise demonstrated how object identity changes when a key changes, without changing the intended document contents. The bucket was still unversioned.
+An S3 object is identified by its key. Renaming an object in a general purpose bucket requires a copy to the new key and deletion of the old key, rather than an atomic filesystem rename.
 
 ### 7.1 Starting the rename
 
-I opened the original TXT object and selected **Object actions → Rename object**. In a general purpose bucket, the new name is a new key; changing it requires a copy followed by deletion of the old key.
+I opened `Sy-S3-info.txt`, selected **Object actions → Rename object**, and configured the new key as `Sy-S3-storage-info.txt`.
 
 <table><tr><td align="center"><a href="images/screenshot-16.png"><img src="images/screenshot-16.png" alt="Screenshot 16: Object actions menu with Rename object." width="780"></a></td></tr></table>
 
@@ -297,7 +294,7 @@ I opened the original TXT object and selected **Object actions → Rename object
 
 ### 7.2 Preserving object settings
 
-I entered `Sy-S3-storage-info.txt` and selected **Copy source settings** rather than explicitly replacing storage, metadata or encryption. This was intended to keep the object configuration consistent while changing only its key.
+I selected **Copy source settings** to preserve the intended storage class, encryption and metadata. Renaming should not inadvertently change the object’s protection or how applications interpret it.
 
 <table><tr><td align="center"><a href="images/screenshot-17.png"><img src="images/screenshot-17.png" alt="Screenshot 17: New object name and Copy source settings." width="780"></a></td></tr></table>
 
@@ -305,7 +302,7 @@ I entered `Sy-S3-storage-info.txt` and selected **Copy source settings** rather 
 
 ### 7.3 Verifying the new key
 
-After saving, I checked the success notification and object list. The renamed TXT object still measured 137 bytes and the JSON object remained unchanged. The new last-modified timestamp is consistent with a new copy. The original key was absent from the unversioned inventory.
+After saving, I confirmed that the new key held the 137-byte TXT object and the JSON object was unchanged. Any application referencing the old key would now need to use the new identifier.
 
 <table><tr><td align="center"><a href="images/screenshot-18.png"><img src="images/screenshot-18.png" alt="Screenshot 18: Successful rename and two-object inventory." width="780"></a></td></tr></table>
 
@@ -313,15 +310,15 @@ After saving, I checked the success notification and object list. The renamed TX
 
 <p align="center"><img src="images/s3-rename.svg" alt="General purpose S3 rename using copy and delete" width="850"></p>
 
-In a general purpose bucket, renaming is a copy followed by deletion of the original key. It is not an atomic rename. Because versioning was disabled at this point, the original key was removed rather than hidden by a delete marker.
+Because the bucket was still unversioned, the old key was removed rather than hidden by a delete marker. In a versioned bucket, the delete step would ordinarily create a marker and leave earlier data versions stored.
 
 ## 08 Enabling Versioning and Updating Data
 
-The objective was to protect against accidental overwrites. Versioning maintains complete objects under a single key, so an update does not have to destroy the previous data.
+Versioning is useful for configuration repositories and frequently updated documents because previous contents remain recoverable after an overwrite.
 
 ### 8.1 Establishing the original versioning state
 
-Before editing the bucket, I opened **Properties → Bucket Versioning** and confirmed it was Disabled. MFA Delete was also disabled. The baseline matters because objects created in an unversioned bucket carry a `null` version ID.
+In **Properties → Bucket Versioning**, I began with the unversioned state. This established a `null` version ID for objects already stored in the bucket.
 
 <table><tr><td align="center"><a href="images/screenshot-19.png"><img src="images/screenshot-19.png" alt="Screenshot 19: Bucket Versioning initially disabled." width="780"></a></td></tr></table>
 
@@ -329,19 +326,21 @@ Before editing the bucket, I opened **Properties → Bucket Versioning** and con
 
 ### 8.2 Enabling versioning
 
-I selected **Edit → Enable → Save changes**. This is a bucket-wide setting rather than a per-object option. I left MFA Delete unchanged; versioning alone is not immutable retention.
+I selected **Edit → Enable → Save changes**, leaving MFA Delete disabled. Versioning is bucket-wide; it preserves full object versions but does not make them immutable.
 
 <table><tr><td align="center"><a href="images/screenshot-20.png"><img src="images/screenshot-20.png" alt="Screenshot 20: Enable selected in the versioning editor." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 20:</strong> Enable selected in the versioning editor.</sub></p>
 
-The bucket properties then displayed Enabled. This confirmed the setting was saved. Existing objects retain their `null` IDs; subsequent writes can receive new unique IDs. AWS recommends a 15-minute propagation allowance before writes after first enabling versioning.
+AWS recommends allowing 15 minutes for propagation when versioning is first enabled before issuing object PUT or DELETE requests. Existing versions keep their `null` IDs; subsequent writes receive unique version IDs.
 
 <table><tr><td align="center"><a href="images/screenshot-21.png"><img src="images/screenshot-21.png" alt="Screenshot 21: Bucket Versioning enabled." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 21:</strong> Bucket Versioning enabled.</sub></p>
 
-The updated document retained the original purpose and added a document version and storage configuration:
+### 8.3 Updating the document under the existing key
+
+I added a document version and the storage configuration to the original text:
 
 ```text
 AWS Training by SRKN
@@ -357,15 +356,11 @@ Storage Class: Standard
 Public Access: Blocked
 ```
 
-### 8.3 Updating the document under the existing key
-
-I prepared the updated document shown above, adding version and configuration information. I selected the same exact filename as the existing S3 key; a different key would create an independent object instead of a new version.
+I uploaded the updated document as `Sy-S3-storage-info.txt`, exactly matching the existing key. A changed filename or prefix would have created an independent object instead of a version of the same key.
 
 <table><tr><td align="center"><a href="images/screenshot-22.png"><img src="images/screenshot-22.png" alt="Screenshot 22: Updated 257-byte document staged under the same key." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 22:</strong> Updated 257-byte document staged under the same key.</sub></p>
-
-The upload status reported one successful 257-byte file and zero failures. The content update was complete; the next check establishes whether the original data remained stored.
 
 <table><tr><td align="center"><a href="images/screenshot-23.png"><img src="images/screenshot-23.png" alt="Screenshot 23: Updated document upload succeeded." width="780"></a></td></tr></table>
 
@@ -384,7 +379,7 @@ On the Objects tab I enabled **Show versions**. The current 257-byte TXT entry h
 
 ## 09 Deletion and Object Recovery
 
-I simulated accidental deletion of the updated TXT document, then restored the current version by removing only its delete marker. This is a logical-deletion recovery exercise rather than a backup restore from another bucket.
+To test recovery from accidental deletion, I used the versioned TXT document. This recovery mechanism operates within the same bucket rather than restoring a separate backup.
 
 ### 9.1 Creating a delete marker
 
@@ -394,49 +389,43 @@ I turned **Show versions** off before selecting the TXT key. This ensured that t
 
 <p><sub><strong>Screenshot 25:</strong> TXT selected for ordinary deletion with Show versions off.</sub></p>
 
-On the confirmation page, the Console indicated that a delete marker would be added. I typed `delete` and submitted the operation for the TXT key only; the JSON object was not selected.
-
+I confirmed the ordinary deletion by typing `delete`. Omitting the version ID causes a versioned bucket to add a delete marker instead of permanently removing a specific data version.
 
 <table><tr><td align="center"><a href="images/screenshot-26.png"><img src="images/screenshot-26.png" alt="Screenshot 26: Deletion confirmation explaining delete marker creation." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 26:</strong> Deletion confirmation explaining delete marker creation.</sub></p>
 
-The success message explicitly reported that a delete marker was added and previous versions were retained. The displayed 257-byte deletion result therefore represents logical removal from the current view, not deletion of those data bytes.
-
 <table><tr><td align="center"><a href="images/screenshot-27.png"><img src="images/screenshot-27.png" alt="Screenshot 27: Successful logical deletion with previous versions retained." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 27:</strong> Successful logical deletion with previous versions retained.</sub></p>
 
-I enabled **Show versions** again and checked the actual inventory: a current delete marker, the 257-byte version and the original 137-byte version were all present. This independently corroborated the deletion status.
+I enabled **Show versions** again to distinguish logical deletion from permanent removal of stored data.
 
 <table><tr><td align="center"><a href="images/screenshot-28.png"><img src="images/screenshot-28.png" alt="Screenshot 28: Current delete marker and two preserved TXT versions." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 28:</strong> Current delete marker and two preserved TXT versions.</sub></p>
 
-The version inventory showed a current 0-byte delete marker and both retained data versions. The ordinary deletion hid the object without removing its 257-byte and 137-byte contents. Delete markers have storage overhead based on their key length even when displayed as 0 B.
+The marker became the current version, hiding the object from ordinary key-based retrieval. Both TXT payloads remained stored, so total object data stayed at 540 bytes. A delete marker also incurs storage overhead based on its key length, even when displayed as 0 B.
 
 ### 9.2 Recovering the current version
 
-To reverse the logical deletion, I kept **Show versions** enabled and selected only the row marked **Delete marker**, with a displayed size of 0 B. Neither TXT data version was selected.
+To reverse the logical deletion, I kept **Show versions** enabled and selected only the delete marker. Removing this specific marker makes the most recent surviving data version current again.
 
 <table><tr><td align="center"><a href="images/screenshot-29.png"><img src="images/screenshot-29.png" alt="Screenshot 29: Only the delete marker selected for removal." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 29:</strong> Only the delete marker selected for removal.</sub></p>
 
-The confirmation screen identified a specific marker version ID. I entered `permanently delete` only after confirming the selected type was Delete marker. Permanently deleting a data version instead would remove that data.
+I entered `permanently delete` for the selected marker version ID. This confirmation is destructive when applied to a data version, so identifying the marker rather than either payload was essential.
 
 <table><tr><td align="center"><a href="images/screenshot-30.png"><img src="images/screenshot-30.png" alt="Screenshot 30: Permanent deletion confirmation for the marker." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 30:</strong> Permanent deletion confirmation for the marker.</sub></p>
 
-The operation reported one successful deletion and zero failures. In this case the deleted entry was the marker, not an object payload.
-
-
 <table><tr><td align="center"><a href="images/screenshot-31.png"><img src="images/screenshot-31.png" alt="Screenshot 31: Delete marker removal succeeded." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 31:</strong> Delete marker removal succeeded.</sub></p>
 
-The version inventory then displayed the 257-byte data version at the top of the TXT key, with the original 137-byte version still underneath. No replacement upload was needed, and the inventory returned to 540 bytes of payload.
+After the marker was removed, the 257-byte version became current again and the 137-byte original remained available. Recovery required no additional upload or storage copy.
 
 <table><tr><td align="center"><a href="images/screenshot-32.png"><img src="images/screenshot-32.png" alt="Screenshot 32: Restored current version and retained original version." width="780"></a></td></tr></table>
 
@@ -444,7 +433,7 @@ The version inventory then displayed the 257-byte data version at the top of the
 
 <p align="center"><img src="images/s3-recovery.svg" alt="Version history and delete marker recovery" width="850"></p>
 
-Recovery was verified through the version inventory; a separate post-recovery retrieval of the file contents was not captured. Versioning is not immutable storage: an authorized permanent deletion of a specific data version cannot be reversed through versioning alone. Object Lock can provide retention protection where required.
+The restored version was verified in the inventory, without a separate content retrieval test. An authorized permanent deletion of a data version cannot be reversed through versioning alone. S3 Object Lock can provide additional retention protection where immutability is required.
 
 ## 10 Configuring Lifecycle Management
 
@@ -452,7 +441,7 @@ Lifecycle rules automate storage transitions, expiration and cleanup. For this s
 
 ### 10.1 Opening lifecycle configuration
 
-I opened **Management → Create lifecycle rule**. The initial list showed no lifecycle rules. I chose a single bucket-wide rule to manage obsolete versions and unfinished uploads without introducing archival transitions.
+I opened **Management → Create lifecycle rule** and configured a bucket-wide policy to manage historical versions and unfinished uploads.
 
 <table><tr><td align="center"><a href="images/screenshot-33.png"><img src="images/screenshot-33.png" alt="Screenshot 33: Management tab before lifecycle rule creation." width="780"></a></td></tr></table>
 
@@ -471,7 +460,7 @@ I opened **Management → Create lifecycle rule**. The initial list showed no li
 
 ### 10.2 Defining scope and actions
 
-I named the rule `S3-Object-Retention-Policy`, selected all objects and acknowledged the scope. I enabled noncurrent-version deletion and cleanup of expired markers or incomplete multipart uploads. I left transitions and current-version expiration unchecked so active data would remain available.
+I applied the rule to all objects rather than a prefix or tag filter. Current-version expiration and transitions were left disabled so the active training documents would remain accessible for the subsequent encryption activity.
 
 <table><tr><td align="center"><a href="images/screenshot-34.png"><img src="images/screenshot-34.png" alt="Screenshot 34: Lifecycle rule name, scope and selected actions." width="780"></a></td></tr></table>
 
@@ -479,7 +468,7 @@ I named the rule `S3-Object-Retention-Policy`, selected all objects and acknowle
 
 ### 10.3 Defining retention periods
 
-I entered 30 days for noncurrent versions and left the optional newer-version count empty. I enabled expired delete marker cleanup and set incomplete multipart uploads to seven days. These are separate timers: the first is relative to a version becoming noncurrent; the second is relative to initiation of an unfinished multipart upload.
+The 30-day retention period begins when a version becomes noncurrent, not when it was first uploaded. Leaving the newer-version count empty means the rule does not reserve a minimum number of newer noncurrent versions. Incomplete multipart upload cleanup uses a separate seven-day timer measured from upload initiation. Expired delete markers are eligible for removal when no underlying data versions remain.
 
 <table><tr><td align="center"><a href="images/screenshot-35.png"><img src="images/screenshot-35.png" alt="Screenshot 35: 30-day noncurrent retention and seven-day multipart cleanup." width="780"></a></td></tr></table>
 
@@ -487,7 +476,7 @@ I entered 30 days for noncurrent versions and left the optional newer-version co
 
 ### 10.4 Verifying the lifecycle rule
 
-After creating the rule, I checked the success notification and the Enabled row. The scope and action columns matched the configuration. The displayed 128 KB minimum applies to default storage transitions, not to noncurrent-version expiration.
+I created and enabled the rule. The default 128 KB minimum displayed in the console governs storage-class transitions, not expiration of small objects.
 
 <table><tr><td align="center"><a href="images/screenshot-36.png"><img src="images/screenshot-36.png" alt="Screenshot 36: Enabled lifecycle rule successfully created." width="780"></a></td></tr></table>
 
@@ -495,20 +484,20 @@ After creating the rule, I checked the success notification and the Enabled row.
 
 <p align="center"><img src="images/s3-lifecycle.svg" alt="Configured lifecycle rule" width="850"></p>
 
-The 30-day period is based on when a version becomes noncurrent. Eligible actions are asynchronous. The default 128 KB transition threshold does not block expiration of smaller objects. Automatic expiration was not observed during this short implementation.
+Lifecycle execution is asynchronous; the configured retention periods establish eligibility rather than a precise deletion time. The enabled rule was verified, but its automatic expiration actions were not observed.
 
 ### 10.5 Example production tiering
 
 <p align="center"><img src="images/s3-production-tiering.svg" alt="Illustrative production lifecycle, not deployed" width="850"></p>
 
-This is a design example, not a rule applied to this bucket. A production workload could start in Standard, move qualifying data to an infrequent-access class as access declines, and eventually archive records before a business-approved expiration date. The example applies to eligible objects only. Transition fees, retrieval costs, minimum durations and business retention requirements must be evaluated before adopting it.
+A production lifecycle could start in Standard, transition eligible data to infrequent-access storage as demand falls, then archive records until their business-approved expiration date. The illustrated policy was not deployed. Evaluate minimum duration, object size, retrieval fees and retention requirements before using such a schedule.
 
 > [!IMPORTANT]
 > **SAA-C03 exam connection:** Expiring a current object in a versioned bucket generally creates a delete marker; noncurrent version expiration is needed to remove historical data. A lifecycle rule that deletes noncurrent versions is destructive once the retention window ends.
 
 ## 11 Applying Object Tags and Metadata
 
-Tags and metadata are both key-value attributes but serve different purposes. Tags support classification and policy or lifecycle filters, whereas metadata describes the object for consuming applications. I tested both update mechanisms on the same current TXT version.
+Object tags and metadata are both key-value attributes, but they have different update mechanisms. I used the current TXT version to demonstrate both.
 
 ### 11.1 Object tagging
 
@@ -519,29 +508,29 @@ Tags and metadata are both key-value attributes but serve different purposes. Ta
 | DataClassification | NonSensitive |
 | Purpose | ObjectStorage |
 
-From the current TXT object, I selected **Metadata → Tags → Edit**, entered the four pairs above, and saved. The selected object was the 257-byte version. These tags classify the object independently of its file contents.
+From the current TXT object, I selected **Metadata → Tags → Edit** and saved the four key-value pairs. The tags classify the resource for potential filtering and policy conditions without altering the document payload.
 
 <table><tr><td align="center"><a href="images/screenshot-37.png"><img src="images/screenshot-37.png" alt="Screenshot 37: Four object tags configured for the current TXT." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 37:</strong> Four object tags configured for the current TXT.</sub></p>
 
-I reopened the metadata view and verified that the four tags persisted. The system-defined metadata still contained only Content-Type. This demonstrates that changing object tags does not require rewriting the data or replacing metadata.
+The tagging operation retained the existing Content-Type and did not create a new data version.
 
 <table><tr><td align="center"><a href="images/screenshot-38.png"><img src="images/screenshot-38.png" alt="Screenshot 38: Saved tags and existing Content-Type metadata." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 38:</strong> Saved tags and existing Content-Type metadata.</sub></p>
 
-Object tags support classification, lifecycle filtering and policy conditions; they do not enforce authorization by themselves. Tag updates do not create a new object version. Tags belong to specific versions; up to ten tags can be assigned per object.
+Object tags belong to individual versions, with up to ten tags per object. A classification tag such as `DataClassification=NonSensitive` is descriptive unless a policy or application uses it to enforce a decision. Our lifecycle rule was bucket-wide and did not depend on these tags.
 
 ### 11.2 Replacing metadata with a same-key copy
 
-I opened **Object actions → Copy**, supplied `s3://sy-awstraining-s3/` with no prefix, and chose **Specify settings**. Using the original destination key allows the copy to replace metadata while retaining the logical object name. The destination showed versioning enabled and Object Lock disabled.
+I opened **Object actions → Copy**, supplied `s3://sy-awstraining-s3/` without a prefix, and chose **Specify settings**. S3 does not support editing user-defined object metadata in place. Copying to the same key replaces the metadata while retaining the logical object name.
 
 <table><tr><td align="center"><a href="images/screenshot-39.png"><img src="images/screenshot-39.png" alt="Screenshot 39: Same-bucket copy destination and Specify settings." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 39:</strong> Same-bucket copy destination and Specify settings.</sub></p>
 
-I selected **Copy existing storage class**, **Copy existing encryption settings**, and **Copy existing checksum functions**. These selections retained the intended storage and protection configuration rather than introducing an unrelated change.
+I selected **Copy existing storage class**, **Copy existing encryption settings**, and **Copy existing checksum functions** to isolate the change to metadata.
 
 <table><tr><td align="center"><a href="images/screenshot-40.png"><img src="images/screenshot-40.png" alt="Screenshot 40: Existing storage class, encryption and checksum function selected for copying." width="780"></a></td></tr></table>
 
@@ -555,7 +544,7 @@ I selected **Copy existing storage class**, **Copy existing encryption settings*
 | User defined | x-amz-meta-document-version | 2 |
 | User defined | x-amz-meta-description | Amazon S3 storage configuration |
 
-I chose **Copy existing tags** and **Replace all metadata**. Because the metadata replacement is a complete replacement, I included the existing `Content-Type: text/plain` as well as four custom `x-amz-meta-` attributes. The custom document version remained `2` because the document bytes were not being revised.
+I chose **Copy existing tags** and **Replace all metadata**. Replacement does not merge the old and new metadata sets, so I explicitly included `Content-Type: text/plain` alongside the custom attributes.
 
 <table><tr><td align="center"><a href="images/screenshot-41.png"><img src="images/screenshot-41.png" alt="Screenshot 41: Existing tags copied and five metadata entries configured." width="780"></a></td></tr></table>
 
@@ -563,19 +552,19 @@ I chose **Copy existing tags** and **Replace all metadata**. Because the metadat
 
 ### 11.3 Verifying the copy and resulting version
 
-The copy status reported one successful 257-byte object and zero failures. This confirmed the write, but the inventory and object properties were needed to establish its version and metadata outcomes.
+I completed the same-key copy, preserving the previous data versions.
 
 <table><tr><td align="center"><a href="images/screenshot-42.png"><img src="images/screenshot-42.png" alt="Screenshot 42: Successful 257-byte copy with no failures." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 42:</strong> Successful 257-byte copy with no failures.</sub></p>
 
-With **Show versions** enabled, the inventory showed a new unique version ID for a third TXT version, alongside the prior 257-byte version and the 137-byte original. The JSON object was unchanged. The extra version increased payload from 540 to 797 bytes.
+With **Show versions** enabled, I verified the additional version. A metadata-only change still produced a complete 257-byte stored version, increasing the payload from 540 to 797 bytes.
 
 <table><tr><td align="center"><a href="images/screenshot-43.png"><img src="images/screenshot-43.png" alt="Screenshot 43: Three TXT versions and one JSON version in inventory." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 43:</strong> Three TXT versions and one JSON version in inventory.</sub></p>
 
-I opened the current TXT object and checked the metadata section. All four object tags remained present; the table showed five metadata entries, one system-defined and four user-defined. This establishes that the copy applied the requested metadata rather than only creating another version.
+I inspected the current version to confirm that the four tags and the five metadata entries were present together.
 
 <table><tr><td align="center"><a href="images/screenshot-44.png"><img src="images/screenshot-44.png" alt="Screenshot 44: Saved four tags and five metadata entries." width="780"></a></td></tr></table>
 
@@ -590,18 +579,18 @@ I opened the current TXT object and checked the metadata section. All four objec
 | User-defined metadata | Application attributes returned in HTTP headers | Copy or replace object |
 | Annotations | Additional object context | Not used in this implementation |
 
-Document version 2 is an application-level label; the new S3 version ID is independently assigned. User-defined metadata is limited to 2 KB in the PUT request.
+The custom document version remained `2` because the document bytes were unchanged; the S3-managed version ID identifies the new stored version independently. User-defined metadata is limited to 2 KB in the PUT request.
 
 > [!IMPORTANT]
 > **SAA-C03 exam connection:** Modifying tags can be independent of object data. Changing user-defined metadata requires a copy or replacement, so in a versioned bucket it can create another billable full object version even if the payload is unchanged.
 
 ## 12 Final Security Review and Resource State
 
-The final review focused on bucket-level public access and ownership. The full bucket policy and CORS settings were not independently established.
+I reviewed the final bucket-level public access and ownership settings. The review did not include a complete bucket policy or CORS audit.
 
 ### 12.1 Checking public-access protections
 
-I returned to the bucket **Permissions** tab and confirmed **Block all public access: On**. The bucket policy panel also displayed the public-access-block notice. This is a configuration review complementary to the earlier unsigned-request test; it is not a complete policy or external-access audit.
+In **Permissions**, I confirmed that Block Public Access remained enabled. This protection complements the earlier access test: it restricts public grants while IAM and applicable resource policies determine authorized private access.
 
 <table><tr><td align="center"><a href="images/screenshot-45.png"><img src="images/screenshot-45.png" alt="Screenshot 45: Final Permissions overview and Block Public Access on." width="780"></a></td></tr></table>
 
@@ -609,7 +598,7 @@ I returned to the bucket **Permissions** tab and confirmed **Block all public ac
 
 ### 12.2 Checking ownership and ACL behavior
 
-Object Ownership still showed **Bucket owner enforced** and the ACL section was disabled. The displayed entries for Everyone, Authenticated users and S3 log delivery had no grants. With ACLs disabled, the displayed owner ACL entries do not function as independent access grants.
+Bucket owner enforced remained active. With ACLs disabled, ACL entries do not independently authorize requests. The S3 ACL group named Authenticated users represents AWS-account holders generally, not just IAM identities in the bucket owner’s account.
 
 <table><tr><td align="center"><a href="images/screenshot-46.png"><img src="images/screenshot-46.png" alt="Screenshot 46: Bucket owner enforced and ACLs disabled." width="780"></a></td></tr></table>
 
