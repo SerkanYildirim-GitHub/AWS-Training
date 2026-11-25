@@ -92,14 +92,9 @@ The purpose was to establish a private regional storage container before introdu
 
 I started in the general purpose bucket inventory and chose **Create bucket**. A general purpose bucket supports the storage classes and versioning operations required for this implementation, unlike a specialized directory bucket.
 
-<details>
-<summary>Screenshot 01 — General purpose buckets dashboard and Create bucket action</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-01.png"><img src="images/screenshot-01.png" alt="Screenshot 01: General purpose buckets dashboard and Create bucket action." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 01:</strong> General purpose buckets dashboard and Create bucket action.</sub></p>
-
-</details>
 
 In the creation form, I selected `us-east-1`, **General purpose**, and **Global namespace**. The global namespace requires a unique bucket name within the AWS partition; it does not make data globally public. The final lowercase name was `sy-awstraining-s3`.
 
@@ -126,14 +121,9 @@ I deliberately started with versioning disabled so that the initial objects coul
 | Default encryption | SSE-S3 | Encrypt new uploads without a customer-managed KMS key |
 | Bucket Key | Enabled in form | Relevant to SSE-KMS, not SSE-S3 |
 
-<details>
-<summary>Screenshot 04 — Initial versioning disabled and SSE-S3 selected</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-04.png"><img src="images/screenshot-04.png" alt="Screenshot 04: Initial versioning disabled and SSE-S3 selected." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 04:</strong> Initial versioning disabled and SSE-S3 selected.</sub></p>
-
-</details>
 
 ### 3.4 Verifying the bucket
 
@@ -164,14 +154,9 @@ Purpose: Object storage, security, and lifecycle management.
 
 For a repeat implementation, the JSON can contain descriptive fields such as `project`, `activity`, `service`, `environment`, and `status`. The actual upload size is recorded below; an exact final JSON payload is not necessary to reproduce the storage behavior.
 
-<details>
-<summary>Screenshot 06 — Local TXT and JSON files prepared for upload</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-06.png"><img src="images/screenshot-06.png" alt="Screenshot 06: Local TXT and JSON files prepared for upload." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 06:</strong> Local TXT and JSON files prepared for upload.</sub></p>
-
-</details>
 
 ### 4.2 Staging the upload
 
@@ -257,14 +242,9 @@ The storage class and encryption sections confirmed Standard and SSE-S3 on the a
 
 The metadata section showed a system-defined `Content-Type` of `text/plain` and no annotations. Content-Type tells a consuming application how to interpret the bytes; it does not change the bytes themselves. This is the baseline for the custom metadata operation later.
 
-<details>
-<summary>Screenshot 12 — System-defined Content-Type and no annotations</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-12.png"><img src="images/screenshot-12.png" alt="Screenshot 12: System-defined Content-Type and no annotations." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 12:</strong> System-defined Content-Type and no annotations.</sub></p>
-
-</details>
 
 An ETag may be an MD5 digest for particular uploads but is not universally an MD5 checksum. For multipart or other encryption configurations, use the documented checksum mechanism rather than treating the ETag as a universal integrity proof.
 
@@ -311,27 +291,17 @@ The rename exercise demonstrated how object identity changes when a key changes,
 
 I opened the original TXT object and selected **Object actions → Rename object**. In a general purpose bucket, the new name is a new key; changing it requires a copy followed by deletion of the old key.
 
-<details>
-<summary>Screenshot 16 — Object actions menu with Rename object</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-16.png"><img src="images/screenshot-16.png" alt="Screenshot 16: Object actions menu with Rename object." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 16:</strong> Object actions menu with Rename object.</sub></p>
-
-</details>
 
 ### 7.2 Preserving object settings
 
 I entered `Sy-S3-storage-info.txt` and selected **Copy source settings** rather than explicitly replacing storage, metadata or encryption. This was intended to keep the object configuration consistent while changing only its key.
 
-<details>
-<summary>Screenshot 17 — New object name and Copy source settings</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-17.png"><img src="images/screenshot-17.png" alt="Screenshot 17: New object name and Copy source settings." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 17:</strong> New object name and Copy source settings.</sub></p>
-
-</details>
 
 ### 7.3 Verifying the new key
 
@@ -353,27 +323,17 @@ The objective was to protect against accidental overwrites. Versioning maintains
 
 Before editing the bucket, I opened **Properties → Bucket Versioning** and confirmed it was Disabled. MFA Delete was also disabled. The baseline matters because objects created in an unversioned bucket carry a `null` version ID.
 
-<details>
-<summary>Screenshot 19 — Bucket Versioning initially disabled</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-19.png"><img src="images/screenshot-19.png" alt="Screenshot 19: Bucket Versioning initially disabled." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 19:</strong> Bucket Versioning initially disabled.</sub></p>
-
-</details>
 
 ### 8.2 Enabling versioning
 
 I selected **Edit → Enable → Save changes**. This is a bucket-wide setting rather than a per-object option. I left MFA Delete unchanged; versioning alone is not immutable retention.
 
-<details>
-<summary>Screenshot 20 — Enable selected in the versioning editor</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-20.png"><img src="images/screenshot-20.png" alt="Screenshot 20: Enable selected in the versioning editor." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 20:</strong> Enable selected in the versioning editor.</sub></p>
-
-</details>
 
 The bucket properties then displayed Enabled. This confirmed the setting was saved. Existing objects retain their `null` IDs; subsequent writes can receive new unique IDs. AWS recommends a 15-minute propagation allowance before writes after first enabling versioning.
 
@@ -407,14 +367,9 @@ I prepared the updated document shown above, adding version and configuration in
 
 The upload status reported one successful 257-byte file and zero failures. The content update was complete; the next check establishes whether the original data remained stored.
 
-<details>
-<summary>Screenshot 23 — Updated document upload succeeded</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-23.png"><img src="images/screenshot-23.png" alt="Screenshot 23: Updated document upload succeeded." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 23:</strong> Updated document upload succeeded.</sub></p>
-
-</details>
 
 ### 8.4 Verifying the version inventory
 
@@ -435,36 +390,22 @@ I simulated accidental deletion of the updated TXT document, then restored the c
 
 I turned **Show versions** off before selecting the TXT key. This ensured that the deletion targeted the ordinary current-key view rather than an explicitly selected data version.
 
-<details>
-<summary>Screenshot 25 — TXT selected for ordinary deletion with Show versions off</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-25.png"><img src="images/screenshot-25.png" alt="Screenshot 25: TXT selected for ordinary deletion with Show versions off." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 25:</strong> TXT selected for ordinary deletion with Show versions off.</sub></p>
 
-</details>
-
 On the confirmation page, the Console indicated that a delete marker would be added. I typed `delete` and submitted the operation for the TXT key only; the JSON object was not selected.
 
-<details>
-<summary>Screenshot 26 — Deletion confirmation explaining delete marker creation</summary>
 
 <table><tr><td align="center"><a href="images/screenshot-26.png"><img src="images/screenshot-26.png" alt="Screenshot 26: Deletion confirmation explaining delete marker creation." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 26:</strong> Deletion confirmation explaining delete marker creation.</sub></p>
 
-</details>
-
 The success message explicitly reported that a delete marker was added and previous versions were retained. The displayed 257-byte deletion result therefore represents logical removal from the current view, not deletion of those data bytes.
-
-<details>
-<summary>Screenshot 27 — Successful logical deletion with previous versions retained</summary>
 
 <table><tr><td align="center"><a href="images/screenshot-27.png"><img src="images/screenshot-27.png" alt="Screenshot 27: Successful logical deletion with previous versions retained." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 27:</strong> Successful logical deletion with previous versions retained.</sub></p>
-
-</details>
 
 I enabled **Show versions** again and checked the actual inventory: a current delete marker, the 257-byte version and the original 137-byte version were all present. This independently corroborated the deletion status.
 
@@ -478,36 +419,22 @@ The version inventory showed a current 0-byte delete marker and both retained da
 
 To reverse the logical deletion, I kept **Show versions** enabled and selected only the row marked **Delete marker**, with a displayed size of 0 B. Neither TXT data version was selected.
 
-<details>
-<summary>Screenshot 29 — Only the delete marker selected for removal</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-29.png"><img src="images/screenshot-29.png" alt="Screenshot 29: Only the delete marker selected for removal." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 29:</strong> Only the delete marker selected for removal.</sub></p>
 
-</details>
-
 The confirmation screen identified a specific marker version ID. I entered `permanently delete` only after confirming the selected type was Delete marker. Permanently deleting a data version instead would remove that data.
-
-<details>
-<summary>Screenshot 30 — Permanent deletion confirmation for the marker</summary>
 
 <table><tr><td align="center"><a href="images/screenshot-30.png"><img src="images/screenshot-30.png" alt="Screenshot 30: Permanent deletion confirmation for the marker." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 30:</strong> Permanent deletion confirmation for the marker.</sub></p>
 
-</details>
-
 The operation reported one successful deletion and zero failures. In this case the deleted entry was the marker, not an object payload.
 
-<details>
-<summary>Screenshot 31 — Delete marker removal succeeded</summary>
 
 <table><tr><td align="center"><a href="images/screenshot-31.png"><img src="images/screenshot-31.png" alt="Screenshot 31: Delete marker removal succeeded." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 31:</strong> Delete marker removal succeeded.</sub></p>
-
-</details>
 
 The version inventory then displayed the 257-byte data version at the top of the TXT key, with the original 137-byte version still underneath. No replacement upload was needed, and the inventory returned to 540 bytes of payload.
 
@@ -527,14 +454,9 @@ Lifecycle rules automate storage transitions, expiration and cleanup. For this s
 
 I opened **Management → Create lifecycle rule**. The initial list showed no lifecycle rules. I chose a single bucket-wide rule to manage obsolete versions and unfinished uploads without introducing archival transitions.
 
-<details>
-<summary>Screenshot 33 — Management tab before lifecycle rule creation</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-33.png"><img src="images/screenshot-33.png" alt="Screenshot 33: Management tab before lifecycle rule creation." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 33:</strong> Management tab before lifecycle rule creation.</sub></p>
-
-</details>
 
 | Rule setting | Configured value |
 |---|---|
@@ -551,14 +473,9 @@ I opened **Management → Create lifecycle rule**. The initial list showed no li
 
 I named the rule `S3-Object-Retention-Policy`, selected all objects and acknowledged the scope. I enabled noncurrent-version deletion and cleanup of expired markers or incomplete multipart uploads. I left transitions and current-version expiration unchecked so active data would remain available.
 
-<details>
-<summary>Screenshot 34 — Lifecycle rule name, scope and selected actions</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-34.png"><img src="images/screenshot-34.png" alt="Screenshot 34: Lifecycle rule name, scope and selected actions." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 34:</strong> Lifecycle rule name, scope and selected actions.</sub></p>
-
-</details>
 
 ### 10.3 Defining retention periods
 
@@ -604,14 +521,9 @@ Tags and metadata are both key-value attributes but serve different purposes. Ta
 
 From the current TXT object, I selected **Metadata → Tags → Edit**, entered the four pairs above, and saved. The selected object was the 257-byte version. These tags classify the object independently of its file contents.
 
-<details>
-<summary>Screenshot 37 — Four object tags configured for the current TXT</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-37.png"><img src="images/screenshot-37.png" alt="Screenshot 37: Four object tags configured for the current TXT." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 37:</strong> Four object tags configured for the current TXT.</sub></p>
-
-</details>
 
 I reopened the metadata view and verified that the four tags persisted. The system-defined metadata still contained only Content-Type. This demonstrates that changing object tags does not require rewriting the data or replacing metadata.
 
@@ -625,25 +537,15 @@ Object tags support classification, lifecycle filtering and policy conditions; t
 
 I opened **Object actions → Copy**, supplied `s3://sy-awstraining-s3/` with no prefix, and chose **Specify settings**. Using the original destination key allows the copy to replace metadata while retaining the logical object name. The destination showed versioning enabled and Object Lock disabled.
 
-<details>
-<summary>Screenshot 39 — Same-bucket copy destination and Specify settings</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-39.png"><img src="images/screenshot-39.png" alt="Screenshot 39: Same-bucket copy destination and Specify settings." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 39:</strong> Same-bucket copy destination and Specify settings.</sub></p>
 
-</details>
-
 I selected **Copy existing storage class**, **Copy existing encryption settings**, and **Copy existing checksum functions**. These selections retained the intended storage and protection configuration rather than introducing an unrelated change.
-
-<details>
-<summary>Screenshot 40 — Existing storage class, encryption and checksum function selected for copying</summary>
 
 <table><tr><td align="center"><a href="images/screenshot-40.png"><img src="images/screenshot-40.png" alt="Screenshot 40: Existing storage class, encryption and checksum function selected for copying." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 40:</strong> Existing storage class, encryption and checksum function selected for copying.</sub></p>
-
-</details>
 
 | Type | Key | Value |
 |---|---|---|
@@ -663,14 +565,9 @@ I chose **Copy existing tags** and **Replace all metadata**. Because the metadat
 
 The copy status reported one successful 257-byte object and zero failures. This confirmed the write, but the inventory and object properties were needed to establish its version and metadata outcomes.
 
-<details>
-<summary>Screenshot 42 — Successful 257-byte copy with no failures</summary>
-
 <table><tr><td align="center"><a href="images/screenshot-42.png"><img src="images/screenshot-42.png" alt="Screenshot 42: Successful 257-byte copy with no failures." width="780"></a></td></tr></table>
 
 <p><sub><strong>Screenshot 42:</strong> Successful 257-byte copy with no failures.</sub></p>
-
-</details>
 
 With **Show versions** enabled, the inventory showed a new unique version ID for a third TXT version, alongside the prior 257-byte version and the 137-byte original. The JSON object was unchanged. The extra version increased payload from 540 to 797 bytes.
 
