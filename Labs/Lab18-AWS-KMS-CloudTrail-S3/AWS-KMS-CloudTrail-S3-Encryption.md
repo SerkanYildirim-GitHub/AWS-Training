@@ -73,9 +73,9 @@ The KMS key material stays protected by KMS. The data key is separate from the l
 
 I used one regional customer-managed key and a separate private log destination. The new trail was multi-Region, although the S3 object and KMS operations demonstrated here took place in `us-east-1`. Application storage and the audit bucket were intentionally independent so that disabling the application encryption key would not disable access to the audit logs.
 
-<p align="center"><img src="images/kms-architecture.svg" alt="Implemented architecture before cleanup." width="850"></p>
+<p align="center"><img src="images/kms-architecture.svg" alt="Architecture integrating Amazon S3, AWS KMS, and AWS CloudTrail for data encryption, access control, and security auditing." width="850"></p>
 
-<p><sub><em>Implemented architecture before cleanup.</em></sub></p>
+<p><sub><em>Architecture integrating Amazon S3, AWS KMS, and AWS CloudTrail for data encryption, access control, and security auditing..</em></sub></p>
 
 
 ```mermaid
@@ -87,8 +87,7 @@ flowchart LR
     CT -->|"Log delivery"| LOG["sy-awstraining-kms-audit"]
 ```
 
-The pre-existing `SYcloudtrail` trail and its separate destination remained outside the temporary architecture's cleanup scope.
-
+I retained the existing 'SYcloudtrail' trail and its associated S3 bucket, 'sy-aws-cloudtrailer', without making any changes to their configuration.
 ---
 
 ## 02 Creating a Customer-Managed KMS Key
