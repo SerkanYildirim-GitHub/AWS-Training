@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="180" viewBox="0 0 900 180" role="img" aria-label="AWS KMS, CloudTrail and S3 Encryption — AWS Training by SRKN"><rect width="900" height="180" rx="12" fill="#232f3e"/><rect y="172" width="900" height="8" fill="#ff9900"/><g font-family="Arial,sans-serif" fill="white"><text x="35" y="39" font-size="16" fill="#ff9900" font-weight="bold">AWS TRAINING BY SRKN</text><text x="35" y="82" font-size="37" font-weight="bold">AWS KMS, CloudTrail &amp; S3</text><text x="35" y="117" font-size="23">Encryption • Key Management • Auditing</text><text x="35" y="149" font-size="14" fill="#d9e2ec">CLOUD ENGINEERING PORTFOLIO  /  SAA-C03</text></g><g transform="translate(735 25)">
+  <path d="M55 6 L104 25 V66 C104 94 82 113 55 126 C28 113 6 94 6 66 V25 Z" fill="#a82c42" stroke="#f2a0ab" stroke-width="2"/>
+  <path d="M55 16 L94 32 V65 C94 87 77 103 55 114" fill="none" stroke="#d85b70" stroke-width="2"/>
+  <g fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="44" cy="49" r="13"/>
+    <path d="M53 59 L77 83 M66 72 L73 65 M73 79 L80 72"/>
+  </g>
+</g></svg>
