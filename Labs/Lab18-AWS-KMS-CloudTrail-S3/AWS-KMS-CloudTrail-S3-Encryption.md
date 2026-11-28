@@ -3,11 +3,13 @@
 # AWS KMS, CloudTrail & S3 Encryption
 **SECURITY / AWS KMS / AMAZON S3 / IAM / CLOUDTRAIL / ENVELOPE ENCRYPTION**
 
-AWS Key Management Service (AWS KMS) provides managed cryptographic keys and authorization controls for protecting application data. When used with Amazon S3 and AWS CloudTrail, it enables encryption at rest, identity-specific access control and API-level auditing without requiring applications to store or manage raw encryption keys.
+AWS Key Management Service (AWS KMS) is a managed service that enables organizations to create, manage, and control cryptographic keys used to protect sensitive data. Its integration with Amazon S3 and AWS CloudTrail provides a security architecture that combines encryption at rest, granular access control, and API-level auditing without requiring applications to manage raw encryption keys.
 
-I created a customer-managed symmetric key, configured a dedicated CloudTrail trail, encrypted an S3 object with SSE-KMS, and correlated successful and denied cryptographic operations with actual audit records. I then tested a narrowly scoped explicit denial, restored access, and removed the temporary encrypted object before scheduling key deletion.
+For this implementation, I reused the [Amazon S3 bucket established in my previous object storage](../Lab17-Amazon-S3/Amazon-S3-Object-Storage.md) and security implementation. I extended the existing storage architecture by introducing customer managed encryption thorough AWS KMS and security auditing through AWS CloudTrail.
 
-**Related implementation:** [Amazon S3 — Object Storage, Security & Lifecycle Management](../Lab17-Amazon-S3/Amazon-S3-Object-Storage.md). I reused the private versioned bucket established in that implementation rather than creating another application bucket.
+I uploaded an object using SSE-KMS, verified authorized and unauthorized access behavior, and analyzed the corresponding CloudTrail event records. To demonstrate the relationship between S3 permissions and KMS authorization, I implemented an object-specific explicit denial, verified the resulting decryption failure, and subsequently restored access.
+
+Finally, I removed the temporary encrypted object and scheduled the KMS key for deletion while preserving the original S3 infrastructure and its security configuration.
 
 ---
 
