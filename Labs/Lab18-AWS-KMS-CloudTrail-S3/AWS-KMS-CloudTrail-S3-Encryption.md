@@ -86,8 +86,8 @@ flowchart LR
     KMS -. "Management events" .-> CT
     CT -->|"Log delivery"| LOG["sy-awstraining-kms-audit"]
 ```
-<p><sub><em>I retained the existing 'SYcloudtrail' trail and its associated S3 bucket, 'sy-aws-cloudtrailer', without making any changes to their configuration.</p></sub></em>
----
+<p>I retained the existing 'SYcloudtrail' trail and its associated S3 bucket, 'sy-aws-cloudtrailer', without making any changes to their configuration.</p>
+
 
 ## 02 Creating a Customer-Managed KMS Key
 
