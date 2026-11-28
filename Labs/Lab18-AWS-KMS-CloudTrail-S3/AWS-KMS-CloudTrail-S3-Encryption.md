@@ -5,7 +5,7 @@
 
 AWS Key Management Service (AWS KMS) is a managed service that enables organizations to create, manage, and control cryptographic keys used to protect sensitive data. Its integration with Amazon S3 and AWS CloudTrail provides a security architecture that combines encryption at rest, granular access control, and API-level auditing without requiring applications to manage raw encryption keys.
 
-For this implementation, I reused the [Amazon S3 bucket established in my previous object storage](../Lab17-Amazon-S3/Amazon-S3-Object-Storage.md) and security implementation. I extended the existing storage architecture by introducing customer managed encryption thorough AWS KMS and security auditing through AWS CloudTrail.
+For this implementation, I reused the [Amazon S3 bucket established in my previous activity](../Lab17-Amazon-S3/Amazon-S3-Object-Storage.md). I extended the existing storage architecture by introducing customer managed encryption thorough AWS KMS and security auditing through AWS CloudTrail.
 
 I uploaded an object using SSE-KMS, verified authorized and unauthorized access behavior, and analyzed the corresponding CloudTrail event records. To demonstrate the relationship between S3 permissions and KMS authorization, I implemented an object-specific explicit denial, verified the resulting decryption failure, and subsequently restored access.
 
